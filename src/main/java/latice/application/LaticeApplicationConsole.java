@@ -1,12 +1,11 @@
 package latice.application;
 
 import latice.console.Console;
-public class LaticeApplicationConsole {
-	
-	public static void main(String[] args) {
-		
-		Console.title("Bienvenue dans notre magnifique jeu de Latice !");
-		Console.title("Développé par seydi   						 !");
+import latice.model.Player;
+import latice.model.Rack;
 
+public class LaticeApplicationConsole {
+
+	public static void main(String[] args) {
 	}
 }
