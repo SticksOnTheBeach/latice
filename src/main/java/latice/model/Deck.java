@@ -9,10 +9,19 @@ public class Deck {
 
 
     private ArrayList<Tile> tiles = new ArrayList<Tile>();
+
     public Deck(ArrayList<Tile> tiles) {
         this.tiles = tiles;
     }
 
-public void shuffle(){}
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
 
+    @Override
+    public String toString() {
+        return "Deck{" +
+                "tiles=" + tiles.toString() +
+                '}';
+    }
 }

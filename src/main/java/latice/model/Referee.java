@@ -10,4 +10,7 @@ public class Referee {
         this.player = player;
         this.gameboard = gameboard;
     }
+    public Referee(){
+
+    }
 }
