@@ -16,7 +16,13 @@ public class LaticeApplicationConsole {
 		Player player2 = new Player(rackj2, "testj2");
 		Game game = new Game(player1, player2, referee);
 		game.shareTilesBetweenTwoPlayers(player1, player2);
+		rackj1.addTileFromDeck(player1.getDeck());
+		rackj2.addTileFromDeck(player2.getDeck());
+
 		message(player1.toString());
 		message(player2.toString());
+		message(rackj1.toString());
+		message(rackj2.toString());
+
 	}
 }
