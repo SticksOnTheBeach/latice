@@ -60,7 +60,7 @@ public class Game {
         }
         Collections.shuffle(listTile);
 
-        return  listTile;
+        return listTile;
     }
     
     /**
