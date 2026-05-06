@@ -44,4 +44,7 @@ public class Rack implements TileContainer{
                 '}';
     }
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
 }
