@@ -23,7 +23,7 @@ public class LaticeTestCases {
 	Rack rackj2 = new Rack();
 	Player player1 = new Player(rackj1, "testj1");
 	Player player2 = new Player(rackj2, "testj2");
-	
+
 	@BeforeEach
 	public void init() {
 		Referee referee = new Referee();
@@ -36,7 +36,7 @@ public class LaticeTestCases {
 		listTiles = game.createAndShuffleTiles();
 		assertEquals(60, listTiles.size());
 	}
-	
+
 	@Test
 	public void checkNumberOfEachDeck() {
 		game.shareTilesBetweenTwoPlayers(player1, player2);
@@ -52,9 +52,9 @@ public class LaticeTestCases {
         while (!player1.getDeck().isEmpty()){
 			player1.getDeck().remove();
 		}
-		assertTrue(player1.getDeck().isEmpty()); 
+		assertTrue(player1.getDeck().isEmpty());
 	}
-	
+
     @Test
 	public void addTilesFromTheRack() {
 		game.shareTilesBetweenTwoPlayers(player1, player2);
@@ -62,7 +62,7 @@ public class LaticeTestCases {
 		assertEquals(25, player1.getDeck().getTiles().size());
 		assertEquals(5, rackj1.getTiles().size());
 	}
-	
+
 	@Test
 	public void addTilesFromTheRackWhenDeckisLessThan5Tiles(){
 		game.shareTilesBetweenTwoPlayers(player1, player2);

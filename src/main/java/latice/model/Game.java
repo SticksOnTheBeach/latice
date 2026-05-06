@@ -75,10 +75,6 @@ public class Game {
 	    ArrayList<Tile> listTileP2 =new ArrayList<Tile>();
 	    int size = listTile.size();
 	    
-	    if (isPlayersEmpty()) {
-	    	return;
-	    }
-	    
 	    for (int i = 0; i < size / 2; i++)
 	        listTileP1.add(listTile.get(i));
 	    for (int i = size / 2; i < size; i++)
