@@ -27,7 +27,7 @@ public class Deck implements TileContainer {
     }
 
     @Override
-    public boolean isempty() {
+    public boolean isEmpty() {
         if (tiles.size() == 0) {
             return true;
         }
