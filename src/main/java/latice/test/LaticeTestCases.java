@@ -41,10 +41,10 @@ public class LaticeTestCases {
 	@Test
 	public void removeTheTilesFromTheDeck() {
 		game.shareTilesBetweenTwoPlayers(player1, player2);
-        while (player1.getDeck().isempty() == false){
+        while (player1.getDeck().isEmpty() == false){
 			player1.getDeck().remove();
 		}
-		assertEquals(true, player1.getDeck().isempty());
+		assertEquals(true, player1.getDeck().isEmpty());
 	}
   @Test
 	public void addTilesFromTheRack() {
