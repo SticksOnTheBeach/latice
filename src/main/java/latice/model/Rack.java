@@ -5,16 +5,18 @@ import latice.model.tile.Tile;
 import java.util.ArrayList;
 
 public class Rack implements TileContainer{
-int maxSize =5;
+	int maxSize =5;
     private ArrayList<Tile> tiles = new ArrayList<Tile>();
-
+    
+    
+    // Changer la méthode Rack, afin qu'au lancement/à l'initialisation du jeu, il est préalablement 5 tiles
     public Rack() {
-
+    	
     }
 
 
     public void addTileFromDeck(Deck deck) {
-        while (tiles.size() < maxSize && deck.isempty() == false) {
+        while (tiles.size() < maxSize && deck.isEmpty() == false) {
                 tiles.add(deck.getTiles().get(0));
                 deck.remove();
         }
@@ -29,7 +31,7 @@ int maxSize =5;
     }
 
     @Override
-    public boolean isempty() {
+    public boolean isEmpty() {
         if (tiles.size() == 0) {
             return true;
         }
