@@ -42,4 +42,7 @@ int maxSize =5;
                 '}';
     }
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
 }

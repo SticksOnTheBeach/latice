@@ -8,7 +8,7 @@ import java.util.Map;
 public class Board {
     private Map<Position, Square> board = new HashMap<>();
 
-   // private Square[][] board; //Possibe hashmap a la place
+   // private Square[][] board; //Possibe hashmap a la place car plus optimal dans cette situation
     public Board() {
         //TODO initialisation du board
       this.board = board;
