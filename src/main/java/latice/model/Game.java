@@ -21,21 +21,35 @@ public class Game {
     
     protected int currentPlayer;  
     
+    /**
+     * Initializes a game for two specific players.
+     * 
+     * @param player1 The first player of the game.
+     * @param player2 The second player of the game.
+     * @param referee The referee overseeing the game rules and logic.
+     */
     public Game(Player player1, Player player2, Referee referee) {
-    	// Method for playing with 2 players
         this.player1 = player1;
         this.player2 = player2;
         this.referee = referee;
-
     }
     
-    
-    // Method to make a game with more than 2 players
+    /**
+     * Initializes a game for a dynamic number of players.
+     * 
+     * @param players A list containing all the players participating in the game.
+     * @param referee The referee overseeing the game rules and logic.
+     */
     public Game(ArrayList<Player> players, Referee referee) {
         this.players = players;
         this.referee = referee;
     }
      
+    /**
+     * Creates a complete set of tiles for the game and shuffles them randomly.
+     * 
+     * @return A list of newly created and shuffled tiles.
+     */
     public List<Tile> createAndShuffleTiles() {
         final List<Tile> listTile =new ArrayList<Tile>();
         for (COLOR color : COLOR.values() ){
@@ -49,6 +63,12 @@ public class Game {
         return  listTile;
     }
     
+    /**
+     * Distributes the generated tiles equally between two specific players.
+     * 
+     * @param player1 The first player to receive half of the generated tiles.
+     * @param player2 The second player to receive the remaining half of the tiles.
+     */
 	public void shareTilesBetweenTwoPlayers(Player player1, Player player2 ) {
 	    final List<Tile> listTile = createAndShuffleTiles();
 	    ArrayList<Tile> listTileP1 =new ArrayList<Tile>();
@@ -68,8 +88,16 @@ public class Game {
 	
 	}
 	
+    /**
+     * Distributes tiles dynamically among all players.
+     */
 	public void shareTilesDynamically() {}
 	
+    /**
+     * Checks if the list of players is empty.
+     * 
+     * @return True if there are no players in the list, false otherwise.
+     */
 	public boolean isPlayersEmpty() {
 		int numberOfPlayers = players.size();
 		if (numberOfPlayers == 0) {
