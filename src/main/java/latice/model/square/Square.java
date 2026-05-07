@@ -6,6 +6,7 @@ public class Square {
 
     private Tile Tile;
     private SquareType type;
+    
     public Square(Tile tile, SquareType type) {
         Tile = tile;
         this.type = type;
@@ -17,4 +18,6 @@ public class Square {
     public SquareType getType() {
         return type;
     }
+    
+    
 }

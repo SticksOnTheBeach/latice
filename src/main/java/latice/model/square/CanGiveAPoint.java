@@ -1,5 +1,10 @@
 package latice.model.square;
 
-public interface CanGiveAPoint {
-    public void canGiveAPoint();
+public abstract class CanGiveAPoint {
+	
+	protected static int POINT = 0;
+	
+	public int giveAPoint() {
+		return 0;
+	};
 }

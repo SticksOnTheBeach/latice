@@ -1,9 +1,10 @@
 package latice.model.square;
 
-public class NormalSquare implements  CanGiveAPoint{
-    @Override
-    public void canGiveAPoint(){
-        //TODO
+public class NormalSquare extends CanGiveAPoint {
+    
+	@Override
+    public int giveAPoint(){
+        return POINT = 0;
     }
 
 }
