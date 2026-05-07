@@ -34,7 +34,6 @@ public class Deck implements TileContainer {
         if (!tiles.isEmpty()) {
             tiles.remove(0);
         }
-        //TODO gerer la liste vide
     }
     
     /**
