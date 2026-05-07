@@ -4,29 +4,28 @@
 	<artifactId>hellomaven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<!-- Indiquer l'encodage et la version du JDK à utiliser -->
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
-		<!-- Dépendance vers JUnit 5 -->
+		<!-- JUnit 5 -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.9.1</version>
+			<version>5.10.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!-- Pour être compatible avec JUnit 5 -->
+			<!-- Plugin pour l'exécution des tests compatibles JUnit 5 -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.2.5</version>
 			</plugin>
 		</plugins>
 	</build>

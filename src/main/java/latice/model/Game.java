@@ -60,7 +60,7 @@ public class Game {
         }
         Collections.shuffle(listTile);
 
-        return  listTile;
+        return listTile;
     }
     
     /**
@@ -74,10 +74,6 @@ public class Game {
 	    ArrayList<Tile> listTileP1 =new ArrayList<Tile>();
 	    ArrayList<Tile> listTileP2 =new ArrayList<Tile>();
 	    int size = listTile.size();
-	    
-	    if (isPlayersEmpty()) {
-	    	return;
-	    }
 	    
 	    for (int i = 0; i < size / 2; i++)
 	        listTileP1.add(listTile.get(i));

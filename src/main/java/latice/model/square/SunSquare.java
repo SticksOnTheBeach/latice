@@ -1,9 +1,10 @@
 package latice.model.square;
 
-public class SunSquare implements  CanGiveAPoint{
+public class SunSquare implements CanGiveAPoint {
+    
     @Override
-    public void canGiveAPoint(){
-        //TODO
+    public int giveAPoint() {
+        return 2;
     }
 
 }

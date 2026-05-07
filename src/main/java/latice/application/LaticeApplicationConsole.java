@@ -16,7 +16,7 @@ public class LaticeApplicationConsole {
 		// Instanciation des objets : Joueur
 		Player player1 = new Player(rackj1, "testj1");
 		Player player2 = new Player(rackj2, "testj2");
-		
+		Board board = new Board();
 		// Instanciation du jeu
 		Game game = new Game(player1, player2, referee);
 		game.shareTilesBetweenTwoPlayers(player1, player2);
@@ -29,6 +29,8 @@ public class LaticeApplicationConsole {
 		message(player2.toString());
 		message(rackj1.toString());
 		message(rackj2.toString());
+		board.createGameBoard();
+		board.showGameBoard();
 
 	}
 }
