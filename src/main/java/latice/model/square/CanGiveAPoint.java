@@ -1,6 +1,6 @@
 package latice.model.square;
 
-public interface CanGiveAPoint {
+public interface CanGiveAPoint {	
     int giveAPoint();
     
 }
