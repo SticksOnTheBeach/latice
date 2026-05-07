@@ -29,7 +29,7 @@ public class LaticeApplicationConsole {
 		message(player2.toString());
 		message(rackj1.toString());
 		message(rackj2.toString());
-		board.createGameBOard();
+		board.createGameBoard();
 		board.showGameBoard();
 
 	}

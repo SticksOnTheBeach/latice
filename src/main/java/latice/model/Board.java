@@ -14,15 +14,14 @@ public class Board {
 
 
     // private Square[][] board; //Possibe hashmap a la place car plus optimal dans cette situation
-    public Board() {
-
-        };
-public void createGameBOard(){
-    for (int i = 0; i < length; i++) {
-        for (int j = 0; j < width; j++) {
-            board.put((new Position(i, j)), new Square(SquareType.NORMAL));
-        }
-    }
+    public Board() {};
+    
+    public void createGameBoard(){
+    	for (int i = 0; i < length; i++) {
+    		for (int j = 0; j < width; j++) {
+    			board.put((new Position(i, j)), new Square(SquareType.NORMAL));
+    		}
+    	}
         board.put(new Position(0, 0), new Square(SquareType.SUN));
         board.put(new Position(1, 1), new Square(SquareType.SUN));
         board.put(new Position(2, 2), new Square(SquareType.SUN));
