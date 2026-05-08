@@ -1,0 +1,63 @@
+package latice.ihm.view;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import latice.model.tile.Tile;
+
+public class TileView extends StackPane {
+
+    private static final int SIZE = 50;
+    private Tile tile;
+
+    public TileView(Tile tile) {
+        this.tile = tile;
+
+        Rectangle rect = new Rectangle(SIZE, SIZE);
+        rect.setFill(getTileColor(tile));
+        rect.setStroke(Color.BLACK);
+        rect.setStrokeWidth(1.5);
+
+        Image image = new Image(getClass().getResourceAsStream(getImagePath(tile)));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(40);
+        imageView.setFitHeight(40);
+        getChildren().addAll(rect, imageView);
+
+
+        // DRAG AND DROP
+        setOnDragDetected(event -> {
+            Dragboard db = startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(tile.getColor().name() + "," + tile.getShape().name());
+            db.setContent(content);
+            event.consume();
+        });
+    }
+
+    public Tile getTile() {
+        return tile;
+    }
+    
+    private String getImagePath(Tile tile) {
+        String color = tile.getColor().name().toLowerCase();
+        String shape = tile.getShape().name().toLowerCase();
+        return "/images/" + shape + "_" + color.substring(0, 1) + ".png";
+    }
+
+    private Color getTileColor(Tile tile) {
+        switch (tile.getColor()) {
+            case YELLOW:   return Color.GOLD;
+            case NAVY:     return Color.NAVY;
+            case MAGENTA:  return Color.MAGENTA;
+            case REDGREEN: return Color.DARKGREEN;
+            case TEAL:     return Color.TEAL;
+            default:       return Color.GRAY;
+        }
+    }
+}

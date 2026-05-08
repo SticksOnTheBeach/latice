@@ -51,6 +51,10 @@ public class Board {
             Console.message(""); 
         }
     }
+    
+    public Square getSquare(Position p) {
+        return board.get(p);
+    }
 
 
 }
