@@ -14,6 +14,7 @@ public class SquarePane extends StackPane {
     private static final int SIZE = 60;
     private Position position;
     private Square square;
+    private boolean isTilePlaced = false;
 
     public SquarePane(Square square, Position position) {
         this.square = square;
@@ -44,25 +45,29 @@ public class SquarePane extends StackPane {
         getChildren().addAll(rect, symbol);
 
         setOnDragOver(event -> {
-            if (event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {
+            if (!isTilePlaced && event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
             event.consume();
         });
-
+        
         setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            if (db.hasString()) {
-                // Récupère la TileView source
+            if (!isTilePlaced) {
                 TileView tileView = (TileView) event.getGestureSource();
-                // Affiche la tuile sur la case
-                getChildren().clear();
-                getChildren().add(tileView);
+                placeTile(tileView);
                 event.setDropCompleted(true);
             }
             event.consume();
         });
     }
+    
+    private void placeTile(TileView tileView) {
+        getChildren().clear();
+        getChildren().add(tileView);
+        isTilePlaced = true;
+        tileView.setOnDragDetected(event -> event.consume());
+    }
+
 
     public Position getPosition() {
         return position;
