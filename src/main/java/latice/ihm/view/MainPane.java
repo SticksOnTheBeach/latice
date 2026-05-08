@@ -9,19 +9,26 @@ import latice.model.Board;
 import latice.model.Rack;
 
 public class MainPane extends BorderPane {
-    protected Label lblNbTours;
-    protected int nbTours;
+    protected Label lblNbRound;
+    protected int nbRound;
+    protected Label lblPlayerRound;
 
     public MainPane(Board board, Rack rack) {
-        lblNbTours = new Label("Tour :");
+        lblNbRound = new Label("Round :");
+        lblPlayerRound = new Label("Player Turn :");
 
         BoardPane boardPane = new BoardPane(board);
         RackBox rackBox = new RackBox(rack);
+        HBox hbTop = new HBox();
         
-        // Tours
-        setTop(lblNbTours);
-        setAlignment(lblNbTours, Pos.CENTER);
-        lblNbTours.setStyle("-fx-font-size: 20px; -fx-font-family: \"Arial\"; -fx-font-weight: bold;");
+        
+        // Round
+        hbTop.setPadding(new Insets(15, 0, 50, 0));
+        hbTop.getChildren().addAll(lblPlayerRound,lblNbRound);
+        hbTop.setAlignment(Pos.CENTER);
+        setTop(hbTop);
+        setAlignment(hbTop, Pos.CENTER);
+        hbTop.setStyle("-fx-font-size: 20px; -fx-font-family: \"Arial\"; -fx-font-weight: bold;");
         
         // Board
         setCenter(boardPane);

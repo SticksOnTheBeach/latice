@@ -1,7 +1,7 @@
 package latice.ihm.view;
 
-import javafx.scene.control.Label;
-import javafx.scene.input.Dragboard;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -34,15 +34,13 @@ public class SquarePane extends StackPane {
             		rect.setFill(Color.LIGHTGRAY); 
             		break;
         }
-        // RECT OF THE SQUARES
-        rect.setStroke(Color.DARKGRAY);
-        rect.setStrokeWidth(1);
-        // SYMBOL OF EACH SQUARE THAT DOESN'T HAVE A MOON OR SUN
-        Label symbol = new Label(square.getType().getSymbol());
-        symbol.setTextFill(Color.BLACK);
-        symbol.setStyle("-fx-font-size: 20px;");
-
-        getChildren().addAll(rect, symbol);
+        
+        // SYMBOL FOR THE SQUARES
+        Image image = new Image(getClass().getResourceAsStream(square.getType().getImagePath()));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(60);
+        imageView.setFitHeight(60);
+        getChildren().addAll(imageView);
 
         setOnDragOver(event -> {
             if (!isTilePlaced && event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {

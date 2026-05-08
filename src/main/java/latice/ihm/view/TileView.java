@@ -1,6 +1,7 @@
 package latice.ihm.view;
 
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -22,11 +23,12 @@ public class TileView extends StackPane {
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(1.5);
 
-     // -- TILES NAMES -- "EN GROS" : We retrieve the tile names and keep only the first two letters with the substring() method
-        Label label = new Label(tile.getShape().name().substring(0, 2));
-        label.setTextFill(Color.WHITE);
+        Image image = new Image(getClass().getResourceAsStream(getImagePath(tile)));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(40);
+        imageView.setFitHeight(40);
+        getChildren().addAll(rect, imageView);
 
-        getChildren().addAll(rect, label);
 
         // DRAG AND DROP
         setOnDragDetected(event -> {
@@ -40,6 +42,12 @@ public class TileView extends StackPane {
 
     public Tile getTile() {
         return tile;
+    }
+    
+    private String getImagePath(Tile tile) {
+        String color = tile.getColor().name().toLowerCase();
+        String shape = tile.getShape().name().toLowerCase();
+        return "/images/" + shape + "_" + color.substring(0, 1) + ".png";
     }
 
     private Color getTileColor(Tile tile) {
