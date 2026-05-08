@@ -4,7 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
+import javafx.scene.layout.HBox;
 import latice.model.Board;
 import latice.model.Rack;
 
@@ -26,10 +26,22 @@ public class MainPane extends BorderPane {
         // Board
         setCenter(boardPane);
         boardPane.setAlignment(Pos.CENTER);
-
-        // Rack
+        
+        // --- Rack ---
+        // OLD //
+        /* Rack
         setBottom(rackBox);
         rackBox.setAlignment(Pos.CENTER);
+        rackBox.setPadding(new Insets(0, 50, 10, 50));*/
+        
+        // NEW //
+        // On crée un conteneur pour empêcher le BorderPane 
+        // d'étirer RackBox sur toute la largeur
+        HBox bottomContainer = new HBox();
+        bottomContainer.setAlignment(Pos.CENTER);
+        bottomContainer.setPadding(new Insets(15, 0, 50, 0));
+        bottomContainer.getChildren().add(rackBox);
+        setBottom(bottomContainer);
         
         // MainPane BorderPane Settings 
         

@@ -15,7 +15,8 @@ public class TileView extends StackPane {
         rect.setFill(getTileColor(tile));
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(1.5);
-
+        
+        // -- TILES NAMES -- "EN GROS" : We retrieve the tile names and keep only the first two letters with the substring() method
         Label label = new Label(tile.getShape().name().substring(0, 2));
         label.setTextFill(Color.WHITE);
 
