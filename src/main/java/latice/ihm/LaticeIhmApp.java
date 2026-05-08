@@ -3,6 +3,7 @@ package latice.ihm;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import latice.ihm.controller.TileController;
 import latice.ihm.view.MainPane;
 import latice.model.Board;
 import latice.model.Game;
@@ -44,10 +45,13 @@ public class LaticeIhmApp extends Application {
 
         Game game = new Game(player1, player2, referee);
         game.shareTilesBetweenTwoPlayers(player1, player2);
-
+        
+        // RACK
         rackJ1.addTileFromDeck(player1.getDeck());
         rackJ2.addTileFromDeck(player2.getDeck());
-
+        
+        // CONTROLLER
+        TileController controllerTile = new TileController(board);
         MainPane mainPane = new MainPane(board, rackJ1);
 
         Scene scene = new Scene(mainPane, 800, 700);

@@ -23,7 +23,9 @@ public class TileController {
      */
     public boolean canPlaceTile(Position position) {
         Square square = board.getSquare(position);
-        if (square == null) return false;
+        if (square == null) {
+        	return false;
+        }
         return !square.isOccupied();
     }
 

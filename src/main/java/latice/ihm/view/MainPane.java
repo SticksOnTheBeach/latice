@@ -5,7 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import latice.ihm.controller.TileController;
 import latice.model.Board;
+import latice.model.Player;
 import latice.model.Rack;
 
 public class MainPane extends BorderPane {
@@ -13,13 +15,13 @@ public class MainPane extends BorderPane {
     protected int nbRound;
     protected Label lblPlayerRound;
 
-    public MainPane(Board board, Rack rack) {
+    public MainPane(Board board, Rack rack, TileController tileController, Player player) {
         lblNbRound = new Label("Round :");
         lblPlayerRound = new Label("Player Turn :");
         lblNbRound.setStyle("-fx-text-fill: white;");
         lblPlayerRound.setStyle("-fx-text-fill: white;");
 
-        BoardPane boardPane = new BoardPane(board);
+        BoardPane boardPane = new BoardPane(board, tileController, player);
         RackBox rackBox = new RackBox(rack);
         HBox hbTop = new HBox();
         
