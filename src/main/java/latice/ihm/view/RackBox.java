@@ -13,17 +13,18 @@ public class RackBox extends HBox {
     private static final int MAX_TILES_IN_RACK = 5;
 
     public RackBox(Rack rack) {
-        setSpacing(12); // L'espace entre chaques tuiles
+        setSpacing(12);
         setAlignment(Pos.CENTER);
         setPadding(new Insets(15));
         
-        // CSS pour les bords arrondis et la couleur "Acajou"
-        setStyle("-fx-background-color: #A67B5B; " + 
-                 "-fx-background-radius: 15; " + 
-                 "-fx-border-radius: 15; " + 
-                 "-fx-border-color: #3e2723; " + 
-                 "-fx-border-width: 3; " +
-                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 5);");
+        setStyle(
+                "-fx-background-color: rgba(255, 255, 255, 0.15); " +
+                "-fx-background-radius: 20; " +
+                "-fx-border-radius: 20; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.4); " +
+                "-fx-border-width: 1.5; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 20, 0, 0, 8);"
+            );
 
         // --- LES EMPLACEMENTS POUR CHACUN DES TUILES ---
         for (int i = 0; i < MAX_TILES_IN_RACK; i++) {

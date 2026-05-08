@@ -16,6 +16,8 @@ public class MainPane extends BorderPane {
     public MainPane(Board board, Rack rack) {
         lblNbRound = new Label("Round :");
         lblPlayerRound = new Label("Player Turn :");
+        lblNbRound.setStyle("-fx-text-fill: white;");
+        lblPlayerRound.setStyle("-fx-text-fill: white;");
 
         BoardPane boardPane = new BoardPane(board);
         RackBox rackBox = new RackBox(rack);

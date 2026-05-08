@@ -4,8 +4,6 @@ public class Player {
     private String name;
     private int score;
     private Rack rack;
-
-
     private Deck deck;
 
     public Player(Rack rack, String name) {
@@ -20,7 +18,23 @@ public class Player {
     public Deck getDeck() {
         return deck;
     }
+    
+    public Rack getRack() {
+        return rack;
+    }
+    
+    public String getName() {
+        return name;
+    }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
     @Override
     public String toString() {
         return "Player{" +
