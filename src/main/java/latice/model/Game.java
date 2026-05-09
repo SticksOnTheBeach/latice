@@ -88,10 +88,33 @@ public class Game {
 	
 	}
 	
-    /**
+	
+	public void createRack() {
+		Rack rack = new Rack();
+	}
+    
+
+	/**
      * Distributes tiles dynamically among all players.
      */
-	public void shareTilesDynamically() {}
+    public void shareTilesDynamically() {
+    	if (players == null || players.isEmpty()) {
+            return; 
+        }
+
+        final List<Tile> allTiles = createAndShuffleTiles();
+        int nbOfPlayers = players.size();
+        int tilesPerPlayer = allTiles.size() / nbOfPlayers;
+        int startIndex = 0; 
+        for (Player player : players) {
+            List<Tile> subList = allTiles.subList(startIndex, startIndex + tilesPerPlayer);
+            ArrayList<Tile> playerTiles = new ArrayList<>(subList);
+            player.setDeck(new Deck(playerTiles));
+            startIndex += tilesPerPlayer;
+        }
+        
+        System.out.println("Distribution terminée : " + tilesPerPlayer + " tuiles par joueur.");
+    }
 	
     /**
      * Checks if the list of players is empty.

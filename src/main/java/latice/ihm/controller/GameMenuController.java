@@ -42,8 +42,9 @@ public class GameMenuController {
         board.createGameBoard();
 
         Game game = new Game(players, referee);
-        game.shareTilesBetweenTwoPlayers(players.get(0), players.get(1));
-
+        //game.shareTilesBetweenTwoPlayers(players.get(0), players.get(1));
+        game.shareTilesDynamically();
+        
         for (Player p : players) {
             p.getRack().addTileFromDeck(p.getDeck());
         }

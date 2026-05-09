@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class GameMenu extends BorderPane {
@@ -31,6 +32,9 @@ public class GameMenu extends BorderPane {
     private VBox advancedBox;
     private VBox centerBox;
     private HBox hbButtons;
+    
+    // private Label msgError;
+    private ArrayList<Label> errorLabels = new ArrayList<>();
 
     private EventHandler<ActionEvent> onBack;
     private EventHandler<ActionEvent> onStart;
@@ -132,8 +136,9 @@ public class GameMenu extends BorderPane {
         // Branchement des handlers
         btnBack.setOnAction(onBack);
         btnStart.setOnAction(e -> {
-            handleStart();
-            onStart.handle(e);
+        	if (handleStart()) {
+                onStart.handle(e);
+            }
         });
 
         hbButtons = new HBox(16, btnBack, btnStart);
@@ -156,7 +161,8 @@ public class GameMenu extends BorderPane {
 
     private void refreshRows() {
         playersBox.getChildren().clear();
-
+        errorLabels.clear();
+        
         for (int i = 0; i < playerNames.size(); i++) {
             final int idx = i;
 
@@ -173,12 +179,22 @@ public class GameMenu extends BorderPane {
             tf.setStyle(inputStyle);
             tf.setPrefWidth(200);
             tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(idx, newVal));
-
+            
+            // MESSAGE D'ERREUR SI PAS DE NOM 
+            Label lblError = new Label("ERROR : PLEASE ENTER A NAME !");
+            lblError.setStyle("-fx-text-fill: #ff5555; -fx-font-size: 11px; -fx-font-weight: bold;");
+            lblError.setTextFill(Color.RED);
+            lblError.setVisible(false);
+            errorLabels.add(lblError);
+            
+            VBox tfBox = new VBox(2, tf, lblError);
+            tfBox.setAlignment(Pos.CENTER_LEFT);
+            
             Button btnOpt = new Button("⚙ options");
             btnOpt.setStyle(btnGhostStyle);
             btnOpt.setOnAction(e -> openAdvanced(idx));
 
-            HBox row = new HBox(10, lblNum, tf, btnOpt);
+            HBox row = new HBox(10, lblNum, tfBox, btnOpt);
             row.setAlignment(Pos.CENTER);
             row.setMaxWidth(450);
             row.setPadding(new Insets(10, 20, 10, 20));
@@ -329,14 +345,24 @@ public class GameMenu extends BorderPane {
         slideOut.play();
     }
 
-    private void handleStart() {
+    private boolean handleStart() {
+    	boolean correct = true;
+    	
         for (int i = 0; i < playerNames.size(); i++) {
-            if (playerNames.get(i).isBlank()) {
-                playerNames.set(i, "Joueur " + (i + 1));
+            if (playerNames.get(i).isEmpty()) {
+                // playerNames.set(i, "Joueur " + (i + 1));
+            	errorLabels.get(i).setVisible(true);
+            	correct = true;
+            } else {
+                errorLabels.get(i).setVisible(false); // On le recache si c'est corrigé
             }
+            
+        } if (correct) {
+            System.out.println("[GameMenu] Démarrage avec : " + playerNames);
         }
-        System.out.println("[GameMenu] Démarrage avec : " + playerNames);
-    }
+
+        return correct;
+}
 
     public ArrayList<String> getPlayerNames() {
         return playerNames;
