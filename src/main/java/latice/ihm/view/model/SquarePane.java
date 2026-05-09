@@ -35,6 +35,7 @@ public class SquarePane extends StackPane {
         Label symbol = new Label(square.getType().getSymbol());
         symbol.setTextFill(Color.BLACK);
         symbol.setStyle("-fx-font-size: 20px;");
+        
 
         getChildren().addAll(rect, symbol);
 

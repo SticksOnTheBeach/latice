@@ -25,7 +25,7 @@ public class TileView extends StackPane {
         
         String color = tile.getColor().name().toLowerCase();
         String shape = tile.getShape().name().toLowerCase();
-        String path = "/images/" + shape + "_" + color.substring(0, 1) + ".png";        
+        String path = "/images/game/" + shape + "_" + color.substring(0, 1) + ".png";        
         ImageView imageView = new ImageView(ImageLoader.load(path));
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);
