@@ -352,9 +352,9 @@ public class GameMenu extends BorderPane {
             if (playerNames.get(i).isEmpty()) {
                 // playerNames.set(i, "Joueur " + (i + 1));
             	errorLabels.get(i).setVisible(true);
-            	correct = true;
+            	correct = false;
             } else {
-                errorLabels.get(i).setVisible(false); // On le recache si c'est corrigé
+                errorLabels.get(i).setVisible(false);
             }
             
         } if (correct) {
