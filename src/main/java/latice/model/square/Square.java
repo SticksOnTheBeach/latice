@@ -8,7 +8,7 @@ public class Square {
     private SquareType type;
     
     public Square(Tile tile, SquareType type) {
-        tile = tile;
+        this.tile = tile;
         this.type = type;
     }
     public Square( SquareType type) {
