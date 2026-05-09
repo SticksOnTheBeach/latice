@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import latice.ihm.controller.TileController;
 import latice.ihm.view.MainPane;
+import latice.ihm.view.menu.MenuPane;
 import latice.model.Board;
 import latice.model.Game;
 import latice.model.Player;
@@ -53,8 +54,8 @@ public class LaticeIhmApp extends Application {
         // CONTROLLER
         TileController tileController = new TileController(board);
         MainPane mainPane = new MainPane(board, rackJ1, tileController, player1);
-
-        Scene scene = new Scene(mainPane, 800, 700);
+        MenuPane menu = new MenuPane();
+        Scene scene = new Scene(menu, 800, 700);
         
         mainPane.setStyle(
             "-fx-background-color: linear-gradient(to bottom right, #3e2723, #6d4c41);"
