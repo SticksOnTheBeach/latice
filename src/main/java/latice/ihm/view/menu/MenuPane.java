@@ -21,14 +21,24 @@ public class MenuPane extends BorderPane {
 
     public MenuPane() {
 
+        // Image de fond
+        ImageView background = new ImageView(ImageLoader.load("/images/menu/background.png"));
+        background.setPreserveRatio(false);
+        background.fitWidthProperty().bind(widthProperty());
+        background.fitHeightProperty().bind(heightProperty());
+
+        // Fond style pixel art / Game Boy
+        setStyle("-fx-background-color: #1a2e35;");
+
         /* TOP */
-        lblTitle = new Label("Latice");
+        /*lblTitle = new Label("LATICE");
         lblTitle.setStyle(
             "-fx-font-size: 64px; " +
             "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: black;"
-        );
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-text-fill: #a8d8a8; " +
+            "-fx-effect: dropshadow(gaussian, #4a9e4a, 0, 0, 4, 4);"
+        );*/
 
         ImageView imageView = new ImageView(ImageLoader.load("/images/menu/parametres.png"));
         imageView.setFitWidth(32);
@@ -43,106 +53,66 @@ public class MenuPane extends BorderPane {
         StackPane topBar = new StackPane();
         topBar.setPadding(new Insets(30));
         StackPane.setAlignment(btnParameters, Pos.CENTER_LEFT);
-        StackPane.setAlignment(lblTitle, Pos.CENTER);
-        topBar.getChildren().addAll(lblTitle, btnParameters);
+        //StackPane.setAlignment(lblTitle, Pos.CENTER);
+        topBar.getChildren().addAll(btnParameters);
         setTop(topBar);
 
-
         /* CENTER */
-        btnPlay = new Button("▶  PLAY");
-        btnExit = new Button("✖  EXIT");
+        btnPlay = new Button("> PLAY");
+        btnExit = new Button("> EXIT");
 
-        // Style cartoon pour Play
-        btnPlay.setStyle(
-            "-fx-font-size: 22px; " +
+        String btnStyle =
+            "-fx-font-size: 20px; " +
             "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #27ae60; " +
-            "-fx-background-radius: 50px; " +
-            "-fx-border-color: #1a5e35; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 20px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-text-fill: #1a2e35; " +
+            "-fx-background-color: #a8d8a8; " +
+            "-fx-background-radius: 0px; " +
+            "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
+            "-fx-border-width: 4px; " +
             "-fx-padding: 12px 40px; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0, 0, 4);"
-        );
+            "-fx-min-width: 200px;";
 
-        // Style cartoon pour Exit
-        btnExit.setStyle(
-            "-fx-font-size: 22px; " +
+        String btnHoverStyle =
+            "-fx-font-size: 20px; " +
             "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #e74c3c; " +
-            "-fx-background-radius: 50px; " +
-            "-fx-border-color: #922b21; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 50px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-text-fill: #1a2e35; " +
+            "-fx-background-color: #c8f8c8; " +
+            "-fx-background-radius: 0px; " +
+            "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
+            "-fx-border-width: 4px; " +
             "-fx-padding: 12px 40px; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0, 0, 4);"
-        );
+            "-fx-min-width: 200px;";
 
-        // Hover sur Play
-        btnPlay.setOnMouseEntered(e -> btnPlay.setStyle(
-            "-fx-font-size: 22px; " +
+        String btnPressedStyle =
+            "-fx-font-size: 20px; " +
             "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #2ecc71; " +
-            "-fx-background-radius: 50px; " +
-            "-fx-border-color: #1a5e35; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 50px; " +
-            "-fx-padding: 12px 40px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-text-fill: #1a2e35; " +
+            "-fx-background-color: #88b888; " +
+            "-fx-background-radius: 0px; " +
+            "-fx-border-color: #1a5e1a #4a9e4a #4a9e4a #1a5e1a; " +
+            "-fx-border-width: 4px; " +
+            "-fx-padding: 14px 38px 10px 42px; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0, 0, 6);"
-        ));
-        btnPlay.setOnMouseExited(e -> btnPlay.setStyle(
-            "-fx-font-size: 22px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #27ae60; " +
-            "-fx-background-radius: 50px; " +
-            "-fx-border-color: #1a5e35; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 50px; " +
-            "-fx-padding: 12px 40px; " +
-            "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0, 0, 4);"
-        ));
+            "-fx-min-width: 200px;";
 
-        // Hover sur Exit
-        btnExit.setOnMouseEntered(e -> btnExit.setStyle(
-            "-fx-font-size: 22px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #e95f50; " +
-            "-fx-background-radius: 50px; " +
-            "-fx-border-color: #922b21; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 50px; " +
-            "-fx-padding: 12px 40px; " +
-            "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0, 0, 6);"
-        ));
-        btnExit.setOnMouseExited(e -> btnExit.setStyle(
-            "-fx-font-size: 22px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Arial\"; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #e74c3c; " +
-            "-fx-background-radius: 50px; " +
-            "-fx-border-color: #922b21; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 50px; " +
-            "-fx-padding: 12px 40px; " +
-            "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0, 0, 4);"
-        ));
+        btnPlay.setStyle(btnStyle);
+        btnExit.setStyle(btnStyle);
+
+        // Hover et pressed
+        btnPlay.setOnMouseEntered(e -> btnPlay.setStyle(btnHoverStyle));
+        btnPlay.setOnMouseExited(e -> btnPlay.setStyle(btnStyle));
+        btnPlay.setOnMousePressed(e -> btnPlay.setStyle(btnPressedStyle));
+        btnPlay.setOnMouseReleased(e -> btnPlay.setStyle(btnHoverStyle));
+
+        btnExit.setOnMouseEntered(e -> btnExit.setStyle(btnHoverStyle));
+        btnExit.setOnMouseExited(e -> btnExit.setStyle(btnStyle));
+        btnExit.setOnMousePressed(e -> btnExit.setStyle(btnPressedStyle));
+        btnExit.setOnMouseReleased(e -> btnExit.setStyle(btnHoverStyle));
 
         GridPane gridMid = new GridPane();
         gridMid.setPadding(new Insets(10, 10, 10, 10));
@@ -153,5 +123,7 @@ public class MenuPane extends BorderPane {
         gridMid.add(btnExit, 0, 1);
 
         setCenter(gridMid);
+
+        getChildren().add(0, background);
     }
 }

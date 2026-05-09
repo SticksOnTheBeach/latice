@@ -55,7 +55,7 @@ public class LaticeIhmApp extends Application {
         TileController tileController = new TileController(board);
         MainPane mainPane = new MainPane(board, rackJ1, tileController, player1);
         MenuPane menu = new MenuPane();
-        Scene scene = new Scene(menu, 800, 700);
+        Scene scene = new Scene(menu, 1000, 700);
         
         mainPane.setStyle(
             "-fx-background-color: linear-gradient(to bottom right, #3e2723, #6d4c41);"
