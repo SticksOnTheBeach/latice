@@ -27,34 +27,53 @@ public class MenuPane extends BorderPane {
         background.fitWidthProperty().bind(widthProperty());
         background.fitHeightProperty().bind(heightProperty());
 
-        // Fond style pixel art / Game Boy
         setStyle("-fx-background-color: #1a2e35;");
 
         /* TOP */
-        /*lblTitle = new Label("LATICE");
-        lblTitle.setStyle(
-            "-fx-font-size: 64px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: \"Courier New\"; " +
-            "-fx-text-fill: #a8d8a8; " +
-            "-fx-effect: dropshadow(gaussian, #4a9e4a, 0, 0, 4, 4);"
-        );*/
-
         ImageView imageView = new ImageView(ImageLoader.load("/images/menu/parametres.png"));
         imageView.setFitWidth(32);
         imageView.setFitHeight(32);
         imageView.setPreserveRatio(true);
         btnParameters = new Button("", imageView);
-        btnParameters.setStyle(
+
+        // Styles bouton paramètres
+        String btnParametersStyle =
             "-fx-background-color: transparent; " +
-            "-fx-cursor: hand;"
-        );
+            "-fx-cursor: hand; " +
+            "-fx-border-color: transparent; " +
+            "-fx-border-width: 2px; " +
+            "-fx-border-radius: 8px; " +
+            "-fx-background-radius: 8px; " +
+            "-fx-padding: 0px;";
+
+        String btnParametersHoverStyle =
+            "-fx-background-color: rgba(255,255,255,0.15); " +
+            "-fx-cursor: hand; " +
+            "-fx-border-color: rgba(255,255,255,0.3); " +
+            "-fx-border-width: 2px; " +
+            "-fx-border-radius: 8px; " +
+            "-fx-background-radius: 8px; " +
+            "-fx-padding: 0px;";
+
+        String btnParametersPressedStyle =
+            "-fx-background-color: rgba(255,255,255,0.05); " +
+            "-fx-cursor: hand; " +
+            "-fx-border-color: rgba(255,255,255,0.2); " +
+            "-fx-border-width: 2px; " +
+            "-fx-border-radius: 8px; " +
+            "-fx-background-radius: 8px; " +
+            "-fx-padding: 0px;";
+
+        btnParameters.setStyle(btnParametersStyle);
+        btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(btnParametersHoverStyle));
+        btnParameters.setOnMouseExited(e -> btnParameters.setStyle(btnParametersStyle));
+        btnParameters.setOnMousePressed(e -> btnParameters.setStyle(btnParametersPressedStyle));
+        btnParameters.setOnMouseReleased(e -> btnParameters.setStyle(btnParametersHoverStyle));
 
         StackPane topBar = new StackPane();
         topBar.setPadding(new Insets(30));
         StackPane.setAlignment(btnParameters, Pos.CENTER_LEFT);
-        //StackPane.setAlignment(lblTitle, Pos.CENTER);
-        topBar.getChildren().addAll(btnParameters);
+        topBar.getChildren().add(btnParameters);
         setTop(topBar);
 
         /* CENTER */
@@ -103,7 +122,6 @@ public class MenuPane extends BorderPane {
         btnPlay.setStyle(btnStyle);
         btnExit.setStyle(btnStyle);
 
-        // Hover et pressed
         btnPlay.setOnMouseEntered(e -> btnPlay.setStyle(btnHoverStyle));
         btnPlay.setOnMouseExited(e -> btnPlay.setStyle(btnStyle));
         btnPlay.setOnMousePressed(e -> btnPlay.setStyle(btnPressedStyle));
