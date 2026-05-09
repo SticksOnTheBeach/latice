@@ -1,12 +1,13 @@
 package latice.model;
 
-import latice.model.tile.COLOR;
-import latice.model.tile.SHAPE;
-import latice.model.tile.Tile;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
+import latice.model.tile.COLOR;
+import latice.model.tile.SHAPE;
+import latice.model.tile.Tile;
 
 public class Game {
 	
@@ -19,8 +20,10 @@ public class Game {
     
     protected int CurrentCycle;
     
-    protected int currentPlayer;  
+    protected int currentPlayerIndex;  
     
+    Random rand = new Random();
+
     /**
      * Initializes a game for two specific players.
      * 
@@ -43,6 +46,7 @@ public class Game {
     public Game(ArrayList<Player> players, Referee referee) {
         this.players = players;
         this.referee = referee;
+        this.currentPlayerIndex = rand.nextInt(players.size());
     }
      
     /**
@@ -101,4 +105,14 @@ public class Game {
 		}
 		return false;
 	}
+	
+	public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+	
+	public void nextTurn() {
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % players.size();
+        
+        System.out.println("C'est au tour de : " + getCurrentPlayer().getName());
+    }
 }

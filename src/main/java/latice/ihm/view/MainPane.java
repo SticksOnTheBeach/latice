@@ -9,28 +9,34 @@ import latice.ihm.controller.TileController;
 import latice.ihm.view.model.BoardPane;
 import latice.ihm.view.model.RackBox;
 import latice.model.Board;
+import latice.model.Game; // N'oublie pas l'import !
 import latice.model.Player;
-import latice.model.Rack;
 
 public class MainPane extends BorderPane {
     protected Label lblNbRound;
-    protected int nbRound;
+    protected int nbRound = 1;
     protected Label lblPlayerRound;
+    private Game game; 
 
-    public MainPane(Board board, Rack rack, TileController tileController, Player player) {
-        lblNbRound = new Label("Round :");
+    public MainPane(Board board, Game game, TileController tileController) {
+        this.game = game;
+
+        lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
+        
         lblNbRound.setStyle("-fx-text-fill: white;");
         lblPlayerRound.setStyle("-fx-text-fill: white;");
 
-        BoardPane boardPane = new BoardPane(board, tileController, player);
-        RackBox rackBox = new RackBox(rack);
-        HBox hbTop = new HBox();
+        // On demande au jeu : Qui joue en premier ?
+        Player currentPlayer = game.getCurrentPlayer();
+        BoardPane boardPane = new BoardPane(board, tileController, currentPlayer);
+        RackBox rackBox = new RackBox(currentPlayer.getRack());
         
+        HBox hbTop = new HBox(20);
         
         // Round
         hbTop.setPadding(new Insets(15, 0, 50, 0));
-        hbTop.getChildren().addAll(lblPlayerRound,lblNbRound);
+        hbTop.getChildren().addAll(lblPlayerRound, lblNbRound);
         hbTop.setAlignment(Pos.CENTER);
         setTop(hbTop);
         setAlignment(hbTop, Pos.CENTER);
@@ -46,6 +52,7 @@ public class MainPane extends BorderPane {
         setBottom(rackBox);
         rackBox.setAlignment(Pos.CENTER);
         rackBox.setPadding(new Insets(0, 50, 10, 50));*/
+
         
         // NEW //
         // On crée un conteneur pour empêcher le BorderPane 
@@ -56,9 +63,12 @@ public class MainPane extends BorderPane {
         bottomContainer.getChildren().add(rackBox);
         setBottom(bottomContainer);
         
-        // MainPane BorderPane Settings 
-        
-        //BorderPane.setAlignment(boardPane, Pos.CENTER);
         BorderPane.setMargin(boardPane, new Insets(20));
+        updateDisplay();
+    }
+    
+    public void updateDisplay() {
+        Player current = game.getCurrentPlayer();
+        lblPlayerRound.setText("Player Turn : " + current.getName());
     }
 }

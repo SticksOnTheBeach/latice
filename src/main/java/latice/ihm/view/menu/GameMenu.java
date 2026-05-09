@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,24 +21,20 @@ import javafx.util.Duration;
 public class GameMenu extends BorderPane {
 
     private static final int MAX_PLAYERS = 4;
-    private static final int MIN_PLAYERS = 2;
 
-    // Liste des noms de joueurs
     private ArrayList<String> playerNames = new ArrayList<>();
-    // pour savoir quel joueur fais quelles modifs
     private int currentPlayerIndex = -1;
-    
     private ArrayList<String> playerColors = new ArrayList<>();
-    
-    private Label lblTitle;
 
-    // Les deux zones principales
+    private Label lblTitle;
     private VBox playersBox;
     private VBox advancedBox;
     private VBox centerBox;
     private HBox hbButtons;
 
-    // Styles boutons
+    private EventHandler<ActionEvent> onBack;
+    private EventHandler<ActionEvent> onStart;
+
     String btnStyle =
         "-fx-font-size: 16px; " +
         "-fx-font-weight: bold; " +
@@ -73,22 +71,22 @@ public class GameMenu extends BorderPane {
         "-fx-text-fill: rgba(168,216,168,0.8); " +
         "-fx-padding: 8px 14px; " +
         "-fx-cursor: hand;";
-    
+
     String btnColorStyle =
-            "-fx-font-size: 14px; " +
-            "-fx-font-family: \"Courier New\"; " +
-            "-fx-background-color: transparent; " +
-            "-fx-border-color: rgba(168,216,168,0.4); " +
-            "-fx-border-radius: 50em; " + 
-            "-fx-background-radius: 50em; " + 
-            "-fx-min-width: 28px; " +
-            "-fx-min-height: 28px; " + 
-            "-fx-max-width: 28px; " + 
-            "-fx-max-height: 28px; " + 
-            "-fx-padding: 0; " +
-            "-fx-alignment: center; " + 
-            "-fx-text-fill: rgba(168,216,168,0.8); " +
-            "-fx-cursor: hand;";
+        "-fx-font-size: 14px; " +
+        "-fx-font-family: \"Courier New\"; " +
+        "-fx-background-color: transparent; " +
+        "-fx-border-color: rgba(168,216,168,0.4); " +
+        "-fx-border-radius: 50em; " +
+        "-fx-background-radius: 50em; " +
+        "-fx-min-width: 28px; " +
+        "-fx-min-height: 28px; " +
+        "-fx-max-width: 28px; " +
+        "-fx-max-height: 28px; " +
+        "-fx-padding: 0; " +
+        "-fx-alignment: center; " +
+        "-fx-text-fill: rgba(168,216,168,0.8); " +
+        "-fx-cursor: hand;";
 
     String inputStyle =
         "-fx-background-color: rgba(255,255,255,0.08); " +
@@ -99,9 +97,10 @@ public class GameMenu extends BorderPane {
         "-fx-font-size: 14px; " +
         "-fx-padding: 8px 12px;";
 
-    public GameMenu(Runnable onBack) {
+    public GameMenu(EventHandler<ActionEvent> onBack, EventHandler<ActionEvent> onStart) {
+        this.onBack = onBack;
+        this.onStart = onStart;
 
-        // 2 joueurs par défaut
         playerNames.add("");
         playerNames.add("");
         playerColors.add("rgba(168,216,168,0.3)");
@@ -109,7 +108,6 @@ public class GameMenu extends BorderPane {
 
         setStyle("-fx-background-color: #1a2e35;");
 
-        /* TITRE */
         lblTitle = new Label("> GAME SETUP");
         lblTitle.setStyle(
             "-fx-font-family: \"Courier New\"; " +
@@ -118,12 +116,10 @@ public class GameMenu extends BorderPane {
             "-fx-text-fill: #a8d8a8;"
         );
 
-        /* ZONE JOUEURS */
         playersBox = new VBox(12);
         playersBox.setAlignment(Pos.CENTER);
         refreshRows();
 
-        /* BOUTONS DU BAS */
         Button btnBack  = new Button("← Retour");
         Button btnStart = new Button("> Démarrer");
 
@@ -133,22 +129,23 @@ public class GameMenu extends BorderPane {
         btnStart.setOnMouseEntered(e -> btnStart.setStyle(btnHoverStyle));
         btnStart.setOnMouseExited(e  -> btnStart.setStyle(btnStyle));
 
-        btnBack.setOnAction(e -> onBack.run());
-        btnStart.setOnAction(e -> handleStart());
+        // Branchement des handlers
+        btnBack.setOnAction(onBack);
+        btnStart.setOnAction(e -> {
+            handleStart();
+            onStart.handle(e);
+        });
 
         hbButtons = new HBox(16, btnBack, btnStart);
         hbButtons.setAlignment(Pos.CENTER);
 
-        /* COLONNE CENTRALE */
         centerBox = new VBox(30, lblTitle, playersBox, hbButtons);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setPadding(new Insets(50));
 
-        /* PANNEAU AVANCÉ (invisible, à droite) */
         advancedBox = buildAdvancedBox();
         advancedBox.setTranslateX(400);
 
-        /* STACKPANE : superpose centerBox et advancedBox */
         StackPane root = new StackPane();
         root.setAlignment(Pos.CENTER);
         StackPane.setAlignment(advancedBox, Pos.CENTER_RIGHT);
@@ -157,17 +154,12 @@ public class GameMenu extends BorderPane {
         setCenter(root);
     }
 
-    // -------------------------------------------------------------------------
-    // Construction des lignes joueurs
-    // -------------------------------------------------------------------------
-
     private void refreshRows() {
         playersBox.getChildren().clear();
 
         for (int i = 0; i < playerNames.size(); i++) {
             final int idx = i;
 
-            /* Numéro */
             Label lblNum = new Label((i + 1) + ".");
             lblNum.setStyle(
                 "-fx-font-family: \"Courier New\"; " +
@@ -176,25 +168,21 @@ public class GameMenu extends BorderPane {
                 "-fx-min-width: 20px;"
             );
 
-            /* Champ nom */
             TextField tf = new TextField(playerNames.get(i));
             tf.setPromptText("Joueur " + (i + 1));
             tf.setStyle(inputStyle);
             tf.setPrefWidth(200);
             tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(idx, newVal));
 
-            /* Bouton options */
             Button btnOpt = new Button("⚙ options");
             btnOpt.setStyle(btnGhostStyle);
             btnOpt.setOnAction(e -> openAdvanced(idx));
 
-            /* Ligne du joueur */
             HBox row = new HBox(10, lblNum, tf, btnOpt);
             row.setAlignment(Pos.CENTER);
-            
             row.setMaxWidth(450);
             row.setPadding(new Insets(10, 20, 10, 20));
-            
+
             String currentColor = playerColors.get(i);
             row.setStyle(
                 "-fx-border-color: " + currentColor + "; " +
@@ -203,18 +191,17 @@ public class GameMenu extends BorderPane {
                 "-fx-background-radius: 10px;"
             );
 
-            /* Bouton + sur la ligne du joueur 2 uniquement */
             if (i == 1 && playerNames.size() < MAX_PLAYERS) {
                 Button btnAdd = new Button("+");
                 btnAdd.setStyle(btnGhostStyle);
                 btnAdd.setOnAction(e -> {
                     playerNames.add("");
+                    playerColors.add("rgba(168,216,168,0.3)");
                     refreshRows();
                 });
                 row.getChildren().add(btnAdd);
             }
 
-            /* Bouton × pour les joueurs 3 et 4 */
             if (i >= 2) {
                 Button btnRemove = new Button("×");
                 btnRemove.setStyle(
@@ -224,6 +211,7 @@ public class GameMenu extends BorderPane {
                 );
                 btnRemove.setOnAction(e -> {
                     playerNames.remove(idx);
+                    playerColors.remove(idx);
                     refreshRows();
                 });
                 row.getChildren().add(btnRemove);
@@ -233,12 +221,7 @@ public class GameMenu extends BorderPane {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Panneau options avancées
-    // -------------------------------------------------------------------------
-
     private VBox buildAdvancedBox() {
-        // Un conteneur digne d'un salon VIP
         VBox box = new VBox(20);
         box.setPadding(new Insets(40, 30, 40, 30));
         box.setMaxWidth(280);
@@ -256,13 +239,12 @@ public class GameMenu extends BorderPane {
             "-fx-text-fill: #a8d8a8;"
         );
 
-        /* --- SECTION COULEURS --- */
         Label lblColor = new Label("Couleur :");
         lblColor.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
-        Button btnRed = new Button("🔴");
-        Button btnBlue = new Button("🔵");
-        Button btnGreen = new Button("🟢");
+        Button btnRed    = new Button("🔴");
+        Button btnBlue   = new Button("🔵");
+        Button btnGreen  = new Button("🟢");
         Button btnYellow = new Button("🟡");
 
         btnRed.setStyle(btnColorStyle);
@@ -270,22 +252,10 @@ public class GameMenu extends BorderPane {
         btnGreen.setStyle(btnColorStyle);
         btnYellow.setStyle(btnColorStyle);
 
-        btnRed.setOnAction(e -> {
-            playerColors.set(currentPlayerIndex, "#ff5555");
-            refreshRows();
-        });
-        btnBlue.setOnAction(e -> {
-            playerColors.set(currentPlayerIndex, "#55aaff");
-            refreshRows();
-        });
-        btnGreen.setOnAction(e -> {
-            playerColors.set(currentPlayerIndex, "#55ff55");
-            refreshRows();
-        });
-        btnYellow.setOnAction(e -> {
-            playerColors.set(currentPlayerIndex, "#ffff55");
-            refreshRows();
-        });
+        btnRed.setOnAction(e    -> { playerColors.set(currentPlayerIndex, "#ff5555"); refreshRows(); });
+        btnBlue.setOnAction(e   -> { playerColors.set(currentPlayerIndex, "#55aaff"); refreshRows(); });
+        btnGreen.setOnAction(e  -> { playerColors.set(currentPlayerIndex, "#55ff55"); refreshRows(); });
+        btnYellow.setOnAction(e -> { playerColors.set(currentPlayerIndex, "#ffff55"); refreshRows(); });
 
         GridPane colorGrid = new GridPane();
         colorGrid.setHgap(8);
@@ -295,7 +265,6 @@ public class GameMenu extends BorderPane {
         colorGrid.add(btnGreen, 2, 0);
         colorGrid.add(btnYellow, 3, 0);
 
-        /* --- SECTION ICÔNES --- */
         Label lblIcon = new Label("Icône :");
         lblIcon.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
@@ -309,28 +278,26 @@ public class GameMenu extends BorderPane {
         btnEagle.setStyle(btnGhostStyle);
         btnWolf.setStyle(btnGhostStyle);
 
-        // Actions pour les icônes
-        btnFox.setOnAction(e -> System.out.println("Icône Renard pour joueur " + (currentPlayerIndex + 1)));
-        btnDragon.setOnAction(e -> System.out.println("Icône Dragon pour joueur " + (currentPlayerIndex + 1)));
-        btnEagle.setOnAction(e -> System.out.println("Icône Aigle pour joueur " + (currentPlayerIndex + 1)));
-        btnWolf.setOnAction(e -> System.out.println("Icône Loup pour joueur " + (currentPlayerIndex + 1)));
+        btnFox.setOnAction(e    -> System.out.println("Icône Renard pour joueur "  + (currentPlayerIndex + 1)));
+        btnDragon.setOnAction(e -> System.out.println("Icône Dragon pour joueur "  + (currentPlayerIndex + 1)));
+        btnEagle.setOnAction(e  -> System.out.println("Icône Aigle pour joueur "   + (currentPlayerIndex + 1)));
+        btnWolf.setOnAction(e   -> System.out.println("Icône Loup pour joueur "    + (currentPlayerIndex + 1)));
 
         HBox iconRow = new HBox(8, btnFox, btnDragon, btnEagle, btnWolf);
 
-        /* --- BOUTON FERMER --- */
         Button btnClose = new Button("← Fermer");
         btnClose.setStyle(btnGhostStyle);
         btnClose.setOnAction(e -> closeAdvanced());
+
         box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, iconRow, btnClose);
 
         return box;
     }
 
     private void openAdvanced(int idx) {
-    	this.currentPlayerIndex = idx;
+        this.currentPlayerIndex = idx;
         centerBox.setMouseTransparent(true);
-        
-        // anim pour les textfields des joueurs et les boutons démarrer et quitter
+
         TranslateTransition slideLeftPlayers = new TranslateTransition(Duration.millis(420), playersBox);
         slideLeftPlayers.setToX(-200);
         TranslateTransition slideLeftBtns = new TranslateTransition(Duration.millis(420), hbButtons);
@@ -338,9 +305,7 @@ public class GameMenu extends BorderPane {
         TranslateTransition slideLeftTitle = new TranslateTransition(Duration.millis(420), lblTitle);
         slideLeftTitle.setToX(-200);
 
-        // Regroupe les deux animations pour les jouer en parallèle
-        ParallelTransition slideLeftAll = new ParallelTransition(slideLeftPlayers, slideLeftBtns, slideLeftTitle);
-        slideLeftAll.play();
+        new ParallelTransition(slideLeftPlayers, slideLeftBtns, slideLeftTitle).play();
 
         TranslateTransition slideIn = new TranslateTransition(Duration.millis(420), advancedBox);
         slideIn.setToX(0);
@@ -349,8 +314,7 @@ public class GameMenu extends BorderPane {
 
     private void closeAdvanced() {
         centerBox.setMouseTransparent(false);
-        
-        //  Crée l'animation de retour pour les champs des joueurs et des boutons démarrer etc..
+
         TranslateTransition slideBackPlayers = new TranslateTransition(Duration.millis(420), playersBox);
         slideBackPlayers.setToX(0);
         TranslateTransition slideBackBtns = new TranslateTransition(Duration.millis(420), hbButtons);
@@ -358,27 +322,20 @@ public class GameMenu extends BorderPane {
         TranslateTransition slideBackTitle = new TranslateTransition(Duration.millis(420), lblTitle);
         slideBackTitle.setToX(0);
 
-        ParallelTransition slideBackAll = new ParallelTransition(slideBackPlayers, slideBackBtns, slideBackTitle);
-        slideBackAll.play();
+        new ParallelTransition(slideBackPlayers, slideBackBtns, slideBackTitle).play();
 
         TranslateTransition slideOut = new TranslateTransition(Duration.millis(420), advancedBox);
         slideOut.setToX(400);
         slideOut.play();
     }
 
-    // -------------------------------------------------------------------------
-    // Démarrer la partie
-    // -------------------------------------------------------------------------
-
     private void handleStart() {
-        // Remplace les noms vides par un nom par défaut
         for (int i = 0; i < playerNames.size(); i++) {
             if (playerNames.get(i).isBlank()) {
                 playerNames.set(i, "Joueur " + (i + 1));
             }
         }
         System.out.println("[GameMenu] Démarrage avec : " + playerNames);
-        // TODO : créer les Player et lancer MainPane
     }
 
     public ArrayList<String> getPlayerNames() {
