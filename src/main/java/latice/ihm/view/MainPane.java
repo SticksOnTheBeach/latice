@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import latice.ihm.controller.TileController;
+import latice.ihm.view.model.BoardPane;
+import latice.ihm.view.model.RackBox;
 import latice.model.Board;
 import latice.model.Player;
 import latice.model.Rack;

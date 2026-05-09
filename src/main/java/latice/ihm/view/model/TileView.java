@@ -1,6 +1,5 @@
 package latice.ihm.view.model;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -26,8 +25,8 @@ public class TileView extends StackPane {
         
         String color = tile.getColor().name().toLowerCase();
         String shape = tile.getShape().name().toLowerCase();
-        Image image = ImageLoader.load("/images/" + shape + "_" + color.substring(0, 1) + ".png");        
-        ImageView imageView = new ImageView(image);
+        String path = "/images/" + shape + "_" + color.substring(0, 1) + ".png";        
+        ImageView imageView = new ImageView(ImageLoader.load(path));
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);
         getChildren().addAll(rect, imageView);
