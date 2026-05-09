@@ -2,6 +2,7 @@ package latice.ihm.view.menu;
 
 import java.util.ArrayList;
 
+import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,11 +23,16 @@ public class GameMenu extends BorderPane {
 
     // Liste des noms de joueurs
     private ArrayList<String> playerNames = new ArrayList<>();
+    // pour savoir quel joueur fais quelles modifs
+    private int currentPlayerIndex = -1;
+    
+    private Label lblTitle;
 
     // Les deux zones principales
     private VBox playersBox;
     private VBox advancedBox;
     private VBox centerBox;
+    private HBox hbButtons;
 
     // Styles boutons
     String btnStyle =
@@ -67,14 +73,20 @@ public class GameMenu extends BorderPane {
         "-fx-cursor: hand;";
     
     String btnColorStyle =
-    		"-fx-font-size: 14px; " +
-    		"-fx-font-family: \"Courier New\"; " +
-    		"-fx-background-color: transparent; " +
-    		"-fx-border-color: rgba(168,216,168,0.4); " +
-    		"-fx-border-radius: 500px; " +
-    		"-fx-background-radius: 6px; " +
-    		"-fx-text-fill: rgba(168,216,168,0.8); " +
-    		"-fx-cursor: hand;";
+            "-fx-font-size: 14px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: rgba(168,216,168,0.4); " +
+            "-fx-border-radius: 50em; " + 
+            "-fx-background-radius: 50em; " + 
+            "-fx-min-width: 28px; " +
+            "-fx-min-height: 28px; " + 
+            "-fx-max-width: 28px; " + 
+            "-fx-max-height: 28px; " + 
+            "-fx-padding: 0; " +
+            "-fx-alignment: center; " + 
+            "-fx-text-fill: rgba(168,216,168,0.8); " +
+            "-fx-cursor: hand;";
 
     String inputStyle =
         "-fx-background-color: rgba(255,255,255,0.08); " +
@@ -94,7 +106,7 @@ public class GameMenu extends BorderPane {
         setStyle("-fx-background-color: #1a2e35;");
 
         /* TITRE */
-        Label lblTitle = new Label("> GAME SETUP");
+        lblTitle = new Label("> GAME SETUP");
         lblTitle.setStyle(
             "-fx-font-family: \"Courier New\"; " +
             "-fx-font-size: 22px; " +
@@ -120,7 +132,7 @@ public class GameMenu extends BorderPane {
         btnBack.setOnAction(e -> onBack.run());
         btnStart.setOnAction(e -> handleStart());
 
-        HBox hbButtons = new HBox(16, btnBack, btnStart);
+        hbButtons = new HBox(16, btnBack, btnStart);
         hbButtons.setAlignment(Pos.CENTER);
 
         /* COLONNE CENTRALE */
@@ -211,7 +223,7 @@ public class GameMenu extends BorderPane {
     // -------------------------------------------------------------------------
 
     private VBox buildAdvancedBox() {
-
+        // Un conteneur digne d'un salon VIP
         VBox box = new VBox(20);
         box.setPadding(new Insets(40, 30, 40, 30));
         box.setMaxWidth(280);
@@ -229,13 +241,13 @@ public class GameMenu extends BorderPane {
             "-fx-text-fill: #a8d8a8;"
         );
 
-        /* Choix de couleur */
+        /* --- SECTION COULEURS --- */
         Label lblColor = new Label("Couleur :");
         lblColor.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
-        Button btnRed    = new Button("🔴");
-        Button btnBlue   = new Button("🔵");
-        Button btnGreen  = new Button("🟢");
+        Button btnRed = new Button("🔴");
+        Button btnBlue = new Button("🔵");
+        Button btnGreen = new Button("🟢");
         Button btnYellow = new Button("🟡");
 
         btnRed.setStyle(btnColorStyle);
@@ -243,15 +255,20 @@ public class GameMenu extends BorderPane {
         btnGreen.setStyle(btnColorStyle);
         btnYellow.setStyle(btnColorStyle);
 
+        btnRed.setOnAction(e -> System.out.println("Couleur Rouge pour joueur " + (currentPlayerIndex + 1)));
+        btnBlue.setOnAction(e -> System.out.println("Couleur Bleue pour joueur " + (currentPlayerIndex + 1)));
+        btnGreen.setOnAction(e -> System.out.println("Couleur Verte pour joueur " + (currentPlayerIndex + 1)));
+        btnYellow.setOnAction(e -> System.out.println("Couleur Jaune pour joueur " + (currentPlayerIndex + 1)));
+
         GridPane colorGrid = new GridPane();
         colorGrid.setHgap(8);
         colorGrid.setVgap(8);
-        colorGrid.add(btnRed,    0, 0);
-        colorGrid.add(btnBlue,   1, 0);
-        colorGrid.add(btnGreen,  0, 1);
-        colorGrid.add(btnYellow, 1, 1);
+        colorGrid.add(btnRed, 0, 0);
+        colorGrid.add(btnBlue, 1, 0);
+        colorGrid.add(btnGreen, 2, 0);
+        colorGrid.add(btnYellow, 3, 0);
 
-        /* Choix d'icône */
+        /* --- SECTION ICÔNES --- */
         Label lblIcon = new Label("Icône :");
         lblIcon.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
@@ -265,41 +282,58 @@ public class GameMenu extends BorderPane {
         btnEagle.setStyle(btnGhostStyle);
         btnWolf.setStyle(btnGhostStyle);
 
+        // Actions pour les icônes
+        btnFox.setOnAction(e -> System.out.println("Icône Renard pour joueur " + (currentPlayerIndex + 1)));
+        btnDragon.setOnAction(e -> System.out.println("Icône Dragon pour joueur " + (currentPlayerIndex + 1)));
+        btnEagle.setOnAction(e -> System.out.println("Icône Aigle pour joueur " + (currentPlayerIndex + 1)));
+        btnWolf.setOnAction(e -> System.out.println("Icône Loup pour joueur " + (currentPlayerIndex + 1)));
+
         HBox iconRow = new HBox(8, btnFox, btnDragon, btnEagle, btnWolf);
 
-        /* Bouton fermer */
+        /* --- BOUTON FERMER --- */
         Button btnClose = new Button("← Fermer");
         btnClose.setStyle(btnGhostStyle);
         btnClose.setOnAction(e -> closeAdvanced());
-
         box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, iconRow, btnClose);
 
         return box;
     }
 
     private void openAdvanced(int idx) {
-    	centerBox.setMouseTransparent(true);
-    	
-        // Glisse les champs vers la gauche
-        TranslateTransition slideLeft = new TranslateTransition(Duration.millis(420), playersBox);
-        slideLeft.setToX(-200);
-        slideLeft.play();
+    	this.currentPlayerIndex = idx;
+        centerBox.setMouseTransparent(true);
+        
+        // anim pour les textfields des joueurs et les boutons démarrer et quitter
+        TranslateTransition slideLeftPlayers = new TranslateTransition(Duration.millis(420), playersBox);
+        slideLeftPlayers.setToX(-200);
+        TranslateTransition slideLeftBtns = new TranslateTransition(Duration.millis(420), hbButtons);
+        slideLeftBtns.setToX(-200);
+        TranslateTransition slideLeftTitle = new TranslateTransition(Duration.millis(420), lblTitle);
+        slideLeftTitle.setToX(-200);
 
-        // Fait apparaître le panneau avancé depuis la droite
+        // Regroupe les deux animations pour les jouer en parallèle
+        ParallelTransition slideLeftAll = new ParallelTransition(slideLeftPlayers, slideLeftBtns, slideLeftTitle);
+        slideLeftAll.play();
+
         TranslateTransition slideIn = new TranslateTransition(Duration.millis(420), advancedBox);
         slideIn.setToX(0);
         slideIn.play();
     }
 
     private void closeAdvanced() {
-    	centerBox.setMouseTransparent(false);
-    	
-        // Remet les champs au centre
-        TranslateTransition slideBack = new TranslateTransition(Duration.millis(420), playersBox);
-        slideBack.setToX(0);
-        slideBack.play();
+        centerBox.setMouseTransparent(false);
+        
+        //  Crée l'animation de retour pour les champs des joueurs et des boutons démarrer etc..
+        TranslateTransition slideBackPlayers = new TranslateTransition(Duration.millis(420), playersBox);
+        slideBackPlayers.setToX(0);
+        TranslateTransition slideBackBtns = new TranslateTransition(Duration.millis(420), hbButtons);
+        slideBackBtns.setToX(0);
+        TranslateTransition slideBackTitle = new TranslateTransition(Duration.millis(420), lblTitle);
+        slideBackTitle.setToX(0);
 
-        // Cache le panneau avancé vers la droite
+        ParallelTransition slideBackAll = new ParallelTransition(slideBackPlayers, slideBackBtns, slideBackTitle);
+        slideBackAll.play();
+
         TranslateTransition slideOut = new TranslateTransition(Duration.millis(420), advancedBox);
         slideOut.setToX(400);
         slideOut.play();
