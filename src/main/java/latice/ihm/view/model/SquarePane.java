@@ -6,6 +6,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import latice.ihm.controller.TileController;
+import latice.ihm.view.MainPane;
+import latice.model.Game;
 import latice.model.Player;
 import latice.model.Position;
 import latice.model.square.Square;
@@ -17,7 +19,9 @@ public class SquarePane extends StackPane {
     private Square square;
     private boolean isOccupied = false;
 
-    public SquarePane(Square square, Position position, TileController tileController, Player player) {
+    // on ajoute game et mainPane en paramètres
+    // pour pouvoir appeler nextTurn() et updateDisplay() après un placement réussi
+    public SquarePane(Square square, Position position, TileController tileController, Player player, Game game, MainPane mainPane) {
         this.square = square;
         this.position = position;
 
@@ -54,6 +58,9 @@ public class SquarePane extends StackPane {
                 if (success) {
                     placeTile(tileView);
                     event.setDropCompleted(true);
+                    // CORRECTION : on passe au joueur suivant et on met à jour l'affichage
+                    game.nextTurn();
+                    mainPane.updateDisplay();
                 } else {
                     event.setDropCompleted(false);
                 }

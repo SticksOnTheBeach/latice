@@ -29,7 +29,8 @@ public class MainPane extends BorderPane {
 
         // On demande au jeu : Qui joue en premier ?
         Player currentPlayer = game.getCurrentPlayer();
-        BoardPane boardPane = new BoardPane(board, tileController, currentPlayer);
+
+        BoardPane boardPane = new BoardPane(board, tileController, currentPlayer, game, this);
         RackBox rackBox = new RackBox(currentPlayer.getRack());
         
         HBox hbTop = new HBox(20);

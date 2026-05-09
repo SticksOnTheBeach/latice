@@ -27,10 +27,6 @@ public class LaticeIhmApp extends Application {
 
 
 
-
-
-
-
         /* TODO : implémenter une classe MenuPane, qui fera office de menu, sur ce menu,
 
          * nous pourrons ajouter le nombres de joueurs souhaité ( min 2 ), un bouton "+" sera à coté
@@ -42,14 +38,13 @@ public class LaticeIhmApp extends Application {
          *  PS : Réaliser d'abord sous format console, afin de vérifier que la méthodes (qui sera contenu dans Game) fonctionne correctemnt*/
 
 
-
-
         GameMenuController controller = new GameMenuController(primaryStage);
 
         GameMenu gameMenu = new GameMenu(
             e -> controller.handleBack(e),
-            e -> controller.handleStart(new latice.ihm.view.menu.GameMenu(null, null).getPlayerNames())
+            e -> controller.handleStart(e)
         );
+        controller.setGameMenu(gameMenu);
 
         primaryStage.setTitle("Latice");
         primaryStage.setScene(new Scene(gameMenu, 1000, 700));

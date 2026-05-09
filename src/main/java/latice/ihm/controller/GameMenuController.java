@@ -1,5 +1,6 @@
 package latice.ihm.controller;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import latice.ihm.view.menu.GameMenu;
@@ -14,14 +15,23 @@ import latice.ihm.view.MainPane;
 public class GameMenuController {
 
     private Stage stage;
+    private GameMenu gameMenu;
 
     public GameMenuController(Stage stage) {
         this.stage = stage;
     }
 
+    public void setGameMenu(GameMenu gameMenu) {
+        this.gameMenu = gameMenu;
+    }
+
     // Retour au menu principal
-    public void handleBack(javafx.event.ActionEvent e) {
+    public void handleBack(ActionEvent e) {
         stage.setScene(new Scene(new MenuPane(), 1000, 700));
+    }
+
+    public void handleStart(ActionEvent e) {
+        handleStart(gameMenu.getPlayerNames());
     }
 
     // Démarrer la partie

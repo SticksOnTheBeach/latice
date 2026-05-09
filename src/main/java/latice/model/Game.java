@@ -11,9 +11,9 @@ import latice.model.tile.Tile;
 
 public class Game {
 	
-	protected Player player1;
-	protected Player player2;
-	
+    // CORRECTION : suppression de player1/player2 séparés.
+    // Tout passe maintenant par la liste players, 
+    // pour que getCurrentPlayer() et nextTurn() fonctionnent dans tous les cas.
     protected ArrayList<Player> players = new ArrayList<Player>();
     
     protected Referee referee;
@@ -32,9 +32,12 @@ public class Game {
      * @param referee The referee overseeing the game rules and logic.
      */
     public Game(Player player1, Player player2, Referee referee) {
-        this.player1 = player1;
-        this.player2 = player2;
+        // CORRECTION : on ajoute les deux joueurs dans la liste players
+        // pour que getCurrentPlayer() et nextTurn() fonctionnent
+        this.players.add(player1);
+        this.players.add(player2);
         this.referee = referee;
+        this.currentPlayerIndex = rand.nextInt(players.size());
     }
     
     /**
@@ -73,27 +76,21 @@ public class Game {
      * @param player1 The first player to receive half of the generated tiles.
      * @param player2 The second player to receive the remaining half of the tiles.
      */
-	public void shareTilesBetweenTwoPlayers(Player player1, Player player2 ) {
+	public void shareTilesBetweenTwoPlayers(Player player1, Player player2) {
 	    final List<Tile> listTile = createAndShuffleTiles();
-	    ArrayList<Tile> listTileP1 =new ArrayList<Tile>();
-	    ArrayList<Tile> listTileP2 =new ArrayList<Tile>();
+	    ArrayList<Tile> listTileP1 = new ArrayList<Tile>();
+	    ArrayList<Tile> listTileP2 = new ArrayList<Tile>();
 	    int size = listTile.size();
 	    
 	    for (int i = 0; i < size / 2; i++)
 	        listTileP1.add(listTile.get(i));
 	    for (int i = size / 2; i < size; i++)
 	        listTileP2.add(listTile.get(i));
-	    this.player1.setDeck(new Deck(listTileP1));
-	    this.player2.setDeck(new Deck(listTileP2));
-	
-	}
-	
-	
-	public void createRack() {
-		Rack rack = new Rack();
-	}
-    
 
+	    player1.setDeck(new Deck(listTileP1));
+	    player2.setDeck(new Deck(listTileP2));
+	}
+	
 	/**
      * Distributes tiles dynamically among all players.
      */
