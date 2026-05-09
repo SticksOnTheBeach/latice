@@ -1,4 +1,4 @@
-package latice.ihm.view;
+package latice.ihm.view.model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import latice.model.tile.Tile;
+import latice.util.ImageLoader;
 
 public class TileView extends StackPane {
 
@@ -22,8 +23,10 @@ public class TileView extends StackPane {
         rect.setFill(getTileColor(tile));
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(1.5);
-
-        Image image = new Image(getClass().getResourceAsStream(getImagePath(tile)));
+        
+        String color = tile.getColor().name().toLowerCase();
+        String shape = tile.getShape().name().toLowerCase();
+        Image image = ImageLoader.load("/images/" + shape + "_" + color.substring(0, 1) + ".png");        
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);
@@ -44,11 +47,6 @@ public class TileView extends StackPane {
         return tile;
     }
     
-    private String getImagePath(Tile tile) {
-        String color = tile.getColor().name().toLowerCase();
-        String shape = tile.getShape().name().toLowerCase();
-        return "/images/" + shape + "_" + color.substring(0, 1) + ".png";
-    }
 
     private Color getTileColor(Tile tile) {
         switch (tile.getColor()) {

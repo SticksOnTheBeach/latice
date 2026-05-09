@@ -51,8 +51,8 @@ public class LaticeIhmApp extends Application {
         rackJ2.addTileFromDeck(player2.getDeck());
         
         // CONTROLLER
-        TileController controllerTile = new TileController(board);
-        MainPane mainPane = new MainPane(board, rackJ1);
+        TileController tileController = new TileController(board);
+        MainPane mainPane = new MainPane(board, rackJ1, tileController, player1);
 
         Scene scene = new Scene(mainPane, 800, 700);
         

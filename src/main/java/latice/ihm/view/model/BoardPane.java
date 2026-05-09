@@ -1,4 +1,4 @@
-package latice.ihm.view;
+package latice.ihm.view.model;
 
 import javafx.scene.layout.GridPane;
 import latice.ihm.controller.TileController;

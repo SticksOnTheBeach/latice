@@ -1,4 +1,4 @@
-package latice.ihm.view;
+package latice.ihm.view.model;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
