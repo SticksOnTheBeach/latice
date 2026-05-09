@@ -26,6 +26,8 @@ public class GameMenu extends BorderPane {
     // pour savoir quel joueur fais quelles modifs
     private int currentPlayerIndex = -1;
     
+    private ArrayList<String> playerColors = new ArrayList<>();
+    
     private Label lblTitle;
 
     // Les deux zones principales
@@ -102,6 +104,8 @@ public class GameMenu extends BorderPane {
         // 2 joueurs par défaut
         playerNames.add("");
         playerNames.add("");
+        playerColors.add("rgba(168,216,168,0.3)");
+        playerColors.add("rgba(168,216,168,0.3)");
 
         setStyle("-fx-background-color: #1a2e35;");
 
@@ -187,6 +191,17 @@ public class GameMenu extends BorderPane {
             /* Ligne du joueur */
             HBox row = new HBox(10, lblNum, tf, btnOpt);
             row.setAlignment(Pos.CENTER);
+            
+            row.setMaxWidth(450);
+            row.setPadding(new Insets(10, 20, 10, 20));
+            
+            String currentColor = playerColors.get(i);
+            row.setStyle(
+                "-fx-border-color: " + currentColor + "; " +
+                "-fx-border-width: 2px; " +
+                "-fx-border-radius: 10px; " +
+                "-fx-background-radius: 10px;"
+            );
 
             /* Bouton + sur la ligne du joueur 2 uniquement */
             if (i == 1 && playerNames.size() < MAX_PLAYERS) {
@@ -255,10 +270,22 @@ public class GameMenu extends BorderPane {
         btnGreen.setStyle(btnColorStyle);
         btnYellow.setStyle(btnColorStyle);
 
-        btnRed.setOnAction(e -> System.out.println("Couleur Rouge pour joueur " + (currentPlayerIndex + 1)));
-        btnBlue.setOnAction(e -> System.out.println("Couleur Bleue pour joueur " + (currentPlayerIndex + 1)));
-        btnGreen.setOnAction(e -> System.out.println("Couleur Verte pour joueur " + (currentPlayerIndex + 1)));
-        btnYellow.setOnAction(e -> System.out.println("Couleur Jaune pour joueur " + (currentPlayerIndex + 1)));
+        btnRed.setOnAction(e -> {
+            playerColors.set(currentPlayerIndex, "#ff5555");
+            refreshRows();
+        });
+        btnBlue.setOnAction(e -> {
+            playerColors.set(currentPlayerIndex, "#55aaff");
+            refreshRows();
+        });
+        btnGreen.setOnAction(e -> {
+            playerColors.set(currentPlayerIndex, "#55ff55");
+            refreshRows();
+        });
+        btnYellow.setOnAction(e -> {
+            playerColors.set(currentPlayerIndex, "#ffff55");
+            refreshRows();
+        });
 
         GridPane colorGrid = new GridPane();
         colorGrid.setHgap(8);
