@@ -210,7 +210,7 @@ public class GameMenu extends BorderPane {
         Button btnOpt = new Button("⚙ options");
         btnOpt.setStyle(btnGhostStyle);
         btnOpt.setOnAction(e -> openAdvanced(i));
-        // VBox afin d'accueillir les messages d'erreurs
+        // VBox afin d'accueillir les messages d'erreurs	
         VBox tfBox = new VBox(4, tf, lblError);
         
         HBox row = new HBox(10, lblNum, tf, btnOpt);
