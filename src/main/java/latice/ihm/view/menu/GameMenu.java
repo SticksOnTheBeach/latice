@@ -213,7 +213,7 @@ public class GameMenu extends BorderPane {
         // VBox afin d'accueillir les messages d'erreurs	
         VBox tfBox = new VBox(4, tf, lblError);
         
-        HBox row = new HBox(10, lblNum, tf, btnOpt);
+        HBox row = new HBox(10, lblNum, tfBox, btnOpt);
         row.setAlignment(Pos.CENTER);
         row.setMaxWidth(450);
         row.setPadding(new Insets(10, 20, 10, 20));
