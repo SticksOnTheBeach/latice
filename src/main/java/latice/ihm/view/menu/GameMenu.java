@@ -186,6 +186,20 @@ public class GameMenu extends BorderPane {
             "-fx-font-size: 14px; " +
             "-fx-min-width: 20px;"
         );
+        
+        Label lblError = new Label("ERROR : PLEASE ENTER A NAME");
+        lblError.setStyle(
+            "-fx-text-fill: #ff5555; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-font-size: 12px;"
+        );
+        lblError.setVisible(false);
+
+        if (i < errorLabels.size()) {
+            errorLabels.set(i, lblError);
+        } else {
+            errorLabels.add(lblError);
+        }
 
         TextField tf = new TextField(playerNames.get(i));
         tf.setPromptText("Joueur " + (i + 1));
@@ -196,7 +210,9 @@ public class GameMenu extends BorderPane {
         Button btnOpt = new Button("⚙ options");
         btnOpt.setStyle(btnGhostStyle);
         btnOpt.setOnAction(e -> openAdvanced(i));
-
+        // VBox afin d'accueillir les messages d'erreurs
+        VBox tfBox = new VBox(4, tf, lblError);
+        
         HBox row = new HBox(10, lblNum, tf, btnOpt);
         row.setAlignment(Pos.CENTER);
         row.setMaxWidth(450);
