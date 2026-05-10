@@ -2,9 +2,11 @@ package latice.ihm.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
 import latice.ihm.view.model.BoardPane;
 import latice.ihm.view.model.RackBox;
@@ -17,22 +19,24 @@ public class MainPane extends BorderPane {
     protected int nbRound = 1;
     protected Label lblPlayerRound;
     private Game game; 
+    
+    private RoundController roundController;
+    private HBox bottomContainer;
 
-    public MainPane(Board board, Game game, TileController tileController) {
+    public MainPane(Board board, Game game, TileController tileController, RoundController roundController) {
         this.game = game;
-
+        this.roundController = roundController;
+        	
         lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
         
         lblNbRound.setStyle("-fx-text-fill: white;");
         lblPlayerRound.setStyle("-fx-text-fill: white;");
 
-        // On demande au jeu : Qui joue en premier ?
-        Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = roundController.getCurrentPlayer();
 
-        BoardPane boardPane = new BoardPane(board, tileController, currentPlayer, game, this);
+        BoardPane boardPane = new BoardPane(board, tileController, roundController);
         RackBox rackBox = new RackBox(currentPlayer.getRack());
-        
         HBox hbTop = new HBox(20);
         
         // Round
@@ -42,6 +46,16 @@ public class MainPane extends BorderPane {
         setTop(hbTop);
         setAlignment(hbTop, Pos.CENTER);
         hbTop.setStyle("-fx-font-size: 20px; -fx-font-family: \"Arial\"; -fx-font-weight: bold;");
+        
+        // --- BOUTON DE TEST  ---
+        Button btnNextTurn = new Button("Fin de tour");
+        btnNextTurn.setStyle("-fx-background-color: #a8d8a8; -fx-cursor: hand; -fx-font-weight: bold;");
+        btnNextTurn.setOnAction(e -> {
+            // Quand on clique, on change de joueur et on rafraîchit l'écran
+            this.roundController.nextPlayerTurn();
+            updateDisplay(); 
+        });
+        hbTop.getChildren().add(btnNextTurn);
         
         // Board
         setCenter(boardPane);
@@ -58,10 +72,16 @@ public class MainPane extends BorderPane {
         // NEW //
         // On crée un conteneur pour empêcher le BorderPane 
         // d'étirer RackBox sur toute la largeur
-        HBox bottomContainer = new HBox();
+        /*HBox bottomContainer = new HBox();
         bottomContainer.setAlignment(Pos.CENTER);
         bottomContainer.setPadding(new Insets(15, 0, 50, 0));
         bottomContainer.getChildren().add(rackBox);
+        setBottom(bottomContainer);*/
+        
+        // --- Rack ---
+        bottomContainer = new HBox();
+        bottomContainer.setAlignment(Pos.CENTER);
+        bottomContainer.setPadding(new Insets(15, 0, 50, 0));
         setBottom(bottomContainer);
         
         BorderPane.setMargin(boardPane, new Insets(20));
@@ -69,7 +89,10 @@ public class MainPane extends BorderPane {
     }
     
     public void updateDisplay() {
-        Player current = game.getCurrentPlayer();
+        Player current = roundController.getCurrentPlayer();
         lblPlayerRound.setText("Player Turn : " + current.getName());
+        bottomContainer.getChildren().clear(); 
+        RackBox newRack = new RackBox(current.getRack());
+        bottomContainer.getChildren().add(newRack);
     }
 }

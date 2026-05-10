@@ -5,9 +5,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
-import latice.ihm.view.MainPane;
-import latice.model.Game;
 import latice.model.Player;
 import latice.model.Position;
 import latice.model.square.Square;
@@ -21,8 +20,8 @@ public class SquarePane extends StackPane {
 
     // on ajoute game et mainPane en paramètres
     // pour pouvoir appeler nextTurn() et updateDisplay() après un placement réussi
-    public SquarePane(Square square, Position position, TileController tileController, Player player, Game game, MainPane mainPane) {
-        this.square = square;
+    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController) {
+    	this.square = square;
         this.position = position;
 
         Rectangle rect = new Rectangle(SIZE, SIZE);
@@ -53,14 +52,12 @@ public class SquarePane extends StackPane {
         setOnDragDropped(event -> {
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
-                boolean success = tileController.placeTile(player, tileView.getTile(), position);
-
+                // ON DEMANDE LE JOUEUR ACTUEL AU MOMENT EXACT DU DROP 
+                Player currentPlayer = roundController.getCurrentPlayer();
+                boolean success = tileController.placeTile(currentPlayer, tileView.getTile(), position);
                 if (success) {
                     placeTile(tileView);
                     event.setDropCompleted(true);
-                    // CORRECTION : on passe au joueur suivant et on met à jour l'affichage
-                    game.nextTurn();
-                    mainPane.updateDisplay();
                 } else {
                     event.setDropCompleted(false);
                 }
