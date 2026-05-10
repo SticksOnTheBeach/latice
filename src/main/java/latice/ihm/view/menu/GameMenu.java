@@ -20,7 +20,19 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class GameMenu extends BorderPane {
-
+	/* TODO : 2 possibilités pour les lignes des joueurs
+	 * soit faire que joueur 3 et joueur 4 soit déjà déclaré mais non affiché et donc que dès 
+	 * que l'on clique sur le "+" ça s'affiche et donc un écouteur
+	 * INCONVÉNIENTS : 
+	 *  - c'est "hardcodeer", si plus tard on veut augmenter et laisser place à plus de joueurs, 
+	 * on aura un problème qui est que ce sera moins modulaire, et moins optimisé
+	 *  - Les objets Player 3 et 4 existent en mémoire même s'ils ne jouent pas
+	 *  - Plus difficile à maintenir
+	 *  
+	 * 
+	 * soit faire comme déjà implémenté, réaliser une boucle qui parcours la listes des joueurs et donc que pour 
+	 * le i-ième joueur tu fais joueur i + 1, et que la liste des joueurs est géré dynamiquement
+	 * */
     private static final int MAX_PLAYERS = 4;
 
     private ArrayList<String> playerNames = new ArrayList<>();
@@ -158,83 +170,70 @@ public class GameMenu extends BorderPane {
 
         setCenter(root);
     }
-
+    
     private void refreshRows() {
         playersBox.getChildren().clear();
-        errorLabels.clear();
-        
         for (int i = 0; i < playerNames.size(); i++) {
-            final int idx = i;
-
-            Label lblNum = new Label((i + 1) + ".");
-            lblNum.setStyle(
-                "-fx-font-family: \"Courier New\"; " +
-                "-fx-text-fill: #a8d8a8; " +
-                "-fx-font-size: 14px; " +
-                "-fx-min-width: 20px;"
-            );
-
-            TextField tf = new TextField(playerNames.get(i));
-            tf.setPromptText("Joueur " + (i + 1));
-            tf.setStyle(inputStyle);
-            tf.setPrefWidth(200);
-            tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(idx, newVal));
-            
-            // MESSAGE D'ERREUR SI PAS DE NOM 
-            Label lblError = new Label("ERROR : PLEASE ENTER A NAME !");
-            lblError.setStyle("-fx-text-fill: #ff5555; -fx-font-size: 11px; -fx-font-weight: bold;");
-            lblError.setTextFill(Color.RED);
-            lblError.setVisible(false);
-            errorLabels.add(lblError);
-            
-            VBox tfBox = new VBox(2, tf, lblError);
-            tfBox.setAlignment(Pos.CENTER_LEFT);
-            
-            Button btnOpt = new Button("⚙ options");
-            btnOpt.setStyle(btnGhostStyle);
-            btnOpt.setOnAction(e -> openAdvanced(idx));
-
-            HBox row = new HBox(10, lblNum, tfBox, btnOpt);
-            row.setAlignment(Pos.CENTER);
-            row.setMaxWidth(450);
-            row.setPadding(new Insets(10, 20, 10, 20));
-
-            String currentColor = playerColors.get(i);
-            row.setStyle(
-                "-fx-border-color: " + currentColor + "; " +
-                "-fx-border-width: 2px; " +
-                "-fx-border-radius: 10px; " +
-                "-fx-background-radius: 10px;"
-            );
-
-            if (i == 1 && playerNames.size() < MAX_PLAYERS) {
-                Button btnAdd = new Button("+");
-                btnAdd.setStyle(btnGhostStyle);
-                btnAdd.setOnAction(e -> {
-                    playerNames.add("");
-                    playerColors.add("rgba(168,216,168,0.3)");
-                    refreshRows();
-                });
-                row.getChildren().add(btnAdd);
-            }
-
-            if (i >= 2) {
-                Button btnRemove = new Button("×");
-                btnRemove.setStyle(
-                    btnGhostStyle +
-                    "-fx-border-color: rgba(255,100,100,0.4); " +
-                    "-fx-text-fill: rgba(255,120,120,0.8);"
-                );
-                btnRemove.setOnAction(e -> {
-                    playerNames.remove(idx);
-                    playerColors.remove(idx);
-                    refreshRows();
-                });
-                row.getChildren().add(btnRemove);
-            }
-
-            playersBox.getChildren().add(row);
+            playersBox.getChildren().add(buildPlayerRow(i));
         }
+    }
+
+    private HBox buildPlayerRow(int i) {
+        Label lblNum = new Label((i + 1) + ".");
+        lblNum.setStyle(
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-text-fill: #a8d8a8; " +
+            "-fx-font-size: 14px; " +
+            "-fx-min-width: 20px;"
+        );
+
+        TextField tf = new TextField(playerNames.get(i));
+        tf.setPromptText("Joueur " + (i + 1));
+        tf.setStyle(inputStyle);
+        tf.setPrefWidth(200);
+        tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(i, newVal));
+
+        Button btnOpt = new Button("⚙ options");
+        btnOpt.setStyle(btnGhostStyle);
+        btnOpt.setOnAction(e -> openAdvanced(i));
+
+        HBox row = new HBox(10, lblNum, tf, btnOpt);
+        row.setAlignment(Pos.CENTER);
+        row.setMaxWidth(450);
+        row.setPadding(new Insets(10, 20, 10, 20));
+        row.setStyle(
+            "-fx-border-color: " + playerColors.get(i) + "; " +
+            "-fx-border-width: 2px; " +
+            "-fx-border-radius: 10px; " +
+            "-fx-background-radius: 10px;"
+        );
+
+        if (i == 1 && playerNames.size() < MAX_PLAYERS) {
+            Button btnAdd = new Button("+");
+            btnAdd.setStyle(btnGhostStyle);
+            btnAdd.setOnAction(e -> {
+                playerNames.add("");
+                playerColors.add("rgba(168,216,168,0.3)");
+                refreshRows();
+            });
+            row.getChildren().add(btnAdd);
+        }
+
+        if (i >= 2) {
+            Button btnRemove = new Button("×");
+            btnRemove.setStyle(btnGhostStyle +
+                "-fx-border-color: rgba(255,100,100,0.4); " +
+                "-fx-text-fill: rgba(255,120,120,0.8);"
+            );
+            btnRemove.setOnAction(e -> {
+                playerNames.remove(i);
+                playerColors.remove(i);
+                refreshRows();
+            });
+            row.getChildren().add(btnRemove);
+        }
+
+        return row;
     }
 
     private VBox buildAdvancedBox() {
@@ -258,9 +257,9 @@ public class GameMenu extends BorderPane {
         Label lblColor = new Label("Couleur :");
         lblColor.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
-        Button btnRed    = new Button("🔴");
-        Button btnBlue   = new Button("🔵");
-        Button btnGreen  = new Button("🟢");
+        Button btnRed = new Button("🔴");
+        Button btnBlue = new Button("🔵");
+        Button btnGreen = new Button("🟢");
         Button btnYellow = new Button("🟡");
 
         btnRed.setStyle(btnColorStyle);
