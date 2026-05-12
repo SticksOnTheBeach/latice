@@ -1,7 +1,6 @@
 package latice.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -57,7 +56,7 @@ public class Game {
      * 
      * @return A list of newly created and shuffled tiles.
      */
-    public List<Tile> createAndShuffleTiles() {
+    public List<Tile> createTiles() {
         final List<Tile> listTile =new ArrayList<Tile>();
         for (COLOR color : COLOR.values() ){
             for (SHAPE shape : SHAPE.values() ){
@@ -65,8 +64,6 @@ public class Game {
                 listTile.add(new Tile(color, shape));
             }
         }
-        Collections.shuffle(listTile);
-
         return listTile;
     }
     
@@ -77,7 +74,7 @@ public class Game {
      * @param player2 The second player to receive the remaining half of the tiles.
      */
 	public void shareTilesBetweenTwoPlayers(Player player1, Player player2) {
-	    final List<Tile> listTile = createAndShuffleTiles();
+	    final List<Tile> listTile = createTiles();
 	    ArrayList<Tile> listTileP1 = new ArrayList<Tile>();
 	    ArrayList<Tile> listTileP2 = new ArrayList<Tile>();
 	    int size = listTile.size();
@@ -99,7 +96,7 @@ public class Game {
             return; 
         }
 
-        final List<Tile> allTiles = createAndShuffleTiles();
+        final List<Tile> allTiles = createTiles();
         int nbOfPlayers = players.size();
         int tilesPerPlayer = allTiles.size() / nbOfPlayers;
         int startIndex = 0; 
@@ -107,6 +104,7 @@ public class Game {
             List<Tile> subList = allTiles.subList(startIndex, startIndex + tilesPerPlayer);
             ArrayList<Tile> playerTiles = new ArrayList<>(subList);
             player.setDeck(new Deck(playerTiles));
+            player.getDeck().shuffle();
             startIndex += tilesPerPlayer;
         }
         

@@ -3,6 +3,7 @@ package latice.model;
 import latice.model.tile.Tile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck implements TileContainer {
 
@@ -35,7 +36,9 @@ public class Deck implements TileContainer {
             tiles.remove(0);
         }
     }
-    
+    public  void shuffle() {
+        Collections.shuffle(tiles);
+    }
     /**
      * Gets the number of tiles currently in the deck.
      * 
