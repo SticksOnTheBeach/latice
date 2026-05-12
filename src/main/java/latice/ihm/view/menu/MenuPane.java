@@ -14,7 +14,10 @@ public class MenuPane extends BorderPane {
     // TOP
     private Label lblTitle;
     private Button btnParameters;
-
+    private static final String BTN_PARAMETERS_STYLE = Style.BTN_PARAMETERS_STYLE;
+    private static final String BTN_PARAMETERS_HOVER_STYLE = Style.BTN_PARAMETERS_HOVER_STYLE;
+    private static final String BTN_PARAMETERS_PRESSED_STYLE = Style.BTN_PARAMETERS_PRESSED_STYLE;
+    
     // CENTER
     private Button btnPlay;
     private Button btnExit;
@@ -36,39 +39,12 @@ public class MenuPane extends BorderPane {
         imageView.setPreserveRatio(true);
         btnParameters = new Button("", imageView);
 
-        // Styles bouton paramètres
-        String btnParametersStyle =
-            "-fx-background-color: transparent; " +
-            "-fx-cursor: hand; " +
-            "-fx-border-color: transparent; " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 8px; " +
-            "-fx-background-radius: 8px; " +
-            "-fx-padding: 0px;";
-
-        String btnParametersHoverStyle =
-            "-fx-background-color: rgba(255,255,255,0.15); " +
-            "-fx-cursor: hand; " +
-            "-fx-border-color: rgba(255,255,255,0.3); " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 8px; " +
-            "-fx-background-radius: 8px; " +
-            "-fx-padding: 0px;";
-
-        String btnParametersPressedStyle =
-            "-fx-background-color: rgba(255,255,255,0.05); " +
-            "-fx-cursor: hand; " +
-            "-fx-border-color: rgba(255,255,255,0.2); " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 8px; " +
-            "-fx-background-radius: 8px; " +
-            "-fx-padding: 0px;";
-
-        btnParameters.setStyle(btnParametersStyle);
-        btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(btnParametersHoverStyle));
-        btnParameters.setOnMouseExited(e -> btnParameters.setStyle(btnParametersStyle));
-        btnParameters.setOnMousePressed(e -> btnParameters.setStyle(btnParametersPressedStyle));
-        btnParameters.setOnMouseReleased(e -> btnParameters.setStyle(btnParametersHoverStyle));
+        // Styles bouton paramètres;    
+        btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE);
+        btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE));
+        btnParameters.setOnMouseExited(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE));
+        btnParameters.setOnMousePressed(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_PRESSED_STYLE));
+        btnParameters.setOnMouseReleased(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE));
 
         StackPane topBar = new StackPane();
         topBar.setPadding(new Insets(30));

@@ -51,68 +51,6 @@ public class GameMenu extends BorderPane {
     private EventHandler<ActionEvent> onBack;
     private EventHandler<ActionEvent> onStart;
 
-    String btnStyle =
-        "-fx-font-size: 16px; " +
-        "-fx-font-weight: bold; " +
-        "-fx-font-family: \"Courier New\"; " +
-        "-fx-text-fill: #1a2e35; " +
-        "-fx-background-color: #a8d8a8; " +
-        "-fx-background-radius: 0px; " +
-        "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
-        "-fx-border-width: 3px; " +
-        "-fx-padding: 10px 30px; " +
-        "-fx-cursor: hand; " +
-        "-fx-min-width: 160px;";
-
-    String btnHoverStyle =
-        "-fx-font-size: 16px; " +
-        "-fx-font-weight: bold; " +
-        "-fx-font-family: \"Courier New\"; " +
-        "-fx-text-fill: #1a2e35; " +
-        "-fx-background-color: #c8f8c8; " +
-        "-fx-background-radius: 0px; " +
-        "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
-        "-fx-border-width: 3px; " +
-        "-fx-padding: 10px 30px; " +
-        "-fx-cursor: hand; " +
-        "-fx-min-width: 160px;";
-
-    String btnGhostStyle =
-        "-fx-font-size: 14px; " +
-        "-fx-font-family: \"Courier New\"; " +
-        "-fx-background-color: transparent; " +
-        "-fx-border-color: rgba(168,216,168,0.4); " +
-        "-fx-border-radius: 6px; " +
-        "-fx-background-radius: 6px; " +
-        "-fx-text-fill: rgba(168,216,168,0.8); " +
-        "-fx-padding: 8px 14px; " +
-        "-fx-cursor: hand;";
-
-    String btnColorStyle =
-        "-fx-font-size: 14px; " +
-        "-fx-font-family: \"Courier New\"; " +
-        "-fx-background-color: transparent; " +
-        "-fx-border-color: rgba(168,216,168,0.4); " +
-        "-fx-border-radius: 50em; " +
-        "-fx-background-radius: 50em; " +
-        "-fx-min-width: 28px; " +
-        "-fx-min-height: 28px; " +
-        "-fx-max-width: 28px; " +
-        "-fx-max-height: 28px; " +
-        "-fx-padding: 0; " +
-        "-fx-alignment: center; " +
-        "-fx-text-fill: rgba(168,216,168,0.8); " +
-        "-fx-cursor: hand;";
-
-    String inputStyle =
-        "-fx-background-color: rgba(255,255,255,0.08); " +
-        "-fx-border-color: rgba(168,216,168,0.3); " +
-        "-fx-border-radius: 6px; " +
-        "-fx-background-radius: 6px; " +
-        "-fx-text-fill: white; " +
-        "-fx-font-size: 14px; " +
-        "-fx-padding: 8px 12px;";
-
     public GameMenu(EventHandler<ActionEvent> onBack, EventHandler<ActionEvent> onStart) {
         this.onBack = onBack;
         this.onStart = onStart;
@@ -139,11 +77,11 @@ public class GameMenu extends BorderPane {
         Button btnBack  = new Button("← Retour");
         Button btnStart = new Button("> Démarrer");
 
-        btnBack.setStyle(btnGhostStyle);
-        btnStart.setStyle(btnStyle);
+        btnBack.setStyle(Style.BTN_GHOST_STYLE);
+        btnStart.setStyle(Style.BTN_STYLE);
 
-        btnStart.setOnMouseEntered(e -> btnStart.setStyle(btnHoverStyle));
-        btnStart.setOnMouseExited(e  -> btnStart.setStyle(btnStyle));
+        btnStart.setOnMouseEntered(e -> btnStart.setStyle(Style.BTN_HOVER_STYLE));
+        btnStart.setOnMouseExited(e  -> btnStart.setStyle(Style.BTN_STYLE));
 
         // Branchement des handlers
         btnBack.setOnAction(onBack);
@@ -208,7 +146,7 @@ public class GameMenu extends BorderPane {
         tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(i, newVal));
 
         Button btnOpt = new Button("⚙ options");
-        btnOpt.setStyle(btnGhostStyle);
+        btnOpt.setStyle(Style.BTN_GHOST_STYLE);
         btnOpt.setOnAction(e -> openAdvanced(i));
         // VBox afin d'accueillir les messages d'erreurs	
         VBox tfBox = new VBox(4, tf, lblError);
@@ -226,7 +164,7 @@ public class GameMenu extends BorderPane {
 
         if (i == 1 && playerNames.size() < MAX_PLAYERS) {
             Button btnAdd = new Button("+");
-            btnAdd.setStyle(btnGhostStyle);
+            btnAdd.setStyle(Style.BTN_GHOST_STYLE);
             btnAdd.setOnAction(e -> {
                 playerNames.add("");
                 playerColors.add("rgba(168,216,168,0.3)");
@@ -237,7 +175,7 @@ public class GameMenu extends BorderPane {
 
         if (i >= 2) {
             Button btnRemove = new Button("×");
-            btnRemove.setStyle(btnGhostStyle +
+            btnRemove.setStyle(Style.BTN_GHOST_STYLE +
                 "-fx-border-color: rgba(255,100,100,0.4); " +
                 "-fx-text-fill: rgba(255,120,120,0.8);"
             );
