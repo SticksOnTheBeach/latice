@@ -32,8 +32,6 @@ public class Game {
      * @param referee The referee overseeing the game rules and logic.
      */
     public Game(Player player1, Player player2, Referee referee) {
-        // CORRECTION : on ajoute les deux joueurs dans la liste players
-        // pour que getCurrentPlayer() et nextTurn() fonctionnent
         this.players.add(player1);
         this.players.add(player2);
         this.referee = referee;
