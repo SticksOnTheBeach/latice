@@ -18,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import latice.ihm.view.style.Style;
 
 public class GameMenu extends BorderPane {
 	/* TODO : 2 possibilités pour les lignes des joueurs
@@ -141,7 +142,7 @@ public class GameMenu extends BorderPane {
 
         TextField tf = new TextField(playerNames.get(i));
         tf.setPromptText("Joueur " + (i + 1));
-        tf.setStyle(inputStyle);
+        tf.setStyle(Style.INPUT_STYLE); // CORRECTION : était "inputStyle" (variable inexistante)
         tf.setPrefWidth(200);
         tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(i, newVal));
 
@@ -211,15 +212,15 @@ public class GameMenu extends BorderPane {
         Label lblColor = new Label("Couleur :");
         lblColor.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
-        Button btnRed = new Button("🔴");
-        Button btnBlue = new Button("🔵");
-        Button btnGreen = new Button("🟢");
+        Button btnRed    = new Button("🔴");
+        Button btnBlue   = new Button("🔵");
+        Button btnGreen  = new Button("🟢");
         Button btnYellow = new Button("🟡");
 
-        btnRed.setStyle(btnColorStyle);
-        btnBlue.setStyle(btnColorStyle);
-        btnGreen.setStyle(btnColorStyle);
-        btnYellow.setStyle(btnColorStyle);
+        btnRed.setStyle(Style.BTN_COLOR_STYLE); // CORRECTION : était "btnColorStyle"
+        btnBlue.setStyle(Style.BTN_COLOR_STYLE);
+        btnGreen.setStyle(Style.BTN_COLOR_STYLE);
+        btnYellow.setStyle(Style.BTN_COLOR_STYLE);
 
         btnRed.setOnAction(e    -> { playerColors.set(currentPlayerIndex, "#ff5555"); refreshRows(); });
         btnBlue.setOnAction(e   -> { playerColors.set(currentPlayerIndex, "#55aaff"); refreshRows(); });
@@ -242,10 +243,10 @@ public class GameMenu extends BorderPane {
         Button btnEagle  = new Button("🦅");
         Button btnWolf   = new Button("🐺");
 
-        btnFox.setStyle(btnGhostStyle);
-        btnDragon.setStyle(btnGhostStyle);
-        btnEagle.setStyle(btnGhostStyle);
-        btnWolf.setStyle(btnGhostStyle);
+        btnFox.setStyle(Style.BTN_GHOST_STYLE); // CORRECTION : était "btnGhostStyle"
+        btnDragon.setStyle(Style.BTN_GHOST_STYLE);
+        btnEagle.setStyle(Style.BTN_GHOST_STYLE);
+        btnWolf.setStyle(Style.BTN_GHOST_STYLE);
 
         btnFox.setOnAction(e    -> System.out.println("Icône Renard pour joueur "  + (currentPlayerIndex + 1)));
         btnDragon.setOnAction(e -> System.out.println("Icône Dragon pour joueur "  + (currentPlayerIndex + 1)));
@@ -255,7 +256,7 @@ public class GameMenu extends BorderPane {
         HBox iconRow = new HBox(8, btnFox, btnDragon, btnEagle, btnWolf);
 
         Button btnClose = new Button("← Fermer");
-        btnClose.setStyle(btnGhostStyle);
+        btnClose.setStyle(Style.BTN_GHOST_STYLE); // CORRECTION : était "btnGhostStyle"
         btnClose.setOnAction(e -> closeAdvanced());
 
         box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, iconRow, btnClose);
@@ -315,7 +316,7 @@ public class GameMenu extends BorderPane {
         }
 
         return correct;
-}
+    }
 
     public ArrayList<String> getPlayerNames() {
         return playerNames;

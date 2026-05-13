@@ -8,16 +8,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import latice.ihm.view.style.Style;
 import latice.util.ImageLoader;
 
 public class MenuPane extends BorderPane {
     // TOP
     private Label lblTitle;
     private Button btnParameters;
-    private static final String BTN_PARAMETERS_STYLE = Style.BTN_PARAMETERS_STYLE;
-    private static final String BTN_PARAMETERS_HOVER_STYLE = Style.BTN_PARAMETERS_HOVER_STYLE;
-    private static final String BTN_PARAMETERS_PRESSED_STYLE = Style.BTN_PARAMETERS_PRESSED_STYLE;
-    
+    // CORRECTION : suppression des constantes locales redondantes
+    // On utilise directement Style.BTN_PARAMETERS_STYLE etc.
+
     // CENTER
     private Button btnPlay;
     private Button btnExit;
@@ -39,7 +39,7 @@ public class MenuPane extends BorderPane {
         imageView.setPreserveRatio(true);
         btnParameters = new Button("", imageView);
 
-        // Styles bouton paramètres;    
+        // Styles bouton paramètres
         btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE);
         btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE));
         btnParameters.setOnMouseExited(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE));

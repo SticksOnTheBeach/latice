@@ -1,20 +1,21 @@
 package latice.ihm.view.model;
 
 import javafx.scene.layout.GridPane;
-import latice.ihm.controller.RoundController; // N'oublie pas l'import
+import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
+import latice.ihm.view.MainPane;
 import latice.model.Board;
 import latice.model.Position;
 
 public class BoardPane extends GridPane {
 
-    // On remplace Player par RoundController
-    public BoardPane(Board board, TileController tileController, RoundController roundController) {
+    // On passe mainPane pour que SquarePane puisse appeler
+    // rafraichirRackJoueur() et updateDisplay() après un placement réussi
+    public BoardPane(Board board, TileController tileController, RoundController roundController, MainPane mainPane) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Position position = new Position(i, j);
-                // On passe le RoundController à chaque case
-                SquarePane squarePane = new SquarePane(board.getSquare(position), position, tileController, roundController);
+                SquarePane squarePane = new SquarePane(board.getSquare(position), position, tileController, roundController, mainPane);
                 add(squarePane, j, i);
             }
         }

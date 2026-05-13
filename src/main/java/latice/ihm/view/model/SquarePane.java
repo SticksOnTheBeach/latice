@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
+import latice.ihm.view.MainPane;
 import latice.model.Player;
 import latice.model.Position;
 import latice.model.square.Square;
@@ -18,10 +19,10 @@ public class SquarePane extends StackPane {
     private Square square;
     private boolean isOccupied = false;
 
-    // on ajoute game et mainPane en paramètres
-    // pour pouvoir appeler nextTurn() et updateDisplay() après un placement réussi
-    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController) {
-    	this.square = square;
+    // on ajoute mainPane en paramètre pour pouvoir appeler
+    // rafraichirRackJoueur() et updateDisplay() après un placement réussi
+    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, MainPane mainPane) {
+        this.square = square;
         this.position = position;
 
         Rectangle rect = new Rectangle(SIZE, SIZE);
@@ -38,7 +39,6 @@ public class SquarePane extends StackPane {
         Label symbol = new Label(square.getType().getSymbol());
         symbol.setTextFill(Color.BLACK);
         symbol.setStyle("-fx-font-size: 20px;");
-        
 
         getChildren().addAll(rect, symbol);
 
@@ -52,12 +52,19 @@ public class SquarePane extends StackPane {
         setOnDragDropped(event -> {
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
-                // ON DEMANDE LE JOUEUR ACTUEL AU MOMENT EXACT DU DROP 
+                // ON DEMANDE LE JOUEUR ACTUEL AU MOMENT EXACT DU DROP
+                int indexAvantTour = roundController.getCurrentPlayerIndex();
                 Player currentPlayer = roundController.getCurrentPlayer();
                 boolean success = tileController.placeTile(currentPlayer, tileView.getTile(), position);
+
                 if (success) {
                     placeTile(tileView);
                     event.setDropCompleted(true);
+                    // Rafraîchit le rack du joueur qui vient de jouer
+                    mainPane.rafraichirRackJoueur(indexAvantTour);
+                    // Passe au joueur suivant et anime les racks
+                    roundController.nextPlayerTurn();
+                    mainPane.updateDisplay();
                 } else {
                     event.setDropCompleted(false);
                 }

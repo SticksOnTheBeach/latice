@@ -3,6 +3,7 @@ package latice.ihm.view.model;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -16,6 +17,8 @@ public class RackBox extends HBox {
         setSpacing(12);
         setAlignment(Pos.CENTER);
         setPadding(new Insets(15));
+        
+        setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         
         setStyle(
                 "-fx-background-color: rgba(255, 255, 255, 0.15); " +
