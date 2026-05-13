@@ -1,7 +1,8 @@
 package latice.ihm.view.style;
 
-public enum Style {
-    BTN_STYLE(
+public class Style {
+
+    public static final String BTN_STYLE =
         "-fx-font-size: 16px; " +
         "-fx-font-weight: bold; " +
         "-fx-font-family: \"Courier New\"; " +
@@ -12,8 +13,9 @@ public enum Style {
         "-fx-border-width: 3px; " +
         "-fx-padding: 10px 30px; " +
         "-fx-cursor: hand; " +
-        "-fx-min-width: 160px;"),
-    BTN_HOVER_STYLE(
+        "-fx-min-width: 160px;";
+
+    public static final String BTN_HOVER_STYLE =
         "-fx-font-size: 16px; " +
         "-fx-font-weight: bold; " +
         "-fx-font-family: \"Courier New\"; " +
@@ -24,8 +26,9 @@ public enum Style {
         "-fx-border-width: 3px; " +
         "-fx-padding: 10px 30px; " +
         "-fx-cursor: hand; " +
-        "-fx-min-width: 160px;"),
-    BTN_GHOST_STYLE(
+        "-fx-min-width: 160px;";
+
+    public static final String BTN_GHOST_STYLE =
         "-fx-font-size: 14px; " +
         "-fx-font-family: \"Courier New\"; " +
         "-fx-background-color: transparent; " +
@@ -34,8 +37,9 @@ public enum Style {
         "-fx-background-radius: 6px; " +
         "-fx-text-fill: rgba(168,216,168,0.8); " +
         "-fx-padding: 8px 14px; " +
-        "-fx-cursor: hand;"),
-    BTN_COLOR_STYLE(
+        "-fx-cursor: hand;";
+
+    public static final String BTN_COLOR_STYLE =
         "-fx-font-size: 14px; " +
         "-fx-font-family: \"Courier New\"; " +
         "-fx-background-color: transparent; " +
@@ -49,42 +53,41 @@ public enum Style {
         "-fx-padding: 0; " +
         "-fx-alignment: center; " +
         "-fx-text-fill: rgba(168,216,168,0.8); " +
-        "-fx-cursor: hand;"
-    ),
-    INPUT_STYLE(
+        "-fx-cursor: hand;";
+
+    public static final String INPUT_STYLE =
         "-fx-background-color: rgba(255,255,255,0.08); " +
         "-fx-border-color: rgba(168,216,168,0.3); " +
         "-fx-border-radius: 6px; " +
         "-fx-background-radius: 6px; " +
         "-fx-text-fill: white; " +
         "-fx-font-size: 14px; " +
-        "-fx-padding: 8px 12px;"),
-    
-    BTN_PARAMETERS_STYLE(
+        "-fx-padding: 8px 12px;";
+
+    public static final String BTN_PARAMETERS_STYLE =
         "-fx-background-color: transparent; " +
         "-fx-cursor: hand; " +
         "-fx-border-color: transparent; " +
         "-fx-border-width: 2px; " +
         "-fx-border-radius: 8px; " +
         "-fx-background-radius: 8px; " +
-        "-fx-padding: 0px;"
-    ),
-    BTN_PARAMETERS_HOVER_STYLE(
+        "-fx-padding: 0px;";
+
+    public static final String BTN_PARAMETERS_HOVER_STYLE =
         "-fx-background-color: rgba(255,255,255,0.15); " +
-            "-fx-cursor: hand; " +
-            "-fx-border-color: rgba(255,255,255,0.3); " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 8px; " +
-            "-fx-background-radius: 8px; " +
-            "-fx-padding: 0px;";
-    ),
-    BTN_PARAMETERS_PRESSED_STYLE(
+        "-fx-cursor: hand; " +
+        "-fx-border-color: rgba(255,255,255,0.3); " +
+        "-fx-border-width: 2px; " +
+        "-fx-border-radius: 8px; " +
+        "-fx-background-radius: 8px; " +
+        "-fx-padding: 0px;";
+
+    public static final String BTN_PARAMETERS_PRESSED_STYLE =
         "-fx-background-color: rgba(255,255,255,0.05); " +
         "-fx-cursor: hand; " +
         "-fx-border-color: rgba(255,255,255,0.2); " +
         "-fx-border-width: 2px; " +
         "-fx-border-radius: 8px; " +
         "-fx-background-radius: 8px; " +
-        "-fx-padding: 0px;"
-    );
+        "-fx-padding: 0px;";
 }
