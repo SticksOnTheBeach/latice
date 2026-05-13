@@ -8,7 +8,7 @@ public class RoundController {
 	// gère les tours des joueurs, c'est cette classe qui vas faire en sorte de gérer à qui c'est de jouer etc...
 	private int currentPlayerIndex = 0;
 	private ArrayList<Player> players;
-	private int roundCount;
+	private int roundCount = 1;
 
 	
 	 public RoundController(ArrayList<Player> players) {

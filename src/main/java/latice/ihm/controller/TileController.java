@@ -47,7 +47,7 @@ public class TileController {
         player.getRack().getTiles().remove(tile);
 
         // Recharge le rack depuis le deck
-        player.getRack().addTileFromDeck(player.getDeck());
+        // player.getRack().addTileFromDeck(player.getDeck());
 
         return true;
     }

@@ -5,6 +5,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
 import latice.ihm.view.MainPane;
@@ -18,10 +19,11 @@ public class SquarePane extends StackPane {
     private Position position;
     private Square square;
     private boolean isOccupied = false;
+    private GameController gameController;
 
     // on ajoute mainPane en paramètre pour pouvoir appeler
     // rafraichirRackJoueur() et updateDisplay() après un placement réussi
-    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, MainPane mainPane) {
+    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, MainPane mainPane, GameController gameController) {
         this.square = square;
         this.position = position;
 
@@ -52,19 +54,11 @@ public class SquarePane extends StackPane {
         setOnDragDropped(event -> {
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
-                // ON DEMANDE LE JOUEUR ACTUEL AU MOMENT EXACT DU DROP
-                int indexAvantTour = roundController.getCurrentPlayerIndex();
-                Player currentPlayer = roundController.getCurrentPlayer();
-                boolean success = tileController.placeTile(currentPlayer, tileView.getTile(), position);
-
+                boolean success = gameController.playTile(tileView.getTile(), position);
+                
                 if (success) {
                     placeTile(tileView);
                     event.setDropCompleted(true);
-                    // Rafraîchit le rack du joueur qui vient de jouer
-                    mainPane.rafraichirRackJoueur(indexAvantTour);
-                    // Passe au joueur suivant et anime les racks
-                    roundController.nextPlayerTurn();
-                    mainPane.updateDisplay();
                 } else {
                     event.setDropCompleted(false);
                 }

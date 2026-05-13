@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
 import latice.ihm.model.RackTransition;
@@ -20,16 +21,20 @@ import latice.model.Player;
 
 public class MainPane extends BorderPane {
     protected Label lblNbRound;
-    protected int nbRound = 1;
+    protected int nbRound;
     protected Label lblPlayerRound;
     private Game game;
 
     private RoundController roundController;
     private RackTransition rackTransition;
+    private GameController gameController;
 
-    public MainPane(Board board, Game game, TileController tileController, RoundController roundController) {
+    public MainPane(Board board, Game game, TileController tileController, RoundController roundController, GameController gameController) {
         this.game = game;
+        this.gameController = gameController;
+        gameController.setView(this);
         this.roundController = roundController;
+        this.nbRound = roundController.getRoundCount();
 
         lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
@@ -44,22 +49,12 @@ public class MainPane extends BorderPane {
         hbTop.setAlignment(Pos.CENTER);
         hbTop.setStyle("-fx-font-size: 20px; -fx-font-family: \"Arial\"; -fx-font-weight: bold;");
 
-        // --- BOUTON DE TEST ---
-        Button btnNextTurn = new Button("Fin de tour");
-        btnNextTurn.setStyle("-fx-background-color: #a8d8a8; -fx-cursor: hand; -fx-font-weight: bold;");
-        btnNextTurn.setOnAction(e -> {
-            // Quand on clique, on change de joueur et on rafraîchit l'écran
-            this.roundController.nextPlayerTurn();
-            updateDisplay();
-        });
-        hbTop.getChildren().add(btnNextTurn);
-
         setTop(hbTop);
         setAlignment(hbTop, Pos.CENTER);
 
         // --- CENTRE : StackPane avec le board ET les racks autour ---
         // On utilise un StackPane pour superposer le board et les racks positionnés autour
-        BoardPane boardPane = new BoardPane(board, tileController, roundController, this);
+        BoardPane boardPane = new BoardPane(board, tileController, roundController, this, gameController);
         boardPane.setAlignment(Pos.CENTER);
         boardPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
@@ -82,9 +77,9 @@ public class MainPane extends BorderPane {
     public void updateDisplay() {
         Player current = roundController.getCurrentPlayer();
         lblPlayerRound.setText("Player Turn : " + current.getName());
+        lblNbRound.setText("Round : " + roundController.getRoundCount());
 
-        // Anime les racks vers la nouvelle position du joueur actif
-        rackTransition.animerVersJoueur(roundController.getCurrentPlayerIndex());
+        rackTransition.animateToPlayer(roundController.getCurrentPlayerIndex());
     }
 
     /**

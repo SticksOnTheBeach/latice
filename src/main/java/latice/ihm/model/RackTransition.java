@@ -2,6 +2,7 @@ package latice.ihm.model;
 
 import java.util.ArrayList;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -75,6 +76,15 @@ public class RackTransition {
             rack.setTranslateX(offsets[0]);
             rack.setTranslateY(offsets[1]);
             rack.setRotate(getTargetAngle(positionRelative, nbJoueurs));
+            
+            // le joueur actuelle ne peux pas toucher aux racks des autres joueurs.
+            if (i == currentPlayerIndex) {
+                rack.setMouseTransparent(false);
+                rack.setOpacity(1.0);
+            } else {
+                rack.setMouseTransparent(true);
+                rack.setOpacity(0.5);
+            }
         }
     }
 
@@ -84,7 +94,7 @@ public class RackTransition {
      *
      * @param nouvelIndex L'index du nouveau joueur actif
      */
-    public void animerVersJoueur(int nouvelIndex) {
+    public void animateToPlayer(int nouvelIndex) {
         this.currentPlayerIndex = nouvelIndex;
         int nbPlayers = players.size();
 
@@ -113,8 +123,17 @@ public class RackTransition {
 
             RotateTransition rt = new RotateTransition(Duration.millis(ANIM_DURATION), rack);
             rt.setByAngle(angleDiff);
-
-            allTransitions.getChildren().addAll(tt, rt);
+            
+            FadeTransition ft = new FadeTransition(Duration.millis(ANIM_DURATION), rack);
+            if (i == currentPlayerIndex) {
+                rack.setMouseTransparent(false);
+                ft.setToValue(1.0);
+            } else {
+                rack.setMouseTransparent(true);
+                ft.setToValue(0.5);
+            }
+            
+            allTransitions.getChildren().addAll(tt, rt, ft);
         }
 
         allTransitions.play();
@@ -233,5 +252,13 @@ public class RackTransition {
         newRack.setTranslateX(offsets[0]);
         newRack.setTranslateY(offsets[1]);
         newRack.setRotate(getTargetAngle(positionRelative, players.size()));
+        
+        if (playerIndex == currentPlayerIndex) {
+        	newRack.setMouseTransparent(false);
+        	newRack.setOpacity(1.0);
+        } else {
+        	newRack.setMouseTransparent(true);
+        	newRack.setOpacity(0.5);
+        }
     }
 }
