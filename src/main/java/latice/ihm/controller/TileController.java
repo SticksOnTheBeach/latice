@@ -3,7 +3,6 @@ package latice.ihm.controller;
 import latice.model.Board;
 import latice.model.Player;
 import latice.model.Position;
-import latice.model.Rack;
 import latice.model.square.Square;
 import latice.model.tile.Tile;
 
@@ -46,8 +45,8 @@ public class TileController {
         // Retire la tuile du rack du joueur
         player.getRack().getTiles().remove(tile);
 
-        // Recharge le rack depuis le deck
-        // player.getRack().addTileFromDeck(player.getDeck());
+        // CORRECTION : décommentée — recharge le rack depuis le deck après chaque placement
+        player.getRack().addTileFromDeck(player.getDeck());
 
         return true;
     }
