@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -53,7 +52,6 @@ public class MainPane extends BorderPane {
         setAlignment(hbTop, Pos.CENTER);
 
         // --- CENTRE : StackPane avec le board ET les racks autour ---
-        // On utilise un StackPane pour superposer le board et les racks positionnés autour
         BoardPane boardPane = new BoardPane(board, tileController, roundController, this, gameController);
         boardPane.setAlignment(Pos.CENTER);
         boardPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -62,11 +60,14 @@ public class MainPane extends BorderPane {
         centerStack.setAlignment(Pos.CENTER);
         centerStack.getChildren().add(boardPane);
 
-        // Récupère la liste des joueurs depuis le RoundController
         ArrayList<Player> players = roundController.getPlayers();
-
-        // Crée la RackTransition qui va gérer le positionnement et les animations
-        rackTransition = new RackTransition(centerStack, players, roundController.getCurrentPlayerIndex());
+        rackTransition = new RackTransition(
+            centerStack,
+            players,
+            roundController.getCurrentPlayerIndex(),
+            roundController,
+            gameController
+        );
 
         setCenter(centerStack);
         BorderPane.setMargin(centerStack, new Insets(20));
@@ -83,7 +84,7 @@ public class MainPane extends BorderPane {
     }
 
     /**
-     * À appeler depuis SquarePane après un placement réussi,
+     * À appeler après un placement réussi,
      * pour rafraîchir le rack du joueur qui vient de jouer.
      *
      * @param playerIndex L'index du joueur dont le rack a changé

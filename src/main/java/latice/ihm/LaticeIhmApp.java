@@ -1,6 +1,7 @@
 package latice.ihm;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import latice.ihm.controller.GameMenuController;
@@ -41,9 +42,11 @@ public class LaticeIhmApp extends Application {
         GameMenuController controller = new GameMenuController(primaryStage);
 
         GameMenu gameMenu = new GameMenu(
-            e -> controller.handleBack(e),
-            e -> controller.handleStart(e)
-        );
+                e -> controller.handleBack(e),
+                e -> controller.handleStart(e)
+            );
+        
+        //GameMenu gameMenu = new GameMenu(e -> controller.handleBack(e));
         controller.setGameMenu(gameMenu);
 
         primaryStage.setTitle("Latice");

@@ -1,9 +1,11 @@
 package latice.ihm.view.model;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
@@ -21,10 +23,16 @@ public class DeckBox extends VBox {
 		this.roundController = roundController;
 		this.gameController = gameController;
 		
+		
+		
 		HBox horizontalLayout = new HBox();
 		
         Image deckImage = ImageLoader.load("/images/game/deck.png");
         ImageView deckView = new ImageView(deckImage);
+        deckView.setFitWidth(60);
+        deckView.setFitHeight(60);
+        deckView.setPreserveRatio(true);
+        deckView.setSmooth(true);
         
         // BOUTON CLIQUABLE POUR LA "PIOCHE" DE CHAQUE JOUEUR
         btnDeck = new Button();
@@ -32,11 +40,14 @@ public class DeckBox extends VBox {
         btnDeck.setGraphic(deckView);
         btnDeck.setOnMouseClicked(event -> {
 
-        	Player currentPlayer = roundController.getCurrentPlayer();
-        	currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
+        	this.gameController.drawTile();
         });
         
         horizontalLayout.getChildren().add(btnDeck);
+        horizontalLayout.setAlignment(Pos.CENTER);
         this.getChildren().add(horizontalLayout);
+        this.setAlignment(Pos.CENTER);
+        this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+    
 	}
 }

@@ -41,11 +41,7 @@ public class TileController {
 
         // Place la tuile sur le board
         board.getSquare(position).setTile(tile);
-
-        // Retire la tuile du rack du joueur
         player.getRack().getTiles().remove(tile);
-
-        // CORRECTION : décommentée — recharge le rack depuis le deck après chaque placement
         player.getRack().addTileFromDeck(player.getDeck());
 
         return true;
