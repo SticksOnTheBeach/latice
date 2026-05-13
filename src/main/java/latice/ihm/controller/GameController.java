@@ -42,13 +42,13 @@ public class GameController {
     }
     
     /**
-     * Pioche une tuile et met à jour l'interface immédiatement.
+     * Pioche UNE SEULE tuile et met à jour l'interface immédiatement.
      */
     public void drawTile() {
         Player currentPlayer = roundController.getCurrentPlayer();
         int currentIndex = roundController.getCurrentPlayerIndex();
         
-        currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
+        currentPlayer.getRack().drawOneTile(currentPlayer.getDeck());
         mainPane.rafraichirRackJoueur(currentIndex);
     }
     /**
