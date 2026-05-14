@@ -19,7 +19,7 @@ public class LaticeApplicationConsole {
 		Board board = new Board();
 		// Instanciation du jeu
 		Game game = new Game(player1, player2, referee);
-		game.shareTilesBetweenTwoPlayers(player1, player2);
+		game.shareTilesDynamically();
 		
 		
 		rackj1.addTileFromDeck(player1.getDeck());
