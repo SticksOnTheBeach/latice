@@ -10,5 +10,10 @@ public class Referee {
         this.player = player;
         this.gameboard = gameboard;
     }
-    
+    public boolean isValidMove(Position position){
+        if(gameboard.isBoardEmpty() && position.equals(new Position(4, 4))){
+            return true;
+        }
+        return false;
+    }
 }

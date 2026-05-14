@@ -51,7 +51,18 @@ public class Board {
             Console.message(""); 
         }
     }
-    
+    public boolean isEmpty(Position position) {
+        Square square = board.get(position);
+        return !square.isOccupied();
+    }
+    public boolean isBoardEmpty() {
+        for (Square square : board.values()) {
+            if (square.isOccupied()) {
+                return false;
+            }
+        }
+        return true;
+    }
     public Square getSquare(Position p) {
         return board.get(p);
     }
