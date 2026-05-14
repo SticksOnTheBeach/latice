@@ -30,6 +30,10 @@ public class Rack implements TileContainer{
         }
     }
 
+    public int size(){
+        return tiles.size();
+    }
+
     @Override
     public boolean isEmpty() {
         if (tiles.size() == 0) {

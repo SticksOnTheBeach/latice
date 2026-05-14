@@ -18,6 +18,7 @@ public class Game {
     protected Referee referee;
     
     protected int CurrentCycle;
+    protected Board board;
     
     protected int currentPlayerIndex;  
     
@@ -30,25 +31,25 @@ public class Game {
      * @param player2 The second player of the game.
      * @param referee The referee overseeing the game rules and logic.
      */
-    public Game(Player player1, Player player2, Referee referee) {
-        // CORRECTION : on ajoute les deux joueurs dans la liste players
-        // pour que getCurrentPlayer() et nextTurn() fonctionnent
-        this.players.add(player1);
-        this.players.add(player2);
-        this.referee = referee;
-        this.currentPlayerIndex = rand.nextInt(players.size());
-    }
-    
     /**
      * Initializes a game for a dynamic number of players.
      * 
      * @param players A list containing all the players participating in the game.
      * @param referee The referee overseeing the game rules and logic.
      */
-    public Game(ArrayList<Player> players, Referee referee) {
+    public Game(ArrayList<Player> players, Referee referee, Board board) {
         this.players = players;
         this.referee = referee;
-        this.currentPlayerIndex = rand.nextInt(players.size());
+        this.board = board;
+    }
+    public void startGame(){
+        board.createGameBoard();
+        createTiles();
+        shareTilesDynamically();
+        choseFirstPlayer();
+        for (Player player :players){
+            player.getRack().addTileFromDeck(player.getDeck());
+        }
     }
      
     /**
@@ -65,6 +66,9 @@ public class Game {
             }
         }
         return listTile;
+    }
+    public String showRack(Player pLayer){
+        return  pLayer.getRack().toString();
     }
     
     /**
@@ -126,6 +130,9 @@ public class Game {
 	
 	public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
+    }
+    public void choseFirstPlayer() {
+        this.currentPlayerIndex = rand.nextInt(players.size());
     }
 	
 	public void nextTurn() {

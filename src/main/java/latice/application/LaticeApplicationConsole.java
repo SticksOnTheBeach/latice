@@ -3,6 +3,9 @@ package latice.application;
 import latice.console.Console;
 import latice.model.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import static latice.console.Console.message;
 
 public class LaticeApplicationConsole {
@@ -10,27 +13,16 @@ public class LaticeApplicationConsole {
 	public static void main(String[] args) {
 		// Instanciation des objets : Arbitres, et rack
 		Referee referee = new Referee();
-		Rack rackj1 = new Rack();
-		Rack rackj2 = new Rack();
-		
 		// Instanciation des objets : Joueur
-		Player player1 = new Player(rackj1, "testj1");
-		Player player2 = new Player(rackj2, "testj2");
+		ArrayList players = new ArrayList<Player>();
+		players.add(new Player(new Rack(), "testj1"));
+		players.add(new Player(new Rack(), "testj2"));
 		Board board = new Board();
 		// Instanciation du jeu
-		Game game = new Game(player1, player2, referee);
-		game.shareTilesDynamically();
-		
-		
-		rackj1.addTileFromDeck(player1.getDeck());
-		rackj2.addTileFromDeck(player2.getDeck());
-
-		message(player1.toString());
-		message(player2.toString());
-		message(rackj1.toString());
-		message(rackj2.toString());
-		board.createGameBoard();
+		Game game = new Game(players, referee, board);
+		game.startGame();
 		board.showGameBoard();
+		message(game.showRack(game.getCurrentPlayer())); // TODO simplifier la methode pour eviter les apells en cascade
 
 	}
 }

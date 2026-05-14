@@ -16,65 +16,87 @@ import latice.model.tile.Tile;
 
 public class LaticeTestCases {
 
-	private Game game;
-	Rack rackj1 = new Rack();
-	Rack rackj2 = new Rack();
-	Rack rackj3 = new Rack();
-	Player player1 = new Player(rackj1, "testj1");
-	Player player2 = new Player(rackj2, "testj2");
-	Player player3 = new Player(rackj3, "testj3");
+	private Game               game;
+	private ArrayList<Player> players;
 
 	@BeforeEach
 	public void init() {
+		players = new ArrayList<>();
+		players.add(new Player(new Rack(), "testj1"));
+		players.add(new Player(new Rack(), "testj2"));
+
 		Referee referee = new Referee();
-		game = new Game(player1, player2, referee);
+		game = new Game(players, referee, new Board());
 	}
-	//TODO : ajouter des test pour plus de 2 joueurs ou si il n'y a aucun joueur
+
+	//TODO : ajouter des test si il n'y a aucun joueur
 
 	@Test
 	public void checkNumberOfTiles() {
-		List<Tile> listTiles = new ArrayList<Tile>();
-		listTiles = game.createTiles();
+		List<Tile> listTiles = game.createTiles();
 		assertEquals(60, listTiles.size());
 	}
 
 	@Test
-	public void checkNumberOfEachDeckForTwoPlayer() {
+	public void checkNumberOfEachDeckForTwoPlayers() {
 		game.shareTilesDynamically();
-
-		assertEquals(30, player1.getDeck().getTiles().size());
-		assertEquals(30, player2.getDeck().getTiles().size());
-		assertEquals(player1.getDeck().getTiles().size(), player2.getDeck().getTiles().size());
+		for (Player player : players) {
+			assertEquals(30, player.getDeck().getTiles().size());
+		}
 	}
 
 	@Test
-	public void removeTheTilesFromTheDeck() {
-		game.shareTilesBetweenTwoPlayers(player1, player2);
-        while (!player1.getDeck().isEmpty()){
-			player1.getDeck().remove();
+	public void checkNumberOfEachDeckForThreePlayers() {
+		players.add(new Player(new Rack(), "testj3"));
+		game.shareTilesDynamically();
+		for (Player player : players) {
+			assertEquals(20, player.getDeck().getTiles().size());
 		}
-		assertTrue(player1.getDeck().isEmpty());
 	}
 
-    @Test
+
+	@Test
+	public void checkTotalTilesAfterShare() {
+		game.shareTilesDynamically();
+		int total = players.stream()
+				.mapToInt(p -> p.getDeck().getTiles().size())
+				.sum();
+		assertEquals(60, total);
+	}
+@Test
+	public void removeAllTilesFromDeck() {
+		game.shareTilesDynamically();
+		Player player = players.get(0);
+		while (!player.getDeck().isEmpty()) {
+			player.getDeck().remove();
+		}
+		assertTrue(player.getDeck().isEmpty());
+	}
+		@Test
 	public void addTilesFromTheRack() {
-		game.shareTilesBetweenTwoPlayers(player1, player2);
-		rackj1.addTileFromDeck(player1.getDeck());
-		assertEquals(25, player1.getDeck().getTiles().size());
-		assertEquals(5, rackj1.getTiles().size());
+		game.shareTilesDynamically();
+			Player player = players.get(0);
+
+			player.getRack().addTileFromDeck(player.getDeck());
+		assertEquals(25, player.getDeck().getTiles().size());
+		assertEquals(5, player.getRack().getTiles().size());
 	}
 
 	@Test
-	public void addTilesFromTheRackWhenDeckisLessThan5Tiles(){
-		game.shareTilesBetweenTwoPlayers(player1, player2);
-		for(int i = 27; i > 0; i--){
-			player1.getDeck().remove();
-		}
-		rackj1.addTileFromDeck(player1.getDeck());
+	public void addTilesFromRackWhenDeckHasLessThanFiveTiles() {
+		game.shareTilesDynamically();
+		Player player = players.get(0);
 
-		assertEquals(0, player1.getDeck().getTiles().size());
-		assertEquals(3, rackj1.getTiles().size());
+		// ne laisser que 3 tuiles dans le deck
+		for (int i = 0; i < 27; i++) {
+			player.getDeck().remove();
+		}
+		assertEquals(3, player.getDeck().getTiles().size());
+		player.getRack().addTileFromDeck(player.getDeck());
+		assertEquals(0, player.getDeck().getTiles().size());
+		assertEquals(3, player.getRack().getTiles().size());
 	}
+
 	@Test
 	void checkCreationOfTheGameBoard(){
 		Board board = new Board();
