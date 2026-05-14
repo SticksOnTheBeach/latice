@@ -8,16 +8,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import latice.ihm.view.style.Style;
 import latice.util.ImageLoader;
 
 public class MenuPane extends BorderPane {
     // TOP
     private Label lblTitle;
     private Button btnParameters;
-    private static final String BTN_PARAMETERS_STYLE = Style.BTN_PARAMETERS_STYLE;
-    private static final String BTN_PARAMETERS_HOVER_STYLE = Style.BTN_PARAMETERS_HOVER_STYLE;
-    private static final String BTN_PARAMETERS_PRESSED_STYLE = Style.BTN_PARAMETERS_PRESSED_STYLE;
-    
+    private static final String BTN_PARAMETERS_STYLE = Style.BTN_PARAMETERS_STYLE.getStyle();
+    private static final String BTN_PARAMETERS_HOVER_STYLE = Style.BTN_PARAMETERS_HOVER_STYLE.getStyle();
+    private static final String BTN_PARAMETERS_PRESSED_STYLE = Style.BTN_PARAMETERS_PRESSED_STYLE.getStyle();
+
     // CENTER
     private Button btnPlay;
     private Button btnExit;
@@ -39,13 +40,13 @@ public class MenuPane extends BorderPane {
         imageView.setPreserveRatio(true);
         btnParameters = new Button("", imageView);
 
-        // Styles bouton paramètres;    
-        btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE);
-        btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE));
-        btnParameters.setOnMouseExited(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE));
-        btnParameters.setOnMousePressed(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_PRESSED_STYLE));
-        btnParameters.setOnMouseReleased(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE));
-
+        // Styles bouton paramètres;
+        btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE.getStyle());        btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE.getStyle()));
+        btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE.getStyle());
+        btnParameters.setOnMouseEntered(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE.getStyle()));
+        btnParameters.setOnMouseExited(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_STYLE.getStyle()));
+        btnParameters.setOnMousePressed(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_PRESSED_STYLE.getStyle()));
+        btnParameters.setOnMouseReleased(e -> btnParameters.setStyle(Style.BTN_PARAMETERS_HOVER_STYLE.getStyle()));
         StackPane topBar = new StackPane();
         topBar.setPadding(new Insets(30));
         StackPane.setAlignment(btnParameters, Pos.CENTER_LEFT);

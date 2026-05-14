@@ -76,7 +76,7 @@ public enum Style {
             "-fx-border-width: 2px; " +
             "-fx-border-radius: 8px; " +
             "-fx-background-radius: 8px; " +
-            "-fx-padding: 0px;";
+            "-fx-padding: 0px;"
     ),
     BTN_PARAMETERS_PRESSED_STYLE(
         "-fx-background-color: rgba(255,255,255,0.05); " +
@@ -87,4 +87,13 @@ public enum Style {
         "-fx-background-radius: 8px; " +
         "-fx-padding: 0px;"
     );
+    private final String style;
+
+    Style(String style) {
+        this.style = style;
+    }
+
+    public String getStyle() {
+        return style;
+    }
 }
