@@ -25,7 +25,7 @@ public class LaticeTestCases {
 		players.add(new Player(new Rack(), "testj1"));
 		players.add(new Player(new Rack(), "testj2"));
 
-		Referee referee = new Referee();
+		Referee referee = new Referee(new Board());
 		game = new Game(players, referee, new Board());
 	}
 

@@ -12,6 +12,8 @@ import latice.model.Rack;
 import latice.model.Referee;
 import latice.ihm.view.MainPane;
 
+import java.sql.Ref;
+
 public class GameMenuController {
 
     private Stage stage;
@@ -36,7 +38,6 @@ public class GameMenuController {
 
     // Démarrer la partie
     public void handleStart(java.util.ArrayList<String> playerNames) {
-        Referee referee = new Referee();
 
         // Créer les joueurs dynamiquement selon les noms saisis
         java.util.ArrayList<Player> players = new java.util.ArrayList<>();
@@ -49,6 +50,8 @@ public class GameMenuController {
         }
 
         Board board = new Board();
+        Referee referee = new Referee(board);
+
         Game game = new Game(players, referee, board);
         //game.shareTilesBetweenTwoPlayers(players.get(0), players.get(1));
         game.startGame();
@@ -57,7 +60,7 @@ public class GameMenuController {
             p.getRack().addTileFromDeck(p.getDeck());
         }
 
-        TileController tileController = new TileController(board);
+        TileController tileController = new TileController(board, referee);
         RoundController roundController = new RoundController(players);
         MainPane mainPane = new MainPane(board, game, tileController, roundController);
         mainPane.setStyle("-fx-background-color: linear-gradient(to bottom right, #3e2723, #6d4c41);");

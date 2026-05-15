@@ -140,4 +140,10 @@ public class Game {
         
         System.out.println("C'est au tour de : " + getCurrentPlayer().getName());
     }
+    public void placeTile(Player player, Tile tile, Position position) {
+        if (referee.isValidMove(position, tile )) {
+            board.placeTile(position, tile);
+            player.getRack().getTiles().remove(tile);//TODO eviter les appeles en cascade
+        }
+    }
 }
