@@ -7,6 +7,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import latice.model.exceptions.InvalidImagePathException;
 import latice.model.tile.Tile;
 import latice.util.ImageLoader;
 
@@ -25,8 +26,14 @@ public class TileView extends StackPane {
         
         String color = tile.getColor().name().toLowerCase();
         String shape = tile.getShape().name().toLowerCase();
-        String path = "/images/game/" + shape + "_" + color.substring(0, 1) + ".png";        
-        ImageView imageView = new ImageView(ImageLoader.load(path));
+        String path = "/images/game/" + shape + "_" + color.substring(0, 1) + ".png";  
+        
+        ImageView imageView = new ImageView();
+        try {
+            imageView.setImage(ImageLoader.load(path));
+        } catch (InvalidImagePathException e) {
+            System.err.println("ERROR : image introuvable ! " + e.getMessage());
+        }
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);
         getChildren().addAll(rect, imageView);

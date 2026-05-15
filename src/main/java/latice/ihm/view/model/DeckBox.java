@@ -2,33 +2,33 @@ package latice.ihm.view.model;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
-import latice.model.Player;
+import latice.model.exceptions.InvalidImagePathException;
 import latice.util.ImageLoader;
 
 public class DeckBox extends VBox {
-	// TODO réalisation d'un interface pour le deck des joueurs
-	private GameController gameController;
-	private Button btnDeck;
-	private RoundController roundController;
+    private GameController gameController;
+    private Button btnDeck;
+    private RoundController roundController;
 
-	
-	public DeckBox(RoundController roundController, GameController gameController) {
-		this.roundController = roundController;
-		this.gameController = gameController;
-		
-		
-		
-		HBox horizontalLayout = new HBox();
-		
-        Image deckImage = ImageLoader.load("/images/game/deck.png");
-        ImageView deckView = new ImageView(deckImage);
+    public DeckBox(RoundController roundController, GameController gameController) {
+        this.roundController = roundController;
+        this.gameController = gameController;
+        
+        HBox horizontalLayout = new HBox();
+        ImageView deckView = new ImageView();
+
+        try {
+            deckView.setImage(ImageLoader.load("/images/game/deck.png"));
+        } catch (InvalidImagePathException e) {
+            System.err.println("ERROR : image du Deck introuvable ! : " + e.getMessage());
+        }
+
         deckView.setFitWidth(60);
         deckView.setFitHeight(60);
         deckView.setPreserveRatio(true);
@@ -39,8 +39,7 @@ public class DeckBox extends VBox {
         btnDeck.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
         btnDeck.setGraphic(deckView);
         btnDeck.setOnMouseClicked(event -> {
-
-        	this.gameController.drawTile();
+            this.gameController.drawTile();
         });
         
         horizontalLayout.getChildren().add(btnDeck);
@@ -48,6 +47,5 @@ public class DeckBox extends VBox {
         this.getChildren().add(horizontalLayout);
         this.setAlignment(Pos.CENTER);
         this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-    
-	}
+    }
 }

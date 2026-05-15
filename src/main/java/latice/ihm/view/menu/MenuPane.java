@@ -10,22 +10,28 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import latice.ihm.view.style.Style;
 import latice.util.ImageLoader;
+import latice.model.exceptions.InvalidImagePathException;
 
 public class MenuPane extends BorderPane {
     // TOP
     private Label lblTitle;
     private Button btnParameters;
-    // CORRECTION : suppression des constantes locales redondantes
-    // On utilise directement Style.BTN_PARAMETERS_STYLE etc.
 
     // CENTER
     private Button btnPlay;
     private Button btnExit;
 
     public MenuPane() {
+        ImageView background = new ImageView();
+        ImageView imageView = new ImageView();
 
-        // Image de fond
-        ImageView background = new ImageView(ImageLoader.load("/images/menu/background.png"));
+        try {
+            background.setImage(ImageLoader.load("/images/menu/background.png"));
+            imageView.setImage(ImageLoader.load("/images/menu/parametres.png"));
+        } catch (InvalidImagePathException e) {
+            System.err.println("ERROR : image introuvable ! " + e.getMessage());
+        }
+
         background.setPreserveRatio(false);
         background.fitWidthProperty().bind(widthProperty());
         background.fitHeightProperty().bind(heightProperty());
@@ -33,7 +39,6 @@ public class MenuPane extends BorderPane {
         setStyle("-fx-background-color: #1a2e35;");
 
         /* TOP */
-        ImageView imageView = new ImageView(ImageLoader.load("/images/menu/parametres.png"));
         imageView.setFitWidth(32);
         imageView.setFitHeight(32);
         imageView.setPreserveRatio(true);

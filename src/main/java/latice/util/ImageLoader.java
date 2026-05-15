@@ -1,9 +1,11 @@
 package latice.util;
 
-import javafx.scene.image.Image;
-
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.scene.image.Image;
+import latice.model.exceptions.InvalidImagePathException;
 
 public class ImageLoader {
 	// CACHE PERMERTTANT DE NE PAS CHARGER DES IMAGES DÉJÀ CHARGÉE POUR PLUS D'OPTIMISATION
@@ -16,18 +18,27 @@ public class ImageLoader {
      * @param path Le chemin de l'image ex: "/images/sun.png"
      * @return L'image chargée, ou null si introuvable.
      */
-    public static Image load(String path) {
+	public static Image load(String path) throws InvalidImagePathException {
+        // Si c'est déjà dans le coffre, on se sert !
         if (cache.containsKey(path)) {
             return cache.get(path);
         }
 
         try {
-            Image image = new Image(ImageLoader.class.getResourceAsStream(path));
+            InputStream is = ImageLoader.class.getResourceAsStream(path);
+            
+            if (is == null) {
+                throw new InvalidImagePathException("ERROR : l'image est introuvable !", path);
+            }
+
+            Image image = new Image(is);
             cache.put(path, image);
             return image;
+            
+        } catch (InvalidImagePathException e) {
+            throw e;
         } catch (Exception e) {
-            System.err.println("Image introuvable : " + path);
-            return null;
+            throw new InvalidImagePathException("Erreur inattendue lors du chargement : " + e.getMessage(), path);
         }
     }
 }
