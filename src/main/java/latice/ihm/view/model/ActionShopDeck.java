@@ -1,5 +1,6 @@
 package latice.ihm.view.model;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -45,6 +46,12 @@ public class ActionShopDeck extends HBox {
 	            current.setScore(current.getScore() - 2);
 	            current.getRack().exchangeAllTiles(current.getDeck());
 	            refreshPoints();
+	        } else {
+	        	Alert alert = new Alert(Alert.AlertType.WARNING);
+	            alert.setTitle("Points insuffisants");
+	            alert.setHeaderText(null);
+	            alert.setContentText("Vous n'avez pas assez de points !");
+	            alert.showAndWait();
 	        }
 	    });
 	    getChildren().addAll(points, actionExchangeAllTiles);
