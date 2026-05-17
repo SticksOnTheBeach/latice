@@ -28,7 +28,7 @@ public class Tile {
     public SHAPE getShape() {
     	return shape;
     }
-    
+
     @Override
     public String toString() {
         return "tile [" + shape + ", " + color + "]";

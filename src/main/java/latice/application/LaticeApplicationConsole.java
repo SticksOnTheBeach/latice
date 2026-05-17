@@ -12,12 +12,13 @@ public class LaticeApplicationConsole {
 
 	public static void main(String[] args) {
 		// Instanciation des objets : Arbitres, et rack
-		Referee referee = new Referee();
 		// Instanciation des objets : Joueur
 		ArrayList players = new ArrayList<Player>();
 		players.add(new Player(new Rack(), "testj1"));
 		players.add(new Player(new Rack(), "testj2"));
 		Board board = new Board();
+		Referee referee = new Referee(board);
+
 		// Instanciation du jeu
 		Game game = new Game(players, referee, board);
 		game.startGame();

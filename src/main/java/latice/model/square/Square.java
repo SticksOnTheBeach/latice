@@ -26,5 +26,8 @@ public class Square {
     public boolean isOccupied() {
         return tile != null;
     }
-    
+
+    public Tile getTile() {
+        return tile;
+    }
 }
