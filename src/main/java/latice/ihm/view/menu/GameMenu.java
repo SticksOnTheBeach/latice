@@ -16,24 +16,22 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import latice.ihm.view.style.Style;
 
 public class GameMenu extends BorderPane {
-	/* TODO : 2 possibilités pour les lignes des joueurs
-	 * soit faire que joueur 3 et joueur 4 soit déjà déclaré mais non affiché et donc que dès 
-	 * que l'on clique sur le "+" ça s'affiche et donc un écouteur
-	 * INCONVÉNIENTS : 
-	 *  - c'est "hardcodeer", si plus tard on veut augmenter et laisser place à plus de joueurs, 
-	 * on aura un problème qui est que ce sera moins modulaire, et moins optimisé
-	 *  - Les objets Player 3 et 4 existent en mémoire même s'ils ne jouent pas
-	 *  - Plus difficile à maintenir
-	 *  
-	 * 
-	 * soit faire comme déjà implémenté, réaliser une boucle qui parcours la listes des joueurs et donc que pour 
-	 * le i-ième joueur tu fais joueur i + 1, et que la liste des joueurs est géré dynamiquement
-	 * */
+    /* TODO : 2 possibilités pour les lignes des joueurs
+     * soit faire que joueur 3 et joueur 4 soit déjà déclaré mais non affiché et donc que dès
+     * que l'on clique sur le "+" ça s'affiche et donc un écouteur
+     * INCONVÉNIENTS :
+     *  - c'est "hardcoder", si plus tard on veut augmenter et laisser place à plus de joueurs,
+     * on aura un problème qui est que ce sera moins modulaire, et moins optimisé
+     *  - Les objets Player 3 et 4 existent en mémoire même s'ils ne jouent pas
+     *  - Plus difficile à maintenir
+     *
+     * soit faire comme déjà implémenté, réaliser une boucle qui parcours la listes des joueurs et donc que pour
+     * le i-ième joueur tu fais joueur i + 1, et que la liste des joueurs est géré dynamiquement
+     */
     private static final int MAX_PLAYERS = 4;
 
     private ArrayList<String> playerNames = new ArrayList<>();
@@ -45,8 +43,7 @@ public class GameMenu extends BorderPane {
     private VBox advancedBox;
     private VBox centerBox;
     private HBox hbButtons;
-    
-    // private Label msgError;
+
     private ArrayList<Label> errorLabels = new ArrayList<>();
 
     private EventHandler<ActionEvent> onBack;
@@ -87,7 +84,7 @@ public class GameMenu extends BorderPane {
         // Branchement des handlers
         btnBack.setOnAction(onBack);
         btnStart.setOnAction(e -> {
-        	if (handleStart()) {
+            if (handleStart()) {
                 onStart.handle(e);
             }
         });
@@ -109,7 +106,7 @@ public class GameMenu extends BorderPane {
 
         setCenter(root);
     }
-    
+
     private void refreshRows() {
         playersBox.getChildren().clear();
         for (int i = 0; i < playerNames.size(); i++) {
@@ -125,7 +122,7 @@ public class GameMenu extends BorderPane {
             "-fx-font-size: 14px; " +
             "-fx-min-width: 20px;"
         );
-        
+
         Label lblError = new Label("ERROR : PLEASE ENTER A NAME");
         lblError.setStyle(
             "-fx-text-fill: #ff5555; " +
@@ -142,16 +139,17 @@ public class GameMenu extends BorderPane {
 
         TextField tf = new TextField(playerNames.get(i));
         tf.setPromptText("Joueur " + (i + 1));
-        tf.setStyle(Style.INPUT_STYLE); // CORRECTION : était "inputStyle" (variable inexistante)
+        tf.setStyle(Style.INPUT_STYLE);
         tf.setPrefWidth(200);
         tf.textProperty().addListener((obs, oldVal, newVal) -> playerNames.set(i, newVal));
 
         Button btnOpt = new Button("⚙ options");
         btnOpt.setStyle(Style.BTN_GHOST_STYLE);
         btnOpt.setOnAction(e -> openAdvanced(i));
-        // VBox afin d'accueillir les messages d'erreurs	
+
+        // VBox afin d'accueillir les messages d'erreurs
         VBox tfBox = new VBox(4, tf, lblError);
-        
+
         HBox row = new HBox(10, lblNum, tfBox, btnOpt);
         row.setAlignment(Pos.CENTER);
         row.setMaxWidth(450);
@@ -217,7 +215,7 @@ public class GameMenu extends BorderPane {
         Button btnGreen  = new Button("🟢");
         Button btnYellow = new Button("🟡");
 
-        btnRed.setStyle(Style.BTN_COLOR_STYLE); // CORRECTION : était "btnColorStyle"
+        btnRed.setStyle(Style.BTN_COLOR_STYLE);
         btnBlue.setStyle(Style.BTN_COLOR_STYLE);
         btnGreen.setStyle(Style.BTN_COLOR_STYLE);
         btnYellow.setStyle(Style.BTN_COLOR_STYLE);
@@ -230,9 +228,9 @@ public class GameMenu extends BorderPane {
         GridPane colorGrid = new GridPane();
         colorGrid.setHgap(8);
         colorGrid.setVgap(8);
-        colorGrid.add(btnRed, 0, 0);
-        colorGrid.add(btnBlue, 1, 0);
-        colorGrid.add(btnGreen, 2, 0);
+        colorGrid.add(btnRed,    0, 0);
+        colorGrid.add(btnBlue,   1, 0);
+        colorGrid.add(btnGreen,  2, 0);
         colorGrid.add(btnYellow, 3, 0);
 
         Label lblIcon = new Label("Icône :");
@@ -243,7 +241,7 @@ public class GameMenu extends BorderPane {
         Button btnEagle  = new Button("🦅");
         Button btnWolf   = new Button("🐺");
 
-        btnFox.setStyle(Style.BTN_GHOST_STYLE); // CORRECTION : était "btnGhostStyle"
+        btnFox.setStyle(Style.BTN_GHOST_STYLE);
         btnDragon.setStyle(Style.BTN_GHOST_STYLE);
         btnEagle.setStyle(Style.BTN_GHOST_STYLE);
         btnWolf.setStyle(Style.BTN_GHOST_STYLE);
@@ -256,7 +254,7 @@ public class GameMenu extends BorderPane {
         HBox iconRow = new HBox(8, btnFox, btnDragon, btnEagle, btnWolf);
 
         Button btnClose = new Button("← Fermer");
-        btnClose.setStyle(Style.BTN_GHOST_STYLE); // CORRECTION : était "btnGhostStyle"
+        btnClose.setStyle(Style.BTN_GHOST_STYLE);
         btnClose.setOnAction(e -> closeAdvanced());
 
         box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, iconRow, btnClose);
@@ -300,18 +298,18 @@ public class GameMenu extends BorderPane {
     }
 
     private boolean handleStart() {
-    	boolean correct = true;
-    	
+        boolean correct = true;
+
         for (int i = 0; i < playerNames.size(); i++) {
             if (playerNames.get(i).isEmpty()) {
-                // playerNames.set(i, "Joueur " + (i + 1));
-            	errorLabels.get(i).setVisible(true);
-            	correct = false;
+                errorLabels.get(i).setVisible(true);
+                correct = false;
             } else {
                 errorLabels.get(i).setVisible(false);
             }
-            
-        } if (correct) {
+        }
+
+        if (correct) {
             System.out.println("[GameMenu] Démarrage avec : " + playerNames);
         }
 
