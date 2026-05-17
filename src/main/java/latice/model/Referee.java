@@ -1,17 +1,19 @@
 package latice.model;
 
 import latice.model.square.Square;
+import latice.model.square.SquareType;
 import latice.model.tile.Tile;
 
 public class Referee {
     private Player player;
     private Board gameboard;
+    protected static int points=0;
 
     public Referee(Board gameboard) {
         this.gameboard = gameboard;
     }
 
-    ;
+    
 
     public Referee(Player player, Board gameboard) {
         this.player = player;
@@ -53,10 +55,50 @@ public class Referee {
                 boolean sameColor = neighborTile.getColor() == tile.getColor();
                 boolean sameShape = neighborTile.getShape() == tile.getShape();
                 if (sameColor || sameShape) {
+                	points += 2;
                     return true;
                 }
             }
         }
         return false;
     }
+
+    public int calculatePoints(Position position, Tile tile) {
+        int points = 0;
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int matchingSides = 0;
+
+        for (int[] dir : directions) {
+            Position neighbor = new Position(
+                position.getRow() + dir[0], 
+                position.getCol() + dir[1]
+            );
+            Square neighborSquare = gameboard.getSquare(neighbor);
+            if (neighborSquare != null && neighborSquare.isOccupied()) {
+                Tile neighborTile = neighborSquare.getTile();
+                if (neighborTile.getColor() == tile.getColor() 
+                    || neighborTile.getShape() == tile.getShape()) {
+                    matchingSides++;
+                }
+            }
+        }
+
+        // Règles :
+        // 2 côtés qui matchent (Double) = 1 point
+        // 3 côtés (Trefoil) = 1 point  
+        // 4 côtés (Latice) = 2 points
+        if (matchingSides >= 2) {
+            points += matchingSides >= 4 ? 2 : 1;
+        }
+
+        // Case soleil = +2 points bonus
+        Square placedSquare = gameboard.getSquare(position);
+        if (placedSquare != null && placedSquare.getType() == SquareType.SUN) {
+            points += 2;
+        }
+
+        return points;
+    }
+        
+
 }
