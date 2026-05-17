@@ -26,5 +26,8 @@ public class ActionShopDeck extends HBox {
 		 * et je n'y vois pas l'intérêt.
 		 * 
 		*/
+		
+		
+		
 	}
 }
