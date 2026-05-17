@@ -1,17 +1,18 @@
 package latice.ihm.controller;
 
-import latice.model.Board;
-import latice.model.Player;
-import latice.model.Position;
+import latice.model.*;
 import latice.model.square.Square;
 import latice.model.tile.Tile;
 
 public class TileController {
 
     private Board board;
+    private Referee referee;
 
-    public TileController(Board board) {
+    public TileController(Board board,  Referee referee) {
+
         this.board = board;
+        this.referee = referee;
     }
 
     /**
@@ -20,12 +21,12 @@ public class TileController {
      * @param position La position sur laquelle on veut poser la tuile.
      * @return True si la case est libre, false sinon.
      */
-    public boolean canPlaceTile(Position position) {
+    public boolean canPlaceTile(Position position, Tile tile) {
         Square square = board.getSquare(position);
-        if (square == null) {
-        	return false;
+        if (square == null || square.isOccupied()) {
+            return false;
         }
-        return !square.isOccupied();
+        return referee.isValidMove(position, tile);
     }
 
     /**
@@ -37,7 +38,7 @@ public class TileController {
      * @return True si le placement a réussi, false sinon.
      */
     public boolean placeTile(Player player, Tile tile, Position position) {
-        if (!canPlaceTile(position)) return false;
+        if (!canPlaceTile(position, tile)) return false;
 
         // Place la tuile sur le board
         board.getSquare(position).setTile(tile);
