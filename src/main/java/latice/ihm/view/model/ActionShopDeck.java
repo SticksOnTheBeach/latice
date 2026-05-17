@@ -22,6 +22,9 @@ import latice.util.ImageLoader;
 
 public class ActionShopDeck extends VBox {
 
+    private static final double PANEL_WIDTH  = 220;
+    private static final double PANEL_HEIGHT = 140;
+
     private GameController  gameController;
     private RoundController roundController;
     private Button          actionExchangeAllTiles;
@@ -41,11 +44,12 @@ public class ActionShopDeck extends VBox {
         setPickOnBounds(false);
 
         // --- PANNEAU ORANGE ---
-        panel = new VBox(6);
-        panel.setAlignment(Pos.TOP_CENTER);
+        panel = new VBox(8);
+        panel.setAlignment(Pos.CENTER);
         panel.setPadding(new Insets(8));
-        panel.setPrefWidth(220);
-        panel.setMaxWidth(220);
+        panel.setPrefWidth(PANEL_WIDTH);
+        panel.setMaxWidth(PANEL_WIDTH);
+        panel.setPrefHeight(PANEL_HEIGHT);
         panel.setPickOnBounds(false);
         panel.setStyle(
             "-fx-background-color: #e87e04; " +
@@ -56,7 +60,9 @@ public class ActionShopDeck extends VBox {
 
         points = new Label("POINTS : 0");
         points.setStyle(
-            "-fx-font-weight: bold; -fx-font-size: 11px; -fx-font-family: \"Courier New\";"
+            "-fx-font-weight: bold; " +
+            "-fx-font-size: 11px; " +
+            "-fx-font-family: \"Courier New\";"
         );
 
         HBox actionsRow = new HBox(12);
@@ -72,7 +78,10 @@ public class ActionShopDeck extends VBox {
         );
 
         panel.getChildren().addAll(points, actionsRow);
+
+        // Panel masqué par défaut, décalé vers le bas (hors vue)
         panel.setVisible(false);
+        panel.setTranslateY(PANEL_HEIGHT);
 
         // --- FLÈCHE ---
         arrow = new Polygon();
@@ -82,6 +91,7 @@ public class ActionShopDeck extends VBox {
         arrow.setStrokeWidth(2);
         arrow.setCursor(Cursor.HAND);
 
+        // Structure : [ panel (caché) au dessus | flèche en bas ]
         getChildren().addAll(panel, arrow);
 
         arrow.setOnMouseClicked(e -> {
@@ -114,26 +124,22 @@ public class ActionShopDeck extends VBox {
 
     private void togglePanel() {
         if (!isOpen) {
+            // Ouvrir : panneau monte depuis le bas vers sa position naturelle
             panel.setVisible(true);
-            panel.applyCss();
-            panel.layout();
-            double h = Math.max(panel.getHeight(), 130);
+            panel.setTranslateY(PANEL_HEIGHT);
 
-            panel.setTranslateY(0);
             TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
-            ttPanel.setFromY(h);   // part du bas
-            ttPanel.setToY(0);     // monte à sa position de base
+            ttPanel.setToY(0);
 
             TranslateTransition ttArrow = new TranslateTransition(Duration.millis(280), arrow);
-            ttArrow.setToY(-h);
+            ttArrow.setToY(-PANEL_HEIGHT);
 
             ttPanel.play();
             ttArrow.play();
         } else {
-            double h = Math.max(panel.getHeight(), 130);
-
+            // Fermer : panneau redescend
             TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
-            ttPanel.setToY(h);
+            ttPanel.setToY(PANEL_HEIGHT);
             ttPanel.setOnFinished(e -> panel.setVisible(false));
 
             TranslateTransition ttArrow = new TranslateTransition(Duration.millis(280), arrow);
@@ -152,12 +158,14 @@ public class ActionShopDeck extends VBox {
         } catch (InvalidImagePathException e) {
             System.err.println("Image introuvable : " + e.getMessage());
         }
-        iv.setFitWidth(50);
-        iv.setFitHeight(60);
+        iv.setFitWidth(48);
+        iv.setFitHeight(55);
         Button btn = new Button("", iv);
         btn.setStyle(
             "-fx-background-color: rgba(0,0,0,0.15); " +
-            "-fx-border-color: #b85e00; -fx-border-width: 1px; -fx-cursor: hand;"
+            "-fx-border-color: #b85e00; " +
+            "-fx-border-width: 1px; " +
+            "-fx-cursor: hand;"
         );
         return btn;
     }
@@ -165,9 +173,13 @@ public class ActionShopDeck extends VBox {
     private VBox wrapAction(Button btn, String labelText) {
         Label lbl = new Label(labelText);
         lbl.setWrapText(true);
-        lbl.setMaxWidth(75);
+        lbl.setMaxWidth(80);
         lbl.setAlignment(Pos.CENTER);
-        lbl.setStyle("-fx-font-size: 9px; -fx-font-family: \"Courier New\"; -fx-text-alignment: center;");
+        lbl.setStyle(
+            "-fx-font-size: 9px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-text-alignment: center;"
+        );
         VBox box = new VBox(3, btn, lbl);
         box.setAlignment(Pos.CENTER);
         return box;

@@ -52,6 +52,7 @@ public class RackTransition {
             HBox slot = new HBox(15, deckBox, rackBox);
             slot.setAlignment(Pos.CENTER);
             slot.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            // IMPORTANT : le slot ne capte que ce qui est visuellement dedans
             slot.setPickOnBounds(false);
 
             rackBoxes.add(rackBox);
@@ -74,9 +75,12 @@ public class RackTransition {
             slot.setRotate(getTargetAngle(positionRelative, nbJoueurs));
 
             if (i == currentPlayerIndex) {
+                // Joueur actif : cliquable, mais ne bloque pas le board derrière
                 slot.setMouseTransparent(false);
+                slot.setPickOnBounds(false);
                 slot.setOpacity(1.0);
             } else {
+                // Joueurs inactifs : totalement transparents aux événements
                 slot.setMouseTransparent(true);
                 slot.setOpacity(0.5);
             }
@@ -109,8 +113,10 @@ public class RackTransition {
             FadeTransition ft = new FadeTransition(Duration.millis(ANIM_DURATION), slot);
             if (i == currentPlayerIndex) {
                 slot.setMouseTransparent(false);
+                slot.setPickOnBounds(false);
                 ft.setToValue(1.0);
             } else {
+                // Joueurs inactifs : complètement transparents aux événements souris/drag
                 slot.setMouseTransparent(true);
                 ft.setToValue(0.5);
             }
@@ -179,6 +185,7 @@ public class RackTransition {
 
         if (playerIndex == currentPlayerIndex) {
             slot.setMouseTransparent(false);
+            slot.setPickOnBounds(false);
             slot.setOpacity(1.0);
         } else {
             slot.setMouseTransparent(true);

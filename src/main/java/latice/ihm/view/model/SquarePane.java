@@ -26,6 +26,7 @@ public class SquarePane extends StackPane {
     public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, MainPane mainPane, GameController gameController) {
         this.square = square;
         this.position = position;
+        this.gameController = gameController;
 
         Rectangle rect = new Rectangle(SIZE, SIZE);
 
@@ -45,6 +46,7 @@ public class SquarePane extends StackPane {
         getChildren().addAll(rect, symbol);
 
         setOnDragOver(event -> {
+            System.out.println("DragOver sur " + position.getRow() + "," + position.getCol());
             if (!isOccupied && event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
@@ -52,9 +54,12 @@ public class SquarePane extends StackPane {
         });
 
         setOnDragDropped(event -> {
+            System.out.println("DragDropped sur " + position.getRow() + "," + position.getCol());
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
+                System.out.println("playTile appelé avec : " + tileView.getTile());
                 boolean success = gameController.playTile(tileView.getTile(), position);
+                System.out.println("success = " + success);
                 
                 if (success) {
                     placeTile(tileView);
