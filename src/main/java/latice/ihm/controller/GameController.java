@@ -34,6 +34,7 @@ public class GameController {
         if (success) {
             // On ne rafraîchit pas le rack visuellement
             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
+        	mainPane.updateDisplay(); 
         	roundController.nextPlayerTurn();
             mainPane.updateDisplay();
             return true;

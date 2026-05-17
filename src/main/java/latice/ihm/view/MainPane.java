@@ -76,7 +76,7 @@ public class MainPane extends BorderPane {
         );
 
         // --- ActionShopDeck à droite du rack ---
-        actionShop = new ActionShopDeck(gameController, roundController, referee);
+        actionShop = new ActionShopDeck(gameController, roundController, referee, this);
         actionShop.setPickOnBounds(false);
         StackPane.setAlignment(actionShop, Pos.CENTER);
         actionShop.setTranslateX(360);

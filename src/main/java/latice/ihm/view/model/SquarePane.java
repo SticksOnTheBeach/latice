@@ -46,7 +46,6 @@ public class SquarePane extends StackPane {
         getChildren().addAll(rect, symbol);
 
         setOnDragOver(event -> {
-            System.out.println("DragOver sur " + position.getRow() + "," + position.getCol());
             if (!isOccupied && event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
@@ -57,10 +56,7 @@ public class SquarePane extends StackPane {
             System.out.println("DragDropped sur " + position.getRow() + "," + position.getCol());
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
-                System.out.println("playTile appelé avec : " + tileView.getTile());
-                boolean success = gameController.playTile(tileView.getTile(), position);
-                System.out.println("success = " + success);
-                
+                boolean success = gameController.playTile(tileView.getTile(), position);                
                 if (success) {
                     placeTile(tileView);
                     event.setDropCompleted(true);

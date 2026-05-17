@@ -46,6 +46,7 @@ public class TileController {
 
         // Calcul et attribution des points
         int pointsGagnes = referee.calculatePoints(position, tile);
+        System.out.println("Points gagnés : " + pointsGagnes + " | Score total : " + (player.getScore() + pointsGagnes));
         player.setScore(player.getScore() + pointsGagnes);
 
         return true;
