@@ -13,23 +13,11 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
-import latice.ihm.view.model.ActionShopDeck;
 import latice.ihm.view.model.DeckBox;
 import latice.ihm.view.model.RackBox;
 import latice.model.Player;
 import latice.model.Referee;
 
-/**
- * RackTransition — gère le positionnement et l'animation des racks autour du board.
- *
- * Selon le nombre de joueurs :
- *   2 joueurs : bas (joueur qui joue) + haut
- *   3 joueurs : bas (joueur qui joue) + gauche + droite
- *   4 joueurs : bas (joueur qui joue) + haut + gauche + droite
- *
- * Chaque slot : [ DeckBox | RackBox | ActionShopDeck ]
- * L'ActionShopDeck n'est visible que dans le slot du joueur actif (position 0 = bas).
- */
 public class RackTransition {
     private static final int ANIM_DURATION = 500;
 
@@ -38,41 +26,35 @@ public class RackTransition {
     private static final double OFFSET_GAUCHE = -440;
     private static final double OFFSET_DROITE =  440;
 
-    private ArrayList<HBox>           playerSlots;
-    private ArrayList<RackBox>        rackBoxes;
-    private ArrayList<ActionShopDeck> actionShops;
+    private ArrayList<HBox>    playerSlots;
+    private ArrayList<RackBox> rackBoxes;
 
-    private ArrayList<Player>  players;
-    private int                currentPlayerIndex;
-    private StackPane          container;
-    private RoundController    roundController;
-    private GameController     gameController;
-    private Referee            referee;
+    private ArrayList<Player> players;
+    private int               currentPlayerIndex;
+    private StackPane         container;
+    private RoundController   roundController;
+    private GameController    gameController;
 
     public RackTransition(StackPane container, ArrayList<Player> players, int currentPlayerIndex,
                           RoundController roundController, GameController gameController, Referee referee) {
-        this.container            = container;
-        this.players              = players;
-        this.currentPlayerIndex   = currentPlayerIndex;
-        this.roundController      = roundController;
-        this.gameController       = gameController;
-        this.referee              = referee;
-        this.playerSlots          = new ArrayList<>();
-        this.rackBoxes            = new ArrayList<>();
-        this.actionShops          = new ArrayList<>();
+        this.container          = container;
+        this.players            = players;
+        this.currentPlayerIndex = currentPlayerIndex;
+        this.roundController    = roundController;
+        this.gameController     = gameController;
+        this.playerSlots        = new ArrayList<>();
+        this.rackBoxes          = new ArrayList<>();
 
         for (Player player : players) {
-            RackBox       rackBox    = new RackBox(player.getRack());
-            DeckBox       deckBox    = new DeckBox(roundController, gameController);
-            ActionShopDeck actionShop = new ActionShopDeck(gameController, roundController, referee);
+            RackBox rackBox = new RackBox(player.getRack());
+            DeckBox deckBox = new DeckBox(roundController, gameController);
 
-            // [ DeckBox | RackBox | ActionShopDeck ]
-            HBox slot = new HBox(15, deckBox, rackBox, actionShop);
+            HBox slot = new HBox(15, deckBox, rackBox);
             slot.setAlignment(Pos.CENTER);
             slot.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            slot.setPickOnBounds(false);
 
             rackBoxes.add(rackBox);
-            actionShops.add(actionShop);
             playerSlots.add(slot);
             container.getChildren().add(slot);
         }
@@ -82,11 +64,10 @@ public class RackTransition {
 
     private void firstRackPosition() {
         int nbJoueurs = players.size();
-
         for (int i = 0; i < nbJoueurs; i++) {
-            HBox slot = playerSlots.get(i);
-            int  positionRelative = (i - currentPlayerIndex + nbJoueurs) % nbJoueurs;
-            double[] offsets = getOffsets(positionRelative, nbJoueurs);
+            HBox     slot             = playerSlots.get(i);
+            int      positionRelative = (i - currentPlayerIndex + nbJoueurs) % nbJoueurs;
+            double[] offsets          = getOffsets(positionRelative, nbJoueurs);
 
             slot.setTranslateX(offsets[0]);
             slot.setTranslateY(offsets[1]);
@@ -95,11 +76,9 @@ public class RackTransition {
             if (i == currentPlayerIndex) {
                 slot.setMouseTransparent(false);
                 slot.setOpacity(1.0);
-                // actionShops.get(i).setVisible(true);
             } else {
                 slot.setMouseTransparent(true);
                 slot.setOpacity(0.5);
-                // actionShops.get(i).setVisible(false);
             }
         }
     }
@@ -107,12 +86,10 @@ public class RackTransition {
     public void animateToPlayer(int nouvelIndex) {
         this.currentPlayerIndex = nouvelIndex;
         int nbPlayers = players.size();
-
         ParallelTransition allTransitions = new ParallelTransition();
 
         for (int i = 0; i < nbPlayers; i++) {
-            HBox slot = playerSlots.get(i);
-
+            HBox     slot        = playerSlots.get(i);
             int      relativePos = (i - currentPlayerIndex + nbPlayers) % nbPlayers;
             double[] offsets     = getOffsets(relativePos, nbPlayers);
 
@@ -130,17 +107,12 @@ public class RackTransition {
             rt.setByAngle(angleDiff);
 
             FadeTransition ft = new FadeTransition(Duration.millis(ANIM_DURATION), slot);
-
             if (i == currentPlayerIndex) {
                 slot.setMouseTransparent(false);
                 ft.setToValue(1.0);
-                // Rafraîchir les points du joueur actif
-                // actionShops.get(i).setVisible(true);
-                // actionShops.get(i).refreshPoints();
             } else {
                 slot.setMouseTransparent(true);
                 ft.setToValue(0.5);
-                // actionShops.get(i).setVisible(false);
             }
 
             allTransitions.getChildren().addAll(tt, rt, ft);
@@ -203,7 +175,6 @@ public class RackTransition {
         RackBox newRack = new RackBox(players.get(playerIndex).getRack());
         rackBoxes.set(playerIndex, newRack);
 
-        // Réinsérer à l'index 1 pour garder [ DeckBox | RackBox | ActionShopDeck ]
         slot.getChildren().add(1, newRack);
 
         if (playerIndex == currentPlayerIndex) {
