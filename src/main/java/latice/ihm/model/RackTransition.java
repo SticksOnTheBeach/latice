@@ -29,7 +29,7 @@ import latice.model.Player;
  * avec une TranslateTransition fluide.
  * Le joueur actif atterrit toujours en bas.
  *
- * Chaque joueur a un conteneur HBox : [ DeckBox | RackBox ]
+ * Chaque joueur a un conteneur HBox contenant le DeckBox (le deck) et le rackbox ( le rack): [ DeckBox | RackBox ]
  * C'est ce HBox qui est animé et positionné autour du board.
  */
 public class RackTransition {
@@ -37,17 +37,17 @@ public class RackTransition {
 
     // Décalages en pixels pour chaque position autour du board
     // valeurs sont ajustées selon la taille du board (environ 540x540)
-    private static final double OFFSET_BAS    =  360;
-    private static final double OFFSET_HAUT   = -360;
+    private static final double OFFSET_BAS =  360;
+    private static final double OFFSET_HAUT = -360;
     private static final double OFFSET_GAUCHE = -440;
     private static final double OFFSET_DROITE =  440;
 
-    // MODIFICATION : on anime des HBox (DeckBox + RackBox) au lieu de RackBox seuls
-    private ArrayList<HBox>    playerSlots;
+    // MODIFICATION : on anime les HBox qui contiennent le rack et le deck de chaque joueur(DeckBox + RackBox) au lieu de RackBox seuls
+    private ArrayList<HBox> playerSlots;
     private ArrayList<RackBox> rackBoxes;
 
-    private ArrayList<Player>  players;
-    private int                currentPlayerIndex;
+    private ArrayList<Player> players;
+    private int currentPlayerIndex;
     private StackPane          container;
     private RoundController    roundController;
     private GameController     gameController;
@@ -86,7 +86,7 @@ public class RackTransition {
             container.getChildren().add(slot);
         }
 
-        // Positionne les racks sans animation au démarrage
+        // Positionne les racks "aléatoirement" ( en fonction du joueur qui commence )
         firstRackPosition();
     }
 

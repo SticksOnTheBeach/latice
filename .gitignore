@@ -6,3 +6,4 @@
 # Dossier de compilation
 target/
 /bin/
+.settings/
