@@ -15,13 +15,13 @@ import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
-import latice.ihm.view.MainPane;
 import latice.model.Player;
 import latice.model.Referee;
 import latice.model.exceptions.InvalidImagePathException;
 import latice.util.ImageLoader;
 
 public class ActionShopDeck extends VBox {
+
     private GameController gameController;
     private RoundController roundController;
     private Button actionExchangeAllTiles;
@@ -29,63 +29,65 @@ public class ActionShopDeck extends VBox {
     private Label points;
     private boolean isOpen = false;
     private VBox panel;
+    private Polygon arrow;
 
-    public ActionShopDeck(GameController gameController, 
-                          RoundController roundController, 
+    public ActionShopDeck(GameController gameController,
+                          RoundController roundController,
                           Referee referee) {
         this.gameController = gameController;
         this.roundController = roundController;
 
-        setAlignment(Pos.TOP_CENTER);
+        setAlignment(Pos.BOTTOM_CENTER);
+        setPickOnBounds(false); // ne bloque pas les clics sur les éléments derrière
 
-        // --- FLÈCHE ---
-        Polygon arrow = new Polygon();
-        arrow.getPoints().addAll(0.0, 20.0, 20.0, 0.0, 40.0, 20.0);
-        arrow.setFill(Color.ORANGE);
-        arrow.setStroke(Color.BLACK);
-        arrow.setCursor(Cursor.HAND);
-
-        // --- PANNEAU ---
-        panel = new VBox(5);
+        // --- PANNEAU ORANGE (caché par défaut) ---
+        panel = new VBox(8);
         panel.setAlignment(Pos.TOP_CENTER);
-        panel.setPadding(new Insets(6));
-        panel.setStyle("-fx-background-color: #e87e04; -fx-border-color: black; -fx-border-width: 1;");
-        panel.setPrefWidth(150);
+        panel.setPadding(new Insets(10));
+        panel.setPrefWidth(250);
+        panel.setStyle(
+            "-fx-background-color: #e87e04; " +
+            "-fx-border-color: #b85e00; " +
+            "-fx-border-width: 2px 2px 0px 2px;"
+        );
 
-        // Points
+        // Label points
         points = new Label("POINTS : 0");
-        points.setStyle("-fx-font-weight: bold; -fx-font-size: 9px;");
+        points.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-font-family: \"Courier New\";");
 
         // Actions côte à côte
-        HBox actionsRow = new HBox(10);
+        HBox actionsRow = new HBox(15);
         actionsRow.setAlignment(Pos.CENTER);
 
-        actionExchangeAllTiles = buildActionButton(
-            "/images/game/exchange.png",
-            "Échange toutes les tuiles de votre Rack"
-        );
-        actionBuyExtraMove = buildActionButton(
-            "/images/game/extra.png",
-            "Vous permet de jouer 2 fois"
-        );
+        actionExchangeAllTiles = buildActionButton("/images/game/exchange.png");
+        actionBuyExtraMove     = buildActionButton("/images/game/extra.png");
 
         actionsRow.getChildren().addAll(
-            wrapAction(actionExchangeAllTiles, "Échange toutes les tuiles de votre Rack"),
-            wrapAction(actionBuyExtraMove, "Vous permet de jouer 2 fois")
+            wrapAction(actionExchangeAllTiles, "Échange rack\n(-2 pts)"),
+            wrapAction(actionBuyExtraMove,     "Jouer 2 fois\n(-2 pts)")
         );
 
         panel.getChildren().addAll(points, actionsRow);
 
-        // Panel caché par défaut
-        panel.setTranslateY(-200);
+        // Panneau caché par défaut (décalé vers le bas = sa propre hauteur)
         panel.setVisible(false);
+        panel.setTranslateY(200); // sera recalculé à l'ouverture
 
-        getChildren().addAll(arrow, panel);
+        // --- FLÈCHE ---
+        arrow = new Polygon();
+        arrow.getPoints().addAll(0.0, 18.0, 18.0, 0.0, 36.0, 18.0);
+        arrow.setFill(Color.ORANGE);
+        arrow.setStroke(Color.web("#b85e00"));
+        arrow.setStrokeWidth(2);
+        arrow.setCursor(Cursor.HAND);
 
-        // --- TOGGLE au clic ---
+        // La flèche et le panneau sont empilés : panneau en haut, flèche en bas
+        getChildren().addAll(panel, arrow);
+
+        // --- TOGGLE au clic sur la flèche ---
         arrow.setOnMouseClicked(e -> togglePanel());
 
-        // --- Listeners actions ---
+        // --- Actions ---
         actionExchangeAllTiles.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
             if (current.getScore() >= 2) {
@@ -93,11 +95,7 @@ public class ActionShopDeck extends VBox {
                 current.getRack().exchangeAllTiles(current.getDeck());
                 refreshPoints();
             } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Points insuffisants");
-                alert.setHeaderText(null);
-                alert.setContentText("Vous n'avez pas assez de points !");
-                alert.showAndWait();
+                showNotEnoughPoints();
             }
         });
 
@@ -108,59 +106,80 @@ public class ActionShopDeck extends VBox {
                 // TODO : logique rejouer
                 refreshPoints();
             } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Points insuffisants");
-                alert.setHeaderText(null);
-                alert.setContentText("Vous n'avez pas assez de points !");
-                alert.showAndWait();
+                showNotEnoughPoints();
             }
         });
     }
 
     private void togglePanel() {
         if (!isOpen) {
-            // Ouvrir
+            // Ouvrir : le panneau remonte depuis le bas
             panel.setVisible(true);
+            panel.applyCss();
+            panel.layout();
+            double hauteur = panel.getHeight() > 0 ? panel.getHeight() : 150;
+
+            panel.setTranslateY(hauteur);
             TranslateTransition tt = new TranslateTransition(Duration.millis(300), panel);
-            tt.setFromY(-panel.getPrefHeight());
             tt.setToY(0);
+            // Faire monter la flèche avec le panneau
+            TranslateTransition ttArrow = new TranslateTransition(Duration.millis(300), arrow);
+            ttArrow.setToY(-hauteur);
             tt.play();
+            ttArrow.play();
         } else {
-            // Fermer
+            // Fermer : le panneau redescend
+            double hauteur = panel.getHeight() > 0 ? panel.getHeight() : 150;
+
             TranslateTransition tt = new TranslateTransition(Duration.millis(300), panel);
-            tt.setFromY(0);
-            tt.setToY(-200);
+            tt.setToY(hauteur);
             tt.setOnFinished(e -> panel.setVisible(false));
+
+            TranslateTransition ttArrow = new TranslateTransition(Duration.millis(300), arrow);
+            ttArrow.setToY(0);
+
             tt.play();
+            ttArrow.play();
         }
         isOpen = !isOpen;
     }
 
-    // Bouton avec image
-    private Button buildActionButton(String imagePath, String tooltip) {
+    private Button buildActionButton(String imagePath) {
         ImageView iv = new ImageView();
         try {
             iv.setImage(ImageLoader.load(imagePath));
         } catch (InvalidImagePathException e) {
             System.err.println("Image introuvable : " + e.getMessage());
         }
-        iv.setFitWidth(50);
-        iv.setFitHeight(60);
+        iv.setFitWidth(55);
+        iv.setFitHeight(65);
         Button btn = new Button("", iv);
-        btn.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;");
+        btn.setStyle(
+            "-fx-background-color: rgba(0,0,0,0.15); " +
+            "-fx-border-color: #b85e00; " +
+            "-fx-border-width: 1px; " +
+            "-fx-cursor: hand;"
+        );
         return btn;
     }
 
-    // VBox image + label
     private VBox wrapAction(Button btn, String labelText) {
         Label lbl = new Label(labelText);
         lbl.setWrapText(true);
-        lbl.setMaxWidth(60);
+        lbl.setMaxWidth(80);
         lbl.setAlignment(Pos.CENTER);
-        lbl.setStyle("-fx-font-size: 9px;");
-        VBox box = new VBox(5, btn, lbl);
+        lbl.setStyle("-fx-font-size: 10px; -fx-font-family: \"Courier New\"; -fx-text-alignment: center;");
+        VBox box = new VBox(4, btn, lbl);
         box.setAlignment(Pos.CENTER);
         return box;
+    }
+
+    private void showNotEnoughPoints() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Points insuffisants");
+        alert.setHeaderText(null);
+        alert.setContentText("Vous n'avez pas assez de points !");
+        alert.showAndWait();
     }
 
     public void refreshPoints() {

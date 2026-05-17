@@ -84,9 +84,9 @@ public class RackTransition {
         int nbJoueurs = players.size();
 
         for (int i = 0; i < nbJoueurs; i++) {
-            HBox slot             = playerSlots.get(i);
+            HBox slot = playerSlots.get(i);
             int  positionRelative = (i - currentPlayerIndex + nbJoueurs) % nbJoueurs;
-            double[] offsets      = getOffsets(positionRelative, nbJoueurs);
+            double[] offsets = getOffsets(positionRelative, nbJoueurs);
 
             slot.setTranslateX(offsets[0]);
             slot.setTranslateY(offsets[1]);
@@ -95,11 +95,11 @@ public class RackTransition {
             if (i == currentPlayerIndex) {
                 slot.setMouseTransparent(false);
                 slot.setOpacity(1.0);
-                actionShops.get(i).setVisible(true);
+                // actionShops.get(i).setVisible(true);
             } else {
                 slot.setMouseTransparent(true);
                 slot.setOpacity(0.5);
-                actionShops.get(i).setVisible(false);
+                // actionShops.get(i).setVisible(false);
             }
         }
     }
@@ -135,12 +135,12 @@ public class RackTransition {
                 slot.setMouseTransparent(false);
                 ft.setToValue(1.0);
                 // Rafraîchir les points du joueur actif
-                actionShops.get(i).setVisible(true);
-                actionShops.get(i).refreshPoints();
+                // actionShops.get(i).setVisible(true);
+                // actionShops.get(i).refreshPoints();
             } else {
                 slot.setMouseTransparent(true);
                 ft.setToValue(0.5);
-                actionShops.get(i).setVisible(false);
+                // actionShops.get(i).setVisible(false);
             }
 
             allTransitions.getChildren().addAll(tt, rt, ft);

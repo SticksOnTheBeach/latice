@@ -13,6 +13,7 @@ import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
 import latice.ihm.model.RackTransition;
+import latice.ihm.view.model.ActionShopDeck;
 import latice.ihm.view.model.BoardPane;
 import latice.model.Board;
 import latice.model.Game;
@@ -29,8 +30,8 @@ public class MainPane extends BorderPane {
     private RackTransition rackTransition;
     private GameController gameController;
     private Referee referee;
+    private ActionShopDeck actionShop;
 
-    // Paramètre "referee" en minuscule — la faute de casse était ici
     public MainPane(Board board, Game game, TileController tileController,
                     RoundController roundController, GameController gameController,
                     Referee referee) {
@@ -53,11 +54,10 @@ public class MainPane extends BorderPane {
         hbTop.getChildren().addAll(lblPlayerRound, lblNbRound);
         hbTop.setAlignment(Pos.CENTER);
         hbTop.setStyle("-fx-font-size: 20px; -fx-font-family: \"Arial\"; -fx-font-weight: bold;");
-
         setTop(hbTop);
         setAlignment(hbTop, Pos.CENTER);
 
-        // --- CENTRE : StackPane avec le board ET les racks autour ---
+        // --- CENTRE : StackPane avec board + racks ---
         BoardPane boardPane = new BoardPane(board, tileController, roundController, this, gameController);
         boardPane.setAlignment(Pos.CENTER);
         boardPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -67,8 +67,6 @@ public class MainPane extends BorderPane {
         centerStack.getChildren().add(boardPane);
 
         ArrayList<Player> players = roundController.getPlayers();
-
-        // L'ActionShopDeck est maintenant géré dans RackTransition directement
         rackTransition = new RackTransition(
             centerStack,
             players,
@@ -81,6 +79,13 @@ public class MainPane extends BorderPane {
         setCenter(centerStack);
         BorderPane.setMargin(centerStack, new Insets(20));
 
+        // --- BAS : ActionShopDeck centré, collé au bord inférieur ---
+        actionShop = new ActionShopDeck(gameController, roundController, referee);
+        HBox bottomWrapper = new HBox(actionShop);
+        bottomWrapper.setAlignment(Pos.BOTTOM_CENTER);
+        bottomWrapper.setPickOnBounds(false);
+        setBottom(bottomWrapper);
+
         updateDisplay();
     }
 
@@ -88,16 +93,12 @@ public class MainPane extends BorderPane {
         Player current = roundController.getCurrentPlayer();
         lblPlayerRound.setText("Player Turn : " + current.getName());
         lblNbRound.setText("Round : " + roundController.getRoundCount());
-
         rackTransition.animateToPlayer(roundController.getCurrentPlayerIndex());
+        if (actionShop != null) {
+            actionShop.refreshPoints();
+        }
     }
 
-    /**
-     * À appeler après un placement réussi,
-     * pour rafraîchir le rack du joueur qui vient de jouer.
-     *
-     * @param playerIndex L'index du joueur dont le rack a changé
-     */
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }
