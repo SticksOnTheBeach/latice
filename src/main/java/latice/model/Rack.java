@@ -62,4 +62,17 @@ public class Rack implements TileContainer{
             deck.remove();
         }
     }
+    
+    
+    public void exchangeAllTiles(Deck deck) {
+        // on remet les tuiles du rack dans le deck
+        deck.getTiles().addAll(tiles);
+        deck.shuffle();
+
+        // on clear le rack
+        tiles.clear();
+
+        // uis on pioche depuis le deck qu'on a
+        addTileFromDeck(deck);
+    }
 }

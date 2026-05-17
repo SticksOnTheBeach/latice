@@ -40,11 +40,17 @@ public class TileController {
     public boolean placeTile(Player player, Tile tile, Position position) {
         if (!canPlaceTile(position, tile)) return false;
 
-        // Place la tuile sur le board
         board.getSquare(position).setTile(tile);
         player.getRack().getTiles().remove(tile);
         player.getRack().addTileFromDeck(player.getDeck());
 
+        // Calcul et attribution des points
+        int pointsGagnes = referee.calculatePoints(position, tile);
+        player.setScore(player.getScore() + pointsGagnes);
+
         return true;
     }
+    
+    
+    
 }

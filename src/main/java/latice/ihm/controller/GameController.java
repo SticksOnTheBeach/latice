@@ -51,6 +51,7 @@ public class GameController {
         currentPlayer.getRack().drawOneTile(currentPlayer.getDeck());
         mainPane.rafraichirRackJoueur(currentIndex);
     }
+    
     /**
      * Méthode pour passer son tour (Bouton "Fin de tour")
      */
