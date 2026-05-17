@@ -17,6 +17,7 @@ import latice.ihm.view.model.BoardPane;
 import latice.model.Board;
 import latice.model.Game;
 import latice.model.Player;
+import latice.model.Referee;
 
 public class MainPane extends BorderPane {
     protected Label lblNbRound;
@@ -27,12 +28,17 @@ public class MainPane extends BorderPane {
     private RoundController roundController;
     private RackTransition rackTransition;
     private GameController gameController;
+    private Referee referee;
 
-    public MainPane(Board board, Game game, TileController tileController, RoundController roundController, GameController gameController) {
+    // Paramètre "referee" en minuscule — la faute de casse était ici
+    public MainPane(Board board, Game game, TileController tileController,
+                    RoundController roundController, GameController gameController,
+                    Referee referee) {
         this.game = game;
         this.gameController = gameController;
         gameController.setView(this);
         this.roundController = roundController;
+        this.referee = referee;
         this.nbRound = roundController.getRoundCount();
 
         lblNbRound = new Label("Round : " + nbRound);
@@ -61,12 +67,15 @@ public class MainPane extends BorderPane {
         centerStack.getChildren().add(boardPane);
 
         ArrayList<Player> players = roundController.getPlayers();
+
+        // L'ActionShopDeck est maintenant géré dans RackTransition directement
         rackTransition = new RackTransition(
             centerStack,
             players,
             roundController.getCurrentPlayerIndex(),
             roundController,
-            gameController
+            gameController,
+            referee
         );
 
         setCenter(centerStack);
