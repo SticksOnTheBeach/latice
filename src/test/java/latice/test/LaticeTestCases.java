@@ -1,18 +1,20 @@
 package latice.test;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import latice.model.*;
+import latice.model.square.Square;
 import latice.model.square.SquareType;
+import latice.model.tile.COLOR;
+import latice.model.tile.SHAPE;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import latice.model.tile.Tile;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LaticeTestCases {
 
@@ -103,5 +105,266 @@ public class LaticeTestCases {
 		board.createGameBoard();
  assertEquals(SquareType.SUN, board.getSquare(new Position(0, 0)).getType());
  //TODO : verifier toutes les cases du plateau
+	}
+
+
+	@Test
+	public void isEmptyReturnseWhenSquareHasNoTile() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		assertTrue(board.isEmpty(new Position(4, 4))); // aucune tuile posée
+	}
+
+	@Test
+	public void isEmptyReturnsFalseenSquareIsOccupied() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		board.placeTile(new Position(4, 4), new Tile(COLOR.YELLOW, SHAPE.BIRD));
+
+		assertFalse(board.isEmpty(new Position(4, 4)));
+	}
+
+
+
+	@Test
+	public void isBoardEmptyReturnsFalseAfterOneTilePlaced() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		board.placeTile(new Position(4, 4), new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+
+		assertFalse(board.isBoardEmpty());
+	}
+
+	@Test
+	public void isBoardEmptyReturnsFalseAfterMultipleTilesPlaced() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		board.placeTile(new Position(4, 4), new Tile(COLOR.NAVY, SHAPE.FLOWER));
+		board.placeTile(new Position(4, 5), new Tile(COLOR.NAVY, SHAPE.GECKO));
+
+		assertFalse(board.isBoardEmpty());
+	}
+
+
+	@Test
+	public void placeTileMakesSquareOccupied() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.FEATHER);
+		board.placeTile(new Position(4, 4), tile);
+
+		assertFalse(board.isEmpty(new Position(4, 4)));
+	}
+
+	@Test
+	public void placeTileStoresCorrectTile() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		Tile tile = new Tile(COLOR.REDGREEN, SHAPE.TURTLE);
+		board.placeTile(new Position(3, 3), tile);
+
+		assertEquals(tile, board.getSquare(new Position(3, 3)).getTile());
+	}
+
+	@Test
+	public void getSquareReturnsNonNullForValidPosition() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		assertNotNull(board.getSquare(new Position(0, 0)));
+	}
+
+	@Test
+	public void getSquareReturnsNullForOutOfBoundsPosition() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		assertNull(board.getSquare(new Position(99, 99)));
+	}
+
+	@Test
+	public void getSquareReturnsCorrectSquareAfterPlaceTile() {
+		Board board = new Board();
+		board.createGameBoard();
+
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
+		board.placeTile(new Position(2, 2), tile);
+
+		Square square = board.getSquare(new Position(2, 2));
+		assertTrue(square.isOccupied());
+		assertEquals(tile, square.getTile());
+	}
+
+
+
+
+	// Tests pour la classe Referee
+	@Test
+	public void firstMoveOnCenter() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
+		Position center = new Position(4, 4);
+
+		assertTrue(referee.isValidMove(center, tile));
+	}
+
+	@Test
+	public void firstMoveNotOnCenter() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
+		Position notCenter = new Position(0, 0);
+
+		assertFalse(referee.isValidMove(notCenter, tile));
+	}
+
+	@Test
+	public void moveOnOccupiedSquare() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		Tile existingTile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
+		board.getSquare(new Position(4, 4)).setTile(existingTile);
+
+		Tile newTile = new Tile(COLOR.NAVY, SHAPE.TURTLE);
+		assertFalse(referee.isValidMove(new Position(4, 4), newTile));
+	}
+
+	@Test
+	public void moveAdjacentWithSameColorIsValid() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.FEATHER));
+
+		Tile newTile = new Tile(COLOR.MAGENTA, SHAPE.GECKO);
+		assertTrue(referee.isValidMove(new Position(4, 5), newTile));
+	}
+
+	@Test
+	public void moveAdjacentWithSameShapeIsValid() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+
+		Tile newTile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);
+		assertTrue(referee.isValidMove(new Position(4, 5), newTile));
+	}
+
+	@Test
+	public void moveAdjacentWithDifferentColorAndShape() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+
+		Tile newTile = new Tile(COLOR.TEAL, SHAPE.GECKO);
+		assertFalse(referee.isValidMove(new Position(4, 5), newTile));
+	}
+
+	@Test
+	public void moveWithNoAdjacentTileIsInvalid() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		Tile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);
+		assertFalse(referee.isValidMove(new Position(2, 2), tile)); // case isolée, plateau vide
+	}
+
+
+
+	@Test
+	public void hasAdjacentTileReturnsTrueWhenSameColoe() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));
+
+		Tile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+	}
+
+	@Test
+	public void hasAdjacentTileReturnsTrueWhenSameShape() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));
+
+		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+	}
+
+	@Test
+	public void hasAdjacentTileReturnsTrueWhenSameColor() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+
+		Tile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+	}
+
+	@Test
+	public void hasAdjacentTileReturnsTrueWhenSameShapes() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+		board.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));
+		Tile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+	}
+
+	@Test
+	public void hasAdjacentTileReturnsFalse() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile)); // plateau vide
+	}
+
+	@Test
+	public void hasAdjacentTileReturnsFalseWhenNeighborDifferentColorAndShape() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.TURTLE);
+		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile));
+	}
+
+	@Test
+	public void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));
+
+		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
 	}
 }
