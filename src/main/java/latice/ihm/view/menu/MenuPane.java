@@ -15,8 +15,7 @@ public class MenuPane extends BorderPane {
     // TOP
     private Label lblTitle;
     private Button btnParameters;
-    // CORRECTION : suppression des constantes locales redondantes
-    // On utilise directement Style.BTN_PARAMETERS_STYLE etc.
+
 
     // CENTER
     private Button btnPlay;
