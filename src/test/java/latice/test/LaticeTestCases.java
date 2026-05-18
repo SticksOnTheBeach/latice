@@ -1,9 +1,6 @@
 package latice.test;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 import latice.model.*;
 import latice.model.square.Square;
 import latice.model.square.SquareType;
@@ -97,6 +94,37 @@ public class LaticeTestCases {
 		player.getRack().addTileFromDeck(player.getDeck());
 		assertEquals(0, player.getDeck().getTiles().size());
 		assertEquals(3, player.getRack().getTiles().size());
+	}
+	@Test
+	public void RemovesFirstTile() {
+		game.shareTilesDynamically();
+		Player player = players.get(0);
+		player.getDeck().remove();
+		assertEquals(29, player.getDeck().size());
+	}
+
+
+	@Test
+	public void shuffle_preservesAllTiles() {
+		game.shareTilesDynamically();
+		Player player = players.get(0);
+		player.getDeck().shuffle();
+		assertEquals(30,player.getDeck().size());
+	}
+	@Test
+	public void playerNotEmpty(){
+		assertFalse(game.isPlayersEmpty());
+	}
+	@Test
+	public void playerEmpty(){
+		players.clear();
+		assertTrue(game.isPlayersEmpty());
+	}
+	@Test
+	public void nextPlayer(){
+		Player current = game.getCurrentPlayer();
+		game.nextTurn();
+		assertNotEquals(current, game.getCurrentPlayer());
 	}
 
 	@Test
