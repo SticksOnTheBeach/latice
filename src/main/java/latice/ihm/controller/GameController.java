@@ -26,8 +26,7 @@ public class GameController {
      */
     public boolean playTile(Tile tile, Position position) {
         Player currentPlayer = roundController.getCurrentPlayer();
-        // inutile mais on peut le laisser quand même, puisque j'ai bloqué les rack en les mettant invisible pour le curseur
-        if (!currentPlayer.getRack().getTiles().contains(tile)) {
+        if (!currentPlayer.getRack().getTiles().contains(tile)|| hasPlayedAction) {
             return false;
         }
 
@@ -37,8 +36,6 @@ public class GameController {
             // On ne rafraîchit pas le rack visuellement
             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
             hasPlayedAction = true;
-        	mainPane.updateDisplay(); 
-        	roundController.nextPlayerTurn();
             mainPane.updateDisplay();
             return true;
         }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -42,15 +43,20 @@ public class MainPane extends BorderPane {
         this.referee         = referee;
         this.nbRound         = roundController.getRoundCount();
 
+
         lblNbRound     = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
+        Button btnEndTurn = new Button("End Turn");
+        btnEndTurn.setOnAction(e -> {
+            gameController.passTurn();
+        });
         lblNbRound.setStyle("-fx-text-fill: white;");
         lblPlayerRound.setStyle("-fx-text-fill: white;");
 
         // --- TOP ---
         HBox hbTop = new HBox(20);
         hbTop.setPadding(new Insets(15, 0, 20, 0));
-        hbTop.getChildren().addAll(lblPlayerRound, lblNbRound);
+        hbTop.getChildren().addAll(lblPlayerRound, lblNbRound, btnEndTurn);
         hbTop.setAlignment(Pos.CENTER);
         hbTop.setStyle("-fx-font-size: 20px; -fx-font-family: \"Arial\"; -fx-font-weight: bold;");
         setTop(hbTop);

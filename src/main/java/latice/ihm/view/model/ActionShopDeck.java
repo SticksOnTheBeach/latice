@@ -109,6 +109,7 @@ public class ActionShopDeck extends VBox {
                     gameController.setHasPlayedAction(true);
                 }
                 else {
+                    if(gameController.isHasPlayedAction() == true);
                     current.setScore(current.getScore() - 2);
                 }
                 current.getRack().exchangeAllTiles(current.getDeck());
@@ -126,7 +127,8 @@ public class ActionShopDeck extends VBox {
             Player current = roundController.getCurrentPlayer();
             if (current.getScore() >= 2 && gameController.isHasPlayedAction() == true) {
                 current.setScore(current.getScore() - 2);
-                // TODO : logique rejouer
+                refreshPoints();
+                gameController.setHasPlayedAction(false);
             } else {
                 if(gameController.isHasPlayedAction() == false) {
                     showNoPlayedYet();
