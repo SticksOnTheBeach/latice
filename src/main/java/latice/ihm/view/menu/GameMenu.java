@@ -37,6 +37,7 @@ public class GameMenu extends BorderPane {
     private ArrayList<String> playerNames = new ArrayList<>();
     private int currentPlayerIndex = -1;
     private ArrayList<String> playerColors = new ArrayList<>();
+    private ArrayList<String> playersIcon = new ArrayList<>();
 
     private Label lblTitle;
     private VBox playersBox;
@@ -296,7 +297,11 @@ public class GameMenu extends BorderPane {
         slideOut.setToX(400);
         slideOut.play();
     }
-
+    
+    /*public boolean colorIsAlreadyPick() {
+    	
+    }*/
+    
     private boolean handleStart() {
         boolean correct = true;
 
