@@ -23,19 +23,7 @@ public class Game {
 
     Random rand = new Random();
 
-    /**
-     * Initializes a game for two specific players.
-     *
-     * @param player1 The first player of the game.
-     * @param player2 The second player of the game.
-     * @param referee The referee overseeing the game rules and logic.
-     */
-    public Game(Player player1, Player player2, Referee referee) {
-        this.players.add(player1);
-        this.players.add(player2);
-        this.referee = referee;
-        this.currentPlayerIndex = rand.nextInt(players.size());
-    }
+
 
     /**
      * Initializes a game for a dynamic number of players.

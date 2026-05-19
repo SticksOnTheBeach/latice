@@ -9,6 +9,13 @@ public class Referee {
     private Board gameboard;
     protected static int points=0;
 
+
+
+    private int roundCount = 1;
+    public Referee() {
+        this.roundCount = 1;
+    }
+
     public Referee(Board gameboard) {
         this.gameboard = gameboard;
     }
@@ -93,7 +100,7 @@ public class Referee {
             points += 4;      // Latice
         } else if (matchingSides == 3) {
             points += 2;      // Trefoil
-        } else {
+        } else if (matchingSides == 2) {
             points += 1;      // Double
         }
         // Case soleil = +2 points bonus
@@ -104,6 +111,23 @@ public class Referee {
 
         return points;
     }
-        
-        
+    public boolean winingCondition(Player player) {
+        if (player.getRack().isEmpty() && player.getDeck().isEmpty()) {
+        return true;
+        }
+        if (this.roundCount >= 10){
+            return true;
+        }
+        return false;
+
+    };
+    public void getWinner(){
+    }
+    public void setRoundCount(int roundCount) {
+        this.roundCount = roundCount;
+    }
+
+    public int getRoundCount() {
+        return roundCount;
+    }
 }
