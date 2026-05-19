@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -46,7 +47,7 @@ public class ActionShopDeck extends VBox {
         setAlignment(Pos.BOTTOM_CENTER);
         setPickOnBounds(false);
 
-        // --- PANNEAU ORANGE ---
+        // --- PANNEAU ---
         panel = new VBox(8);
         panel.setAlignment(Pos.CENTER);
         panel.setPadding(new Insets(8));
@@ -55,25 +56,28 @@ public class ActionShopDeck extends VBox {
         panel.setPrefHeight(PANEL_HEIGHT);
         panel.setPickOnBounds(false);
         panel.setStyle(
-            "-fx-background-color: #e87e04; " +
-            "-fx-border-color: #b85e00; " +
-            "-fx-border-width: 2px 2px 0px 2px; " +
-            "-fx-background-radius: 8px 8px 0 0;"
+            "-fx-background-color: rgba(255, 255, 255, 0.12); " + 
+            "-fx-background-radius: 16px 16px 0 0; " +
+            "-fx-border-color: rgba(255, 255, 255, 0.2); " +
+            "-fx-border-width: 1.5px 1.5px 0px 1.5px; " +
+            "-fx-border-radius: 16px 16px 0 0; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0, 0, -4);"
         );
 
         points = new Label("POINTS : 0");
         points.setStyle(
             "-fx-font-weight: bold; " +
             "-fx-font-size: 11px; " +
-            "-fx-font-family: \"Courier New\";"
+            "-fx-font-family: 'SF Pro Text', Helvetica, Arial, sans-serif; " +
+            "-fx-text-fill: rgba(255, 255, 255, 0.95);"
         );
 
         HBox actionsRow = new HBox(12);
         actionsRow.setAlignment(Pos.CENTER);
         actionsRow.setPickOnBounds(false);
 
-        actionExchangeAllTiles = buildActionButton("/images/game/exchange.png");
-        actionBuyExtraMove     = buildActionButton("/images/game/extra.png");
+        actionExchangeAllTiles = buildActionButton("/images/game/exchange.png", "-2"); // possibilité de faire une méthode et d'attrivuer une action à un nombres de points pour plus de portabilités etc..
+        actionBuyExtraMove     = buildActionButton("/images/game/extra.png", "-2"); // possibilité de faire une méthode et d'attrivuer une action à un nombres de points pour plus de portabilités et si on ajoute des actions donc peut être faire une liste d'actions et des getters et setteurs, et un getteurs et setteurs de prix des actions
 
         actionsRow.getChildren().addAll(
             wrapAction(actionExchangeAllTiles, "Échange rack\n(-2 pts)"),
@@ -81,20 +85,16 @@ public class ActionShopDeck extends VBox {
         );
 
         panel.getChildren().addAll(points, actionsRow);
-
-        // Panel masqué par défaut, décalé vers le bas (hors vue)
         panel.setVisible(false);
         panel.setTranslateY(PANEL_HEIGHT);
 
-        // --- FLÈCHE ---
+        // --- FLÈCHE (qui sert d'animatino) ---
         arrow = new Polygon();
         arrow.getPoints().addAll(0.0, 14.0, 14.0, 0.0, 28.0, 14.0);
-        arrow.setFill(Color.ORANGE);
-        arrow.setStroke(Color.web("#b85e00"));
-        arrow.setStrokeWidth(2);
+        arrow.setFill(Color.rgb(255, 255, 255, 0.15));
+        arrow.setStroke(Color.rgb(255, 255, 255, 0.25));
+        arrow.setStrokeWidth(1.5);
         arrow.setCursor(Cursor.HAND);
-
-        // Structure : [ panel (caché) au dessus | flèche en bas ]
         getChildren().addAll(panel, arrow);
 
         arrow.setOnMouseClicked(e -> {
@@ -119,7 +119,6 @@ public class ActionShopDeck extends VBox {
             if (current.getScore() >= 2) {
                 current.setScore(current.getScore() - 2);
                 // TODO : logique rejouer
-                refreshPoints();
             } else {
                 showNotEnoughPoints();
             }
@@ -128,7 +127,6 @@ public class ActionShopDeck extends VBox {
 
     private void togglePanel() {
         if (!isOpen) {
-            // Ouvrir : panneau monte depuis le bas vers sa position naturelle
             panel.setVisible(true);
             panel.setTranslateY(PANEL_HEIGHT);
 
@@ -141,7 +139,6 @@ public class ActionShopDeck extends VBox {
             ttPanel.play();
             ttArrow.play();
         } else {
-            // Fermer : panneau redescend
             TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
             ttPanel.setToY(PANEL_HEIGHT);
             ttPanel.setOnFinished(e -> panel.setVisible(false));
@@ -155,7 +152,8 @@ public class ActionShopDeck extends VBox {
         isOpen = !isOpen;
     }
 
-    private Button buildActionButton(String imagePath) {
+
+    private Button buildActionButton(String imagePath, String costText) {
         ImageView iv = new ImageView();
         try {
             iv.setImage(ImageLoader.load(imagePath));
@@ -164,13 +162,56 @@ public class ActionShopDeck extends VBox {
         }
         iv.setFitWidth(48);
         iv.setFitHeight(55);
-        Button btn = new Button("", iv);
+
+        Label lblCost = new Label(costText);
+        lblCost.setStyle(
+            "-fx-font-size: 22px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-font-family: 'SF Pro Text', Helvetica, Arial, sans-serif; " +
+            "-fx-text-fill: #a1a1a1;"
+        );
+        lblCost.setOpacity(0);
+
+        StackPane graphicContainer = new StackPane(iv, lblCost);
+        Button btn = new Button("", graphicContainer);
+        
         btn.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.15); " +
-            "-fx-border-color: #b85e00; " +
+            "-fx-background-color: rgba(255, 255, 255, 0.08); " +
+            "-fx-background-radius: 10px; " +
+            "-fx-border-color: rgba(255, 255, 255, 0.15); " +
             "-fx-border-width: 1px; " +
+            "-fx-border-radius: 10px; " +
             "-fx-cursor: hand;"
         );
+        
+        btn.setOnMouseEntered(e -> {
+            iv.setOpacity(0.15);
+            lblCost.setOpacity(1.0);
+            
+            btn.setStyle(
+                "-fx-background-color: rgba(255, 255, 255, 0.18); " +
+                "-fx-background-radius: 10px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.3); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 10px; " +
+                "-fx-cursor: hand;"
+            );
+        });
+        
+        btn.setOnMouseExited(e -> {
+            iv.setOpacity(1.0);
+            lblCost.setOpacity(0);
+            
+            btn.setStyle(
+                "-fx-background-color: rgba(255, 255, 255, 0.08); " +
+                "-fx-background-radius: 10px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.15); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 10px; " +
+                "-fx-cursor: hand;"
+            );
+        });
+        
         return btn;
     }
 
@@ -179,10 +220,13 @@ public class ActionShopDeck extends VBox {
         lbl.setWrapText(true);
         lbl.setMaxWidth(80);
         lbl.setAlignment(Pos.CENTER);
+        
+        // Style de texte gris clair Apple épuré
         lbl.setStyle(
             "-fx-font-size: 9px; " +
-            "-fx-font-family: \"Courier New\"; " +
-            "-fx-text-alignment: center;"
+            "-fx-font-family: 'SF Pro Text', Helvetica, Arial, sans-serif; " +
+            "-fx-text-alignment: center; " +
+            "-fx-text-fill: rgba(255, 255, 255, 0.7);"
         );
         VBox box = new VBox(3, btn, lbl);
         box.setAlignment(Pos.CENTER);
