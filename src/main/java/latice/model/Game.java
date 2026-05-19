@@ -80,27 +80,6 @@ public class Game {
     }
 
     /**
-     * Distributes the generated tiles equally between two specific players.
-     *
-     * @param player1 The first player to receive half of the generated tiles.
-     * @param player2 The second player to receive the remaining half of the tiles.
-     */
-    public void shareTilesBetweenTwoPlayers(Player player1, Player player2) {
-        final List<Tile> listTile = createTiles();
-        ArrayList<Tile> listTileP1 = new ArrayList<Tile>();
-        ArrayList<Tile> listTileP2 = new ArrayList<Tile>();
-        int size = listTile.size();
-
-        for (int i = 0; i < size / 2; i++)
-            listTileP1.add(listTile.get(i));
-        for (int i = size / 2; i < size; i++)
-            listTileP2.add(listTile.get(i));
-
-        player1.setDeck(new Deck(listTileP1));
-        player2.setDeck(new Deck(listTileP2));
-    }
-
-    /**
      * Distributes tiles dynamically among all players.
      */
     public void shareTilesDynamically() {
@@ -154,4 +133,5 @@ public class Game {
             player.getRack().getTiles().remove(tile);//TODO eviter les appeles en cascade
         }
     }
+
 }

@@ -9,7 +9,9 @@ public class GameController {
 	private MainPane mainPane;
 	private RoundController roundController;
 	private TileController tileController;
-	
+
+
+    private boolean hasPlayedAction = false;
 	public GameController(RoundController roundController, TileController tileController) {
 		this.roundController = roundController;
 		this.tileController = tileController;
@@ -34,6 +36,7 @@ public class GameController {
         if (success) {
             // On ne rafraîchit pas le rack visuellement
             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
+            hasPlayedAction = true;
         	mainPane.updateDisplay(); 
         	roundController.nextPlayerTurn();
             mainPane.updateDisplay();
@@ -61,6 +64,7 @@ public class GameController {
         int currentIndex = roundController.getCurrentPlayerIndex();
         roundController.nextPlayerTurn();
         mainPane.updateDisplay();
+        hasPlayedAction = false;
     }
     
     public Player getCurrentPlayer() {
@@ -70,4 +74,13 @@ public class GameController {
     public int getRoundCount() {
         return roundController.getRoundCount();
     }
+
+    public void setHasPlayedAction(boolean hasPlayedAction) {
+        this.hasPlayedAction = hasPlayedAction;
+    }
+
+    public boolean isHasPlayedAction() {
+        return hasPlayedAction;
+    }
+
 }

@@ -104,23 +104,36 @@ public class ActionShopDeck extends VBox {
 
         actionExchangeAllTiles.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            if (current.getScore() >= 2) {
-                current.setScore(current.getScore() - 2);
+            if (current.getScore() >= 2 || gameController.isHasPlayedAction() == false) {
+                if(gameController.isHasPlayedAction() == false) {
+                    gameController.setHasPlayedAction(true);
+                }
+                else {
+                    current.setScore(current.getScore() - 2);
+                }
                 current.getRack().exchangeAllTiles(current.getDeck());
                 refreshPoints();
                 mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
             } else {
-                showNotEnoughPoints();
-            }
+                //condition si on a pas encore joué
+
+                    showNotEnoughPoints();
+                }
+
         });
 
         actionBuyExtraMove.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            if (current.getScore() >= 2) {
+            if (current.getScore() >= 2 && gameController.isHasPlayedAction() == true) {
                 current.setScore(current.getScore() - 2);
                 // TODO : logique rejouer
             } else {
-                showNotEnoughPoints();
+                if(gameController.isHasPlayedAction() == false) {
+                    showNoPlayedYet();
+                }
+                 else {
+                    showNotEnoughPoints();
+                }
             }
         });
     }
@@ -238,6 +251,13 @@ public class ActionShopDeck extends VBox {
         alert.setTitle("Points insuffisants");
         alert.setHeaderText(null);
         alert.setContentText("Vous n'avez pas assez de points !");
+        alert.showAndWait();
+    }
+    private void showNoPlayedYet() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Pas encore joué");
+        alert.setHeaderText(null);
+        alert.setContentText("Vous n'avez pas encore fait de tour !");
         alert.showAndWait();
     }
 

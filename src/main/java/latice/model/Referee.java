@@ -87,12 +87,15 @@ public class Referee {
 
         // Règles :
         // 2 côtés qui matchent (Double) = 1 point
-        // 3 côtés (Trefoil) = 1 point  
-        // 4 côtés (Latice) = 2 points
-        if (matchingSides >= 2) {
-            points += matchingSides >= 4 ? 2 : 1;
+        // 3 côtés (Trefoil) = 2 point
+        // 4 côtés (Latice) = 4 points
+        if (matchingSides >= 4) {
+            points += 4;      // Latice
+        } else if (matchingSides == 3) {
+            points += 2;      // Trefoil
+        } else {
+            points += 1;      // Double
         }
-
         // Case soleil = +2 points bonus
         Square placedSquare = gameboard.getSquare(position);
         if (placedSquare != null && placedSquare.getType() == SquareType.SUN) {
