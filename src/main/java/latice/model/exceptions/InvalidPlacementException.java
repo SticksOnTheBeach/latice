@@ -1,5 +1,8 @@
 package latice.model.exceptions;
 
-public class InvalidPlacementException {
-
+public class InvalidPlacementException extends Exception{
+	
+	public InvalidPlacementException(String message) {
+		super(message);
+	}
 }
