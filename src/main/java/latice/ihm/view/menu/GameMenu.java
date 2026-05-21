@@ -299,7 +299,7 @@ public class GameMenu extends BorderPane {
     }
     
     /*public boolean colorIsAlreadyPick() {
-    	
+    	if 
     }*/
     
     private boolean handleStart() {

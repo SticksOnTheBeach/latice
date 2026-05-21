@@ -31,9 +31,15 @@ public class SquarePane extends StackPane {
         Rectangle rect = new Rectangle(SIZE, SIZE);
 
         switch (square.getType()) {
-            case SUN:    rect.setFill(Color.GOLD);          break;
-            case MOON:   rect.setFill(Color.MEDIUMPURPLE);  break;
-            case NORMAL: default: rect.setFill(Color.LIGHTGRAY); break;
+            case SUN:    
+            	rect.setFill(Color.GOLD);          
+            	break;
+            case MOON:   
+            	rect.setFill(Color.MEDIUMPURPLE);  
+            	break;
+            case NORMAL: 
+            	default: rect.setFill(Color.LIGHTGRAY); 
+            	break;
         }
 
         rect.setStroke(Color.DARKGRAY);
