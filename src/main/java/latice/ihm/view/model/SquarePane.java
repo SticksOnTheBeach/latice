@@ -1,17 +1,16 @@
 package latice.ihm.view.model;
 
-import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
 import latice.ihm.view.MainPane;
-import latice.model.Player;
 import latice.model.Position;
+import latice.model.exceptions.InvalidImagePathException;
 import latice.model.square.Square;
+import latice.util.ImageLoader;
 
 public class SquarePane extends StackPane {
 
@@ -21,35 +20,23 @@ public class SquarePane extends StackPane {
     private boolean isOccupied = false;
     private GameController gameController;
 
-    // on ajoute mainPane en paramètre pour pouvoir appeler
-    // rafraichirRackJoueur() et updateDisplay() après un placement réussi
     public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, MainPane mainPane, GameController gameController) {
         this.square = square;
         this.position = position;
         this.gameController = gameController;
-
-        Rectangle rect = new Rectangle(SIZE, SIZE);
-
-        switch (square.getType()) {
-            case SUN:    
-            	rect.setFill(Color.GOLD);          
-            	break;
-            case MOON:   
-            	rect.setFill(Color.MEDIUMPURPLE);  
-            	break;
-            case NORMAL: 
-            	default: rect.setFill(Color.LIGHTGRAY); 
-            	break;
+        
+        try {
+        // ✅ Image depuis getImagePath() au lieu du Rectangle + Label
+        ImageView imageView = new ImageView(ImageLoader.load(square.getType().getImagePath()));
+        imageView.setFitWidth(SIZE);
+        imageView.setFitHeight(SIZE);
+        imageView.setPreserveRatio(false);
+        getChildren().add(imageView);
+        } catch (InvalidImagePathException e) {
+        	System.out.println(e.getMessage());
         }
 
-        rect.setStroke(Color.DARKGRAY);
-        rect.setStrokeWidth(1);
 
-        Label symbol = new Label(square.getType().getSymbol());
-        symbol.setTextFill(Color.BLACK);
-        symbol.setStyle("-fx-font-size: 20px;");
-
-        getChildren().addAll(rect, symbol);
 
         setOnDragOver(event -> {
             if (!isOccupied && event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {
@@ -62,7 +49,7 @@ public class SquarePane extends StackPane {
             System.out.println("DragDropped sur " + position.getRow() + "," + position.getCol());
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
-                boolean success = gameController.playTile(tileView.getTile(), position);                
+                boolean success = gameController.playTile(tileView.getTile(), position);
                 if (success) {
                     placeTile(tileView);
                     event.setDropCompleted(true);

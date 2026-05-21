@@ -98,22 +98,35 @@ public class Referee {
         }
         return false;
     }
+    
+    /**
+     * Compte le nombre de voisins qui matchent (même couleur OU même forme).
+     */
+    private int countMatchingNeighbors(Position position, Tile tile) {
+        int count = 0;
+        for (Position neighbor : getAdjacentPositions(position)) {
+            Square neighborSquare = gameboard.getSquare(neighbor);
+            if (neighborSquare != null && neighborSquare.isOccupied()) {
+                Tile neighborTile = neighborSquare.getTile();
+                if (neighborTile.getColor() == tile.getColor() || neighborTile.getShape() == tile.getShape()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 
     public int calculatePoints(Position position, Tile tile) {
         int points = 0;
-        int matchingSides = 0;
-
-        if(hasAdjacentTile(position)) {
-        	if (hasAdjacentSameColor(position, tile) || hasAdjacentSameShape(position, tile)) {
-        		matchingSides++;
-        	}
-        }
+        int matchingSides = countMatchingNeighbors(position, tile);
 
         if (matchingSides >= 4) {
             points += 4;
         } else if (matchingSides == 3) {
-            points += 2;
+            points += 3;
         } else if (matchingSides == 2) {
+            points += 2;
+        } else if (matchingSides == 1) {
             points += 1;
         }
 
