@@ -46,10 +46,62 @@ public class MainPane extends BorderPane {
 
         lblNbRound     = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
+        
         Button btnEndTurn = new Button("End Turn");
+        String btnEndTurnStyle =
+                "-fx-background-color: rgba(255, 255, 255, 0.12); " +
+                "-fx-background-radius: 20px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.35); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 20px; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-family: \"SF Pro Display\", \"Helvetica Neue\", Arial; " +
+                "-fx-font-weight: 500; " +
+                "-fx-padding: 8px 22px; " +
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 4);";
+        
+        String btnEndTurnHoverStyle =
+                "-fx-background-color: rgba(255, 255, 255, 0.22); " +
+                "-fx-background-radius: 20px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.55); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 20px; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-family: \"SF Pro Display\", \"Helvetica Neue\", Arial; " +
+                "-fx-font-weight: 500; " +
+                "-fx-padding: 8px 22px; " +
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 14, 0, 0, 6);";
+        
+        String btnEndTurnPressedStyle =
+                "-fx-background-color: rgba(255, 255, 255, 0.50); " +
+                "-fx-background-radius: 20px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.86); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 20px; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-family: \"SF Pro Display\", \"Helvetica Neue\", Arial; " +
+                "-fx-font-weight: 500; " +
+                "-fx-padding: 8px 22px; " +
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 14, 0, 0, 6);";
+        
+        
+        
+        btnEndTurn.setStyle(btnEndTurnStyle);
+        btnEndTurn.setOnMouseEntered(e-> btnEndTurn.setStyle(btnEndTurnHoverStyle));
+        btnEndTurn.setOnMouseExited(e-> btnEndTurn.setStyle(btnEndTurnStyle));
+        btnEndTurn.setOnMousePressed(e-> btnEndTurn.setStyle(btnEndTurnPressedStyle));
+        btnEndTurn.setOnMouseReleased(e-> btnEndTurn.setStyle(btnEndTurnHoverStyle));
         btnEndTurn.setOnAction(e -> {
             gameController.passTurn();
         });
+        
+        
         lblNbRound.setStyle("-fx-text-fill: white;");
         lblPlayerRound.setStyle("-fx-text-fill: white;");
 
