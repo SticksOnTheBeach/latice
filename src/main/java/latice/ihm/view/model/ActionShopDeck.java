@@ -16,7 +16,7 @@ import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
-import latice.ihm.view.MainPane;
+import latice.ihm.view.GamePane;
 import latice.model.Player;
 import latice.model.Referee;
 import latice.model.exceptions.InvalidImagePathException;
@@ -35,11 +35,11 @@ public class ActionShopDeck extends VBox {
     private boolean         isOpen = false;
     private VBox            panel;
     private Polygon         arrow;
-    private MainPane mainPane;
+    private GamePane mainPane;
 
     public ActionShopDeck(GameController gameController,
                           RoundController roundController,
-                          Referee referee, MainPane mainPane) {
+                          Referee referee, GamePane mainPane) {
         this.gameController  = gameController;
         this.roundController = roundController;
         this.mainPane = mainPane;

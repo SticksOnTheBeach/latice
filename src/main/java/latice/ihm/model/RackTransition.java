@@ -7,6 +7,7 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -20,7 +21,9 @@ import latice.model.Referee;
 
 public class RackTransition {
     private static final int ANIM_DURATION = 500;
-
+    
+    private static final double BLUR_RADIUS = 15.0;
+    
     private static final double OFFSET_BAS    =  360;
     private static final double OFFSET_HAUT   = -360;
     private static final double OFFSET_GAUCHE = -440;
@@ -63,6 +66,18 @@ public class RackTransition {
         firstRackPosition();
     }
 
+    	
+    /**
+     * Applique ou retire le flou sur un slot selon s'il est actif ou non.
+     */
+    private void applyBlurForOthersPlayers(HBox slot, boolean isCurrentPlayer) {
+        if (isCurrentPlayer) {
+            slot.setEffect(null); // pas de flou pour le joueur actif
+        } else {
+            slot.setEffect(new GaussianBlur(BLUR_RADIUS)); // flou pour les autres
+        }
+    }
+    
     private void firstRackPosition() {
         int nbJoueurs = players.size();
         for (int i = 0; i < nbJoueurs; i++) {
@@ -79,10 +94,12 @@ public class RackTransition {
                 slot.setMouseTransparent(false);
                 slot.setPickOnBounds(false);
                 slot.setOpacity(1.0);
+                applyBlurForOthersPlayers(slot, true);
             } else {
                 // Joueurs inactifs : totalement transparents aux événements
                 slot.setMouseTransparent(true);
                 slot.setOpacity(0.5);
+                applyBlurForOthersPlayers(slot, false);
             }
         }
     }
@@ -115,10 +132,12 @@ public class RackTransition {
                 slot.setMouseTransparent(false);
                 slot.setPickOnBounds(false);
                 ft.setToValue(1.0);
+                applyBlurForOthersPlayers(slot, true);
             } else {
                 // Joueurs inactifs : complètement transparents aux événements souris/drag
                 slot.setMouseTransparent(true);
                 ft.setToValue(0.5);
+                applyBlurForOthersPlayers(slot, false);
             }
 
             allTransitions.getChildren().addAll(tt, rt, ft);
@@ -136,16 +155,16 @@ public class RackTransition {
             }
         } else if (nbJoueurs == 3) {
             switch (positionRelative) {
-                case 0:  return new double[]{ 0,             OFFSET_BAS };
+                case 0:  return new double[]{ 0,OFFSET_BAS };
                 case 1:  return new double[]{ OFFSET_DROITE, 0 };
                 case 2:  return new double[]{ OFFSET_GAUCHE, 0 };
                 default: return new double[]{ 0, 0 };
             }
         } else {
             switch (positionRelative) {
-                case 0:  return new double[]{ 0,             OFFSET_BAS };
+                case 0:  return new double[]{ 0,OFFSET_BAS };
                 case 1:  return new double[]{ OFFSET_DROITE, 0 };
-                case 2:  return new double[]{ 0,             OFFSET_HAUT };
+                case 2:  return new double[]{ 0,OFFSET_HAUT };
                 case 3:  return new double[]{ OFFSET_GAUCHE, 0 };
                 default: return new double[]{ 0, 0 };
             }

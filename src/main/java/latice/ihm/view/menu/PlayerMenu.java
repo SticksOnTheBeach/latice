@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import latice.ihm.view.style.Style;
 
-public class GameMenu extends BorderPane {
+public class PlayerMenu extends BorderPane {
     /* TODO : 2 possibilités pour les lignes des joueurs
      * soit faire que joueur 3 et joueur 4 soit déjà déclaré mais non affiché et donc que dès
      * que l'on clique sur le "+" ça s'affiche et donc un écouteur
@@ -50,7 +50,7 @@ public class GameMenu extends BorderPane {
     private EventHandler<ActionEvent> onBack;
     private EventHandler<ActionEvent> onStart;
 
-    public GameMenu(EventHandler<ActionEvent> onBack, EventHandler<ActionEvent> onStart) {
+    public PlayerMenu(EventHandler<ActionEvent> onBack, EventHandler<ActionEvent> onStart) {
         this.onBack = onBack;
         this.onStart = onStart;
 

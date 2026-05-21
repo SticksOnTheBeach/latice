@@ -15,7 +15,7 @@ import latice.ihm.view.style.Style;
 import latice.model.exceptions.InvalidImagePathException;
 import latice.util.ImageLoader;
 
-public class MenuPane extends BorderPane {
+public class MainMenuPane extends BorderPane {
     // TOP
     private Label lblTitle;
     private Button btnParameters;
@@ -25,7 +25,7 @@ public class MenuPane extends BorderPane {
     private Button btnPlay;
     private Button btnExit;
 
-    public MenuPane(Stage stage) {
+    public MainMenuPane(Stage stage) {
         ImageView background = new ImageView();
         ImageView imageView = new ImageView();
 
@@ -72,8 +72,6 @@ public class MenuPane extends BorderPane {
             "-fx-text-fill: #1a2e35; " +
             "-fx-background-color: #a8d8a8; " +
             "-fx-background-radius: 0px; " +
-            "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
-            "-fx-border-width: 4px; " +
             "-fx-padding: 12px 40px; " +
             "-fx-cursor: hand; " +
             "-fx-min-width: 200px;";
@@ -85,7 +83,7 @@ public class MenuPane extends BorderPane {
             "-fx-text-fill: #1a2e35; " +
             "-fx-background-color: #c8f8c8; " +
             "-fx-background-radius: 0px; " +
-            "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
+            "-fx-border-color: white; "+
             "-fx-border-width: 4px; " +
             "-fx-padding: 12px 40px; " +
             "-fx-cursor: hand; " +
@@ -136,7 +134,7 @@ public class MenuPane extends BorderPane {
     public void handleStart(Stage stage) {
         GameMenuController controller = new GameMenuController(stage);
  
-        GameMenu gameMenu = new GameMenu(
+        PlayerMenu gameMenu = new PlayerMenu(
             e -> controller.handleBack(e),
             e -> controller.handleStart(e)
         );

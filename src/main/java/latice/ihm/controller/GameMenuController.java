@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import latice.ihm.view.MainPane;
-import latice.ihm.view.menu.GameMenu;
-import latice.ihm.view.menu.MenuPane;
+import latice.ihm.view.GamePane;
+import latice.ihm.view.menu.PlayerMenu;
+import latice.ihm.view.menu.MainMenuPane;
 import latice.model.Board;
 import latice.model.Game;
 import latice.model.Player;
@@ -17,19 +17,19 @@ import latice.model.Referee;
 public class GameMenuController {
 
     private Stage stage;
-    private GameMenu gameMenu;
+    private PlayerMenu gameMenu;
 
     public GameMenuController(Stage stage) {
         this.stage = stage;
     }
 
-    public void setGameMenu(GameMenu gameMenu) {
+    public void setGameMenu(PlayerMenu gameMenu) {
         this.gameMenu = gameMenu;
     }
 
     // Retour au menu principal
     public void handleBack(ActionEvent e) {
-        stage.setScene(new Scene(new MenuPane(stage), 1000, 700));
+        stage.setScene(new Scene(new MainMenuPane(stage), 1000, 700));
     }
 
     public void handleStart(ActionEvent e) {
@@ -63,7 +63,7 @@ public class GameMenuController {
         TileController tileController = new TileController(board, referee);
         RoundController roundController = new RoundController(players);
         GameController gameController = new GameController(roundController, tileController);
-        MainPane mainPane = new MainPane(board, game, tileController, roundController, gameController, referee);
+        GamePane mainPane = new GamePane(board, game, tileController, roundController, gameController, referee);
         mainPane.setStyle("-fx-background-color: linear-gradient(to bottom right, #3e2723, #6d4c41);");
 
         stage.setScene(new Scene(mainPane, 1000, 900));

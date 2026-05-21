@@ -6,7 +6,7 @@ import javafx.scene.layout.StackPane;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
 import latice.ihm.controller.TileController;
-import latice.ihm.view.MainPane;
+import latice.ihm.view.GamePane;
 import latice.model.Position;
 import latice.model.exceptions.InvalidImagePathException;
 import latice.model.square.Square;
@@ -20,7 +20,7 @@ public class SquarePane extends StackPane {
     private boolean isOccupied = false;
     private GameController gameController;
 
-    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, MainPane mainPane, GameController gameController) {
+    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, GamePane mainPane, GameController gameController) {
         this.square = square;
         this.position = position;
         this.gameController = gameController;

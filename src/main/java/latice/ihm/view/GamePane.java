@@ -21,7 +21,7 @@ import latice.model.Game;
 import latice.model.Player;
 import latice.model.Referee;
 
-public class MainPane extends BorderPane {
+public class GamePane extends BorderPane {
     protected Label lblNbRound;
     protected int   nbRound;
     protected Label lblPlayerRound;
@@ -33,7 +33,7 @@ public class MainPane extends BorderPane {
     private Referee         referee;
     private ActionShopDeck  actionShop;
 
-    public MainPane(Board board, Game game, TileController tileController,
+    public GamePane(Board board, Game game, TileController tileController,
                     RoundController roundController, GameController gameController,
                     Referee referee) {
         this.game            = game;
