@@ -5,9 +5,8 @@ import latice.model.tile.Tile;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck implements TileContainer {
+public class Deck extends Container implements TileContainer {
 
-    private ArrayList<Tile> tiles = new ArrayList<Tile>();
 
     /**
      * Initializes a deck with a specific list of tiles.
@@ -15,51 +14,11 @@ public class Deck implements TileContainer {
      * @param tiles The initial list of tiles for this deck.
      */
     public Deck(ArrayList<Tile> tiles) {
-        this.tiles = tiles;
+        super(tiles);
     }
 
-    /**
-     * Retrieves the list of tiles in the deck.
-     * 
-     * @return The current list of tiles.
-     */
-    public ArrayList<Tile> getTiles() {
-        return tiles;
-    }
-
-    /**
-     * Removes the top tile from the deck.
-     */
-    @Override
-    public void remove() {
-        if (!tiles.isEmpty()) {
-            tiles.remove(0);
-        }
-    }
-    public  void shuffle() {
-        Collections.shuffle(tiles);
-    }
-    /**
-     * Gets the number of tiles currently in the deck.
-     * 
-     * @return The exact number of tiles remaining.
-     */
-    public int size() {
-        return tiles.size();
-    }
-
-    /**
-     * Checks if the deck is empty.
-     * 
-     * @return True if there are no tiles left, false otherwise.
-     */
-    @Override
-    public boolean isEmpty() {
-        return tiles.isEmpty(); 
-    }
-    
     @Override
     public String toString() {
-        return "Deck{" + "tiles=" + tiles.toString() +'}';
+        return "Deck{" + "tiles=" + super.toString() +'}';
     }
 }
