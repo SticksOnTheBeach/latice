@@ -2,15 +2,18 @@ package latice.ihm.view.menu;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import latice.ihm.controller.GameMenuController;
 import latice.ihm.view.style.Style;
-import latice.util.ImageLoader;
 import latice.model.exceptions.InvalidImagePathException;
+import latice.util.ImageLoader;
 
 public class MenuPane extends BorderPane {
     // TOP
@@ -22,7 +25,7 @@ public class MenuPane extends BorderPane {
     private Button btnPlay;
     private Button btnExit;
 
-    public MenuPane() {
+    public MenuPane(Stage stage) {
         ImageView background = new ImageView();
         ImageView imageView = new ImageView();
 
@@ -113,6 +116,9 @@ public class MenuPane extends BorderPane {
         btnExit.setOnMouseExited(e -> btnExit.setStyle(btnStyle));
         btnExit.setOnMousePressed(e -> btnExit.setStyle(btnPressedStyle));
         btnExit.setOnMouseReleased(e -> btnExit.setStyle(btnHoverStyle));
+        
+        btnPlay.setOnAction(e -> handleStart(stage));
+        btnExit.setOnAction(e -> System.exit(0));
 
         GridPane gridMid = new GridPane();
         gridMid.setPadding(new Insets(10, 10, 10, 10));
@@ -125,5 +131,17 @@ public class MenuPane extends BorderPane {
         setCenter(gridMid);
 
         getChildren().add(0, background);
+    }
+    
+    public void handleStart(Stage stage) {
+        GameMenuController controller = new GameMenuController(stage);
+ 
+        GameMenu gameMenu = new GameMenu(
+            e -> controller.handleBack(e),
+            e -> controller.handleStart(e)
+        );
+        controller.setGameMenu(gameMenu);
+ 
+        stage.setScene(new Scene(gameMenu, 1000, 700));
     }
 }

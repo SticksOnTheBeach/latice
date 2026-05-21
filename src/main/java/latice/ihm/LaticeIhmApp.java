@@ -1,11 +1,11 @@
 package latice.ihm;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import latice.ihm.controller.GameMenuController;
 import latice.ihm.view.menu.GameMenu;
+import latice.ihm.view.menu.MenuPane;
 
 public class LaticeIhmApp extends Application {
 
@@ -45,13 +45,14 @@ public class LaticeIhmApp extends Application {
                 e -> controller.handleBack(e),
                 e -> controller.handleStart(e)
             );
+        MenuPane mainMenu = new MenuPane(primaryStage);
         
         //GameMenu gameMenu = new GameMenu(e -> controller.handleBack(e));
         controller.setGameMenu(gameMenu);
         
         primaryStage.setResizable(false);
         primaryStage.setTitle("Latice");
-        primaryStage.setScene(new Scene(gameMenu, 1000, 700));
+        primaryStage.setScene(new Scene(mainMenu, 1000, 700));
         primaryStage.show();
     }
 

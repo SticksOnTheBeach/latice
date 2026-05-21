@@ -1,8 +1,11 @@
 package latice.ihm.controller;
 
+import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import latice.ihm.view.MainPane;
 import latice.ihm.view.menu.GameMenu;
 import latice.ihm.view.menu.MenuPane;
 import latice.model.Board;
@@ -10,9 +13,6 @@ import latice.model.Game;
 import latice.model.Player;
 import latice.model.Rack;
 import latice.model.Referee;
-import latice.ihm.view.MainPane;
-
-import java.sql.Ref;
 
 public class GameMenuController {
 
@@ -29,7 +29,7 @@ public class GameMenuController {
 
     // Retour au menu principal
     public void handleBack(ActionEvent e) {
-        stage.setScene(new Scene(new MenuPane(), 1000, 700));
+        stage.setScene(new Scene(new MenuPane(stage), 1000, 700));
     }
 
     public void handleStart(ActionEvent e) {
@@ -37,11 +37,11 @@ public class GameMenuController {
     }
 
     // Démarrer la partie
-    public void handleStart(java.util.ArrayList<String> playerNames) {
+    public void handleStart(ArrayList<String> playerNames) {
 
         // Créer les joueurs dynamiquement selon les noms saisis
-        java.util.ArrayList<Player> players = new java.util.ArrayList<>();
-        java.util.ArrayList<Rack> racks = new java.util.ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<Rack> racks = new ArrayList<>();
 
         for (String name : playerNames) {
             Rack rack = new Rack();
