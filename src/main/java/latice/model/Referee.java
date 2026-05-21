@@ -36,74 +36,87 @@ public class Referee {
      */
 
     public boolean isValidMove(Position position, Tile tile) {
-        // Vérification de la validation de la tuile à placer en premier
         if (gameboard.isBoardEmpty() && position.equals(new Position(4, 4))) {
             return true;
         }
-
-        if (!gameboard.isEmpty(position)) { // Vérification que la case est libre
+        if (!gameboard.isEmpty(position)) {
             return false;
         }
-        if (!hasAdjacentTile(position, tile)) {
+        if (!hasAdjacentTile(position)) {
+            return false;
+        }
+        if (!hasAdjacentSameColor(position, tile) && !hasAdjacentSameShape(position, tile)) {
             return false;
         }
         return true;
     }
+    
+    private Position[] getAdjacentPositions(Position position) {
+    	return new Position[] { new Position(position.getPositionUp(), position.getCol()),
+    							new Position(position.getPositionDown(), position.getCol()),
+    							new Position(position.getRow(), position.getPositionLeft()),
+    							new Position(position.getRow(), position.getPositionRight())
+    	};
+    }
 
-    public boolean hasAdjacentTile(Position position, Tile tile) {
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        boolean hasAdjacentTile = false; // Vérifier qu'une tuile adjacente existe
-        for (int[] dir : directions) { // Parcourir les 4 directions
-            Position neighbor = new Position(position.getRow() + dir[0], position.getCol() + dir[1]); // Récupérer les positions adjacentes
-            Square neighborSquare = gameboard.getSquare(neighbor); // Récupérer les cases adjacentes
+    public boolean hasAdjacentTile(Position position) {
+    	for (Position neighbor : getAdjacentPositions(position)) { // on parcours les différentes position AUTOUR de la position donnée
+    		Square neighborSquare = gameboard.getSquare(neighbor);
+    		if (neighborSquare != null && neighborSquare.isOccupied()) { // on vérifie si dans l'une des position voisines il y'a une cases occupé 
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * Vérifie si au moins une tuile voisine est de la même couleur.
+     */
+    public boolean hasAdjacentSameColor(Position position, Tile tile) {
+        for (Position neighbor : getAdjacentPositions(position)) {
+            Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
-                hasAdjacentTile = true;
-                Tile neighborTile = neighborSquare.getTile();
-                boolean sameColor = neighborTile.getColor() == tile.getColor();
-                boolean sameShape = neighborTile.getShape() == tile.getShape();
-                if (sameColor || sameShape) {
-                	points += 2;
+                if (neighborSquare.getTile().getColor() == tile.getColor()) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
-    
-    
-    public int calculatePoints(Position position, Tile tile) {
-        int points = 0;
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        int matchingSides = 0;
 
-        for (int[] dir : directions) {
-            Position neighbor = new Position(
-                position.getRow() + dir[0], 
-                position.getCol() + dir[1]
-            );
+    /**
+     * Vérifie si au moins une tuile voisine est de la même forme.
+     */
+    public boolean hasAdjacentSameShape(Position position, Tile tile) {
+        for (Position neighbor : getAdjacentPositions(position)) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
-                Tile neighborTile = neighborSquare.getTile();
-                if (neighborTile.getColor() == tile.getColor() 
-                    || neighborTile.getShape() == tile.getShape()) {
-                    matchingSides++;
+                if (neighborSquare.getTile().getShape() == tile.getShape()) {
+                    return true;
                 }
             }
         }
+        return false;
+    }
 
-        // Règles :
-        // 2 côtés qui matchent (Double) = 1 point
-        // 3 côtés (Trefoil) = 2 point
-        // 4 côtés (Latice) = 4 points
-        if (matchingSides >= 4) {
-            points += 4;      // Latice
-        } else if (matchingSides == 3) {
-            points += 2;      // Trefoil
-        } else if (matchingSides == 2) {
-            points += 1;      // Double
+    public int calculatePoints(Position position, Tile tile) {
+        int points = 0;
+        int matchingSides = 0;
+
+        if(hasAdjacentTile(position)) {
+        	if (hasAdjacentSameColor(position, tile) || hasAdjacentSameShape(position, tile)) {
+        		matchingSides++;
+        	}
         }
-        // Case soleil = +2 points bonus
+
+        if (matchingSides >= 4) {
+            points += 4;
+        } else if (matchingSides == 3) {
+            points += 2;
+        } else if (matchingSides == 2) {
+            points += 1;
+        }
+
         Square placedSquare = gameboard.getSquare(position);
         if (placedSquare != null && placedSquare.getType() == SquareType.SUN) {
             points += 2;
@@ -111,6 +124,7 @@ public class Referee {
 
         return points;
     }
+    
     public boolean winingCondition(Player player) {
         if (player.getRack().isEmpty() && player.getDeck().isEmpty()) {
         return true;
