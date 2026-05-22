@@ -5,6 +5,8 @@ import latice.model.Player;
 import latice.model.Position;
 import latice.model.tile.Tile;
 
+import java.util.ArrayList;
+
 public class GameController {
 	private GamePane mainPane;
 	private RoundController roundController;
@@ -36,7 +38,7 @@ public class GameController {
             // On ne rafraîchit pas le rack visuellement
             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
             if (tileController.getReferee().winingConditionEmpty(currentPlayer)) {
-                Player winner = tileController.getReferee().getWinner(roundController.getPlayers());
+                ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
                 mainPane.showWinner(winner);
                 return true;
             }
@@ -68,7 +70,7 @@ public class GameController {
         int currentIndex = roundController.getCurrentPlayerIndex();
         roundController.nextPlayerTurn();
         if (tileController.getReferee().winingConditionCycles()) {
-            Player winner = tileController.getReferee().getWinner(roundController.getPlayers());
+            ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
             mainPane.showWinner(winner);
             return;
         }

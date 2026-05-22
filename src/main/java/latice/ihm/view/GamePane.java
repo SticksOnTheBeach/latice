@@ -157,11 +157,21 @@ public class GamePane extends BorderPane {
             actionShop.refreshPoints();
         }
     }
-    public void showWinner(Player winner) {
+    public void showWinner(ArrayList<Player> players) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Fin de partie");
         alert.setHeaderText("Victoire !");
-        alert.setContentText(winner.getName() + " a gagné avec " + winner.getScore() + " points !");
+        String message;
+        if (players.size() == 1) {
+            message = players.get(0).getName() + " a gagné !";
+        } else {
+            message = "Les gagnants sont :\n";
+            for (Player player : players) {
+                message = message + "• " + player.getName() + "\n";
+            }
+            alert.setContentText(message);
+            alert.showAndWait();
+        }
         alert.showAndWait();
     }
     public void rafraichirRackJoueur(int playerIndex) {

@@ -557,7 +557,7 @@ public class LaticeTestCases {
 			p1.getDeck().remove();
 		}
 		Referee referee = new Referee(new Board());
-		assertEquals(p1, referee.getWinner(players));
+		assertEquals(List.of(p1), referee.getWinner(players));
 	}
 	// ===================== hasAdjacentSameColor =====================
 

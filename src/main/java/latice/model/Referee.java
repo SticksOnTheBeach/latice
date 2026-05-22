@@ -151,7 +151,7 @@ public class Referee {
         }
         return false;
     }
-    public Player getWinner(ArrayList<Player> players) {
+    public ArrayList<Player> getWinner(ArrayList<Player> players) {
         int minTiles = players.get(0).getRack().size() + players.get(0).getDeck().size();
         for (Player player : players) {
             int remaining = player.getRack().size() + player.getDeck().size();
@@ -159,19 +159,13 @@ public class Referee {
                 minTiles = remaining;
             }
         }
-        ArrayList<Player> potentialWinner = new ArrayList<>();
+        ArrayList<Player> winner = new ArrayList<>();
         for (Player player : players) {
             if (player.getRack().size() + player.getDeck().size() == minTiles) {
-                potentialWinner.add(player);
+                winner.add(player);
             }
         }
-        // eviter les egalités au maximum avec celui qui a le plus de points
-        Player winner = potentialWinner.get(0);
-        for (Player player : potentialWinner) {
-            if (player.getScore() > winner.getScore()) {
-                winner = player;
-            }
-        }
+
 
         return winner;//TODO gerer les cas rare ou plusieurs joueurs on memes tuilles et points
     }
