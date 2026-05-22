@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -156,7 +157,13 @@ public class GamePane extends BorderPane {
             actionShop.refreshPoints();
         }
     }
-
+    public void showWinner(Player winner) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Fin de partie");
+        alert.setHeaderText("Victoire !");
+        alert.setContentText(winner.getName() + " a gagné avec " + winner.getScore() + " points !");
+        alert.showAndWait();
+    }
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }

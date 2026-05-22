@@ -299,7 +299,7 @@ public class LaticeTestCases {
 		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));
 
 		Tile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
 	}
 
 	@Test
@@ -311,7 +311,7 @@ public class LaticeTestCases {
 		board.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));
 
 		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
 	}
 
 	@Test
@@ -323,7 +323,7 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
 
 		Tile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
 	}
 
 	@Test
@@ -333,7 +333,7 @@ public class LaticeTestCases {
 		Referee referee = new Referee(board);
 		board.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));
 		Tile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
 	}
 
 	@Test
@@ -343,18 +343,9 @@ public class LaticeTestCases {
 		Referee referee = new Referee(board);
 
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
-		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile)); // plateau vide
+		assertFalse(referee.hasAdjacentTile(new Position(4, 4))); // plateau vide
 	}
 
-	@Test
-	public void hasAdjacentTileReturnsFalseWhenNeighborDifferentColorAndShape() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.TURTLE);
-		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile));
-	}
 
 	@Test
 	public void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {
@@ -365,6 +356,6 @@ public class LaticeTestCases {
 		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));
 
 		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
 	}
 }

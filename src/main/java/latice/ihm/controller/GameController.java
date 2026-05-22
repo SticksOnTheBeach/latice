@@ -35,8 +35,15 @@ public class GameController {
         if (success) {
             // On ne rafraîchit pas le rack visuellement
             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
+            if (tileController.getReferee().winingConditionEmpty(currentPlayer)) {
+                Player winner = tileController.getReferee().getWinner(roundController.getPlayers());
+                mainPane.showWinner(winner);
+                return true;
+            }
+
             hasPlayedAction = true;
             mainPane.updateDisplay();
+
             return true;
         }
         return false;
@@ -60,8 +67,14 @@ public class GameController {
         Player currentPlayer = roundController.getCurrentPlayer();
         int currentIndex = roundController.getCurrentPlayerIndex();
         roundController.nextPlayerTurn();
+        if (tileController.getReferee().winingConditionCycles()) {
+            Player winner = tileController.getReferee().getWinner(roundController.getPlayers());
+            mainPane.showWinner(winner);
+            return;
+        }
         mainPane.updateDisplay();
         hasPlayedAction = false;
+
     }
     
     public Player getCurrentPlayer() {
