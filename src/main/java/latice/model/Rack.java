@@ -25,7 +25,7 @@ public class Rack extends Container implements TileContainer{
      * Pioche une seule et unique tuile depuis le deck.
      */
     public void drawOneTile(Deck deck) {
-        // On vérifie qu'il y a de la place (moins de maxSize) et que la pioche n'est pas vide
+        // On vérifie qu'il y a de la place (moins de maxSize) et que la pioche n'est pas vide probablement inutile comme methode
         if (tiles.size() < maxSize && !deck.isEmpty()) {
             tiles.add(deck.getTiles().get(0));
             deck.remove();
