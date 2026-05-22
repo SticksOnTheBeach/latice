@@ -99,7 +99,6 @@ public class LaticeTestCases {
 		assertEquals(0, player.getDeck().getTiles().size());
 		assertEquals(3, player.getRack().getTiles().size());
 	}
-// ===================== Check Board =====================
 
 	@Test
 	void checkCreationOfTheGameBoard(){
