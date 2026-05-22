@@ -23,19 +23,7 @@ public class Game {
 
     Random rand = new Random();
 
-    /**
-     * Initializes a game for two specific players.
-     *
-     * @param player1 The first player of the game.
-     * @param player2 The second player of the game.
-     * @param referee The referee overseeing the game rules and logic.
-     */
-    public Game(Player player1, Player player2, Referee referee) {
-        this.players.add(player1);
-        this.players.add(player2);
-        this.referee = referee;
-        this.currentPlayerIndex = rand.nextInt(players.size());
-    }
+
 
     /**
      * Initializes a game for a dynamic number of players.
@@ -77,27 +65,6 @@ public class Game {
 
     public String showRack(Player pLayer) {
         return pLayer.getRack().toString();
-    }
-
-    /**
-     * Distributes the generated tiles equally between two specific players.
-     *
-     * @param player1 The first player to receive half of the generated tiles.
-     * @param player2 The second player to receive the remaining half of the tiles.
-     */
-    public void shareTilesBetweenTwoPlayers(Player player1, Player player2) {
-        final List<Tile> listTile = createTiles();
-        ArrayList<Tile> listTileP1 = new ArrayList<Tile>();
-        ArrayList<Tile> listTileP2 = new ArrayList<Tile>();
-        int size = listTile.size();
-
-        for (int i = 0; i < size / 2; i++)
-            listTileP1.add(listTile.get(i));
-        for (int i = size / 2; i < size; i++)
-            listTileP2.add(listTile.get(i));
-
-        player1.setDeck(new Deck(listTileP1));
-        player2.setDeck(new Deck(listTileP2));
     }
 
     /**
@@ -154,4 +121,5 @@ public class Game {
             player.getRack().getTiles().remove(tile);//TODO eviter les appeles en cascade
         }
     }
+
 }

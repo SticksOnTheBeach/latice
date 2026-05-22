@@ -2,6 +2,7 @@ package latice.application;
 
 import latice.console.Console;
 import latice.model.*;
+import latice.model.tile.Tile;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

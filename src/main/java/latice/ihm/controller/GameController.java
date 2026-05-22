@@ -1,21 +1,23 @@
 package latice.ihm.controller;
 
-import latice.ihm.view.MainPane;
+import latice.ihm.view.GamePane;
 import latice.model.Player;
 import latice.model.Position;
 import latice.model.tile.Tile;
 
 public class GameController {
-	private MainPane mainPane;
+	private GamePane mainPane;
 	private RoundController roundController;
 	private TileController tileController;
-	
+
+
+    private boolean hasPlayedAction = false;
 	public GameController(RoundController roundController, TileController tileController) {
 		this.roundController = roundController;
 		this.tileController = tileController;
 	}
 	
-	public void setView(MainPane mainPane) {
+	public void setView(GamePane mainPane) {
 		this.mainPane = mainPane;
 	}
 	
@@ -24,8 +26,7 @@ public class GameController {
      */
     public boolean playTile(Tile tile, Position position) {
         Player currentPlayer = roundController.getCurrentPlayer();
-        // inutile mais on peut le laisser quand même, puisque j'ai bloqué les rack en les mettant invisible pour le curseur
-        if (!currentPlayer.getRack().getTiles().contains(tile)) {
+        if (!currentPlayer.getRack().getTiles().contains(tile)|| hasPlayedAction) {
             return false;
         }
 
@@ -34,7 +35,7 @@ public class GameController {
         if (success) {
             // On ne rafraîchit pas le rack visuellement
             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
-        	roundController.nextPlayerTurn();
+            hasPlayedAction = true;
             mainPane.updateDisplay();
             return true;
         }
@@ -60,6 +61,7 @@ public class GameController {
         int currentIndex = roundController.getCurrentPlayerIndex();
         roundController.nextPlayerTurn();
         mainPane.updateDisplay();
+        hasPlayedAction = false;
     }
     
     public Player getCurrentPlayer() {
@@ -69,4 +71,13 @@ public class GameController {
     public int getRoundCount() {
         return roundController.getRoundCount();
     }
+
+    public void setHasPlayedAction(boolean hasPlayedAction) {
+        this.hasPlayedAction = hasPlayedAction;
+    }
+
+    public boolean isHasPlayedAction() {
+        return hasPlayedAction;
+    }
+
 }
