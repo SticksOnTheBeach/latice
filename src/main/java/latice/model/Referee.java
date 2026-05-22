@@ -125,10 +125,8 @@ public class Referee {
         if (matchingSides >= 4) {
             points += 4;
         } else if (matchingSides == 3) {
-            points += 3;
-        } else if (matchingSides == 2) {
             points += 2;
-        } else if (matchingSides == 1) {
+        } else if (matchingSides == 2) {
             points += 1;
         }
 
