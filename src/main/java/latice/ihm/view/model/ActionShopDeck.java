@@ -103,6 +103,7 @@ public class ActionShopDeck extends VBox {
         });
 
         actionExchangeAllTiles.setOnAction(e -> {
+            //TODO : faire en sorte qu'il pioche le meme nombre de tuiles et selectionner celles qu'il garde
             Player current = roundController.getCurrentPlayer();
             if (current.getScore() >= 2 || gameController.isHasPlayedAction() == false) {
                 if(gameController.isHasPlayedAction() == false) {

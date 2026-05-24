@@ -15,7 +15,7 @@ public class TileView extends StackPane {
 
     private static final int SIZE = 50;
     private Tile tile;
-
+    public static TileView selectedTile = null;
     public TileView(Tile tile) {
         this.tile = tile;
 
@@ -47,12 +47,21 @@ public class TileView extends StackPane {
             db.setContent(content);
             event.consume();
         });
-    }
+        //click
+        setOnMouseClicked(event -> {
+            if (selectedTile != null) {
+                selectedTile.setStyle(""); // désélectionner l'ancienne tuille
+            }
+            selectedTile = this;
+            setStyle("-fx-effect: dropshadow(gaussian, #FFD700, 10, 0.8, 0, 0);"); // highlight de la tuille selectionnée
+            event.consume();
+        });
 
+    }
     public Tile getTile() {
         return tile;
     }
-    
+
 
     private Color getTileColor(Tile tile) {
         switch (tile.getColor()) {

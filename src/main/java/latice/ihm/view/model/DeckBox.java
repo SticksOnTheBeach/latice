@@ -39,7 +39,8 @@ public class DeckBox extends VBox {
         btnDeck.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
         btnDeck.setGraphic(deckView);
         btnDeck.setOnMouseClicked(event -> {
-            this.gameController.drawTile();
+          //  this.gameController.drawTile();
+            //TODO : a revoir car pas dans les regles du jeu et pose probleme car pioche infini, revoir la logique ou changer son fonctionnement
         });
         
         horizontalLayout.getChildren().add(btnDeck);

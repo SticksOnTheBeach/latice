@@ -3,6 +3,7 @@ package latice.ihm.controller;
 import latice.ihm.view.GamePane;
 import latice.model.Player;
 import latice.model.Position;
+import latice.model.Rack;
 import latice.model.tile.Tile;
 
 import java.util.ArrayList;
@@ -68,12 +69,16 @@ public class GameController {
     public void passTurn() {
         Player currentPlayer = roundController.getCurrentPlayer();
         int currentIndex = roundController.getCurrentPlayerIndex();
+        currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
+        mainPane.rafraichirRackJoueur(currentIndex);
+
         roundController.nextPlayerTurn();
         if (tileController.getReferee().winingConditionCycles()) {
             ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
             mainPane.showWinner(winner);
             return;
         }
+
         mainPane.updateDisplay();
         hasPlayedAction = false;
 
