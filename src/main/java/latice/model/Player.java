@@ -6,6 +6,7 @@ public class Player {
     private Rack rack;
     private Deck deck;
 
+    private boolean hasPlayedAction = false;
     public Player(Rack rack, String name) {
         this.rack = rack;
         this.score = 0;
@@ -44,5 +45,6 @@ public class Player {
                 ", deck=" + deck.toString() +
                 '}';
     }
+
 }
 

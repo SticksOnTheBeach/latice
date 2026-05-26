@@ -31,7 +31,7 @@ public class Rack extends Container implements TileContainer{
             deck.remove();
         }
     }
-    
+
     
     public void exchangeAllTiles(Deck deck) {
         // on remet les tuiles du rack dans le deck
@@ -44,6 +44,24 @@ public class Rack extends Container implements TileContainer{
         // uis on pioche depuis le deck qu'on a
         addTileFromDeck(deck);
     }
+    public void exchangeSomeTiles(Deck deck, ArrayList<Tile> tilesToKeep) {
+        int targetSize = tiles.size();
+
+        for (Tile tile : tiles) {
+            if (!tilesToKeep.contains(tile)) {
+                deck.getTiles().add(tile);
+            }
+        }
+        deck.shuffle();
+
+        tiles.clear();
+        tiles.addAll(tilesToKeep);
+        while (tiles.size() < targetSize && !deck.isEmpty()) {
+            tiles.add(deck.getTiles().get(0));
+            deck.remove();
+        }
+    }
+
     @Override
     public String toString() {
         return "Rack{" +

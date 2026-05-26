@@ -19,8 +19,13 @@ import latice.ihm.controller.RoundController;
 import latice.ihm.view.GamePane;
 import latice.model.Player;
 import latice.model.Referee;
+import latice.model.action.BuyExtraMoveAction;
+import latice.model.action.ExchangeRackAction;
 import latice.model.exceptions.InvalidImagePathException;
+import latice.model.tile.Tile;
 import latice.util.ImageLoader;
+
+import java.util.ArrayList;
 
 public class ActionShopDeck extends VBox {
 
@@ -103,41 +108,21 @@ public class ActionShopDeck extends VBox {
         });
 
         actionExchangeAllTiles.setOnAction(e -> {
-            //TODO : faire en sorte qu'il pioche le meme nombre de tuiles et selectionner celles qu'il garde
             Player current = roundController.getCurrentPlayer();
-            if (current.getScore() >= 2 || gameController.isHasPlayedAction() == false) {
-                if(gameController.isHasPlayedAction() == false) {
-                    gameController.setHasPlayedAction(true);
-                }
-                else {
-                    if(gameController.isHasPlayedAction() == true);
-                    current.setScore(current.getScore() - 2);
-                }
-                current.getRack().exchangeAllTiles(current.getDeck());
-                refreshPoints();
-                mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
-            } else {
-                //condition si on a pas encore joué
-
-                    showNotEnoughPoints();
-                }
-
+            ArrayList<Tile> tilesToKeep = new ArrayList<>(); // TODO : UI pour sélectionner les tuiles à garder
+            new ExchangeRackAction().changeRack(current, referee, tilesToKeep);
+            refreshPoints();
+            mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
         });
 
         actionBuyExtraMove.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            if (current.getScore() >= 2 && gameController.isHasPlayedAction() == true) {
-                current.setScore(current.getScore() - 2);
-                refreshPoints();
-                gameController.setHasPlayedAction(false);
-            } else {
-                if(gameController.isHasPlayedAction() == false) {
-                    showNoPlayedYet();
-                }
-                 else {
-                    showNotEnoughPoints();
-                }
-            }
+            boolean hadAction = referee.isHasPlayedAction();
+            new BuyExtraMoveAction().buyExtraMove(current, referee);
+            if (!hadAction) showNoPlayedYet();
+            else if (current.getScore() < 2) showNotEnoughPoints();
+            else refreshPoints();
+
         });
     }
 

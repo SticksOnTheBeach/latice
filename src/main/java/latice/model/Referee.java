@@ -10,9 +10,7 @@ public class Referee {
     private Player player;
     private Board gameboard;
     protected static int points=0;
-
-
-
+    private boolean havePlayed = false;
     private int roundCount = 1;
     public Referee() {
         this.roundCount = 1;
@@ -165,7 +163,11 @@ public class Referee {
         }
 
 
-        return winner;//TODO gerer les cas rare ou plusieurs joueurs on memes tuilles et points
+        return winner;
+    }
+
+    public void resetTurn() {
+        havePlayed = false;
     }
     public void setRoundCount(int roundCount) {
         this.roundCount = roundCount;
@@ -174,4 +176,7 @@ public class Referee {
     public int getRoundCount() {
         return roundCount;
     }
+    public boolean isHasPlayedAction() { return havePlayed; }
+    public void setHasPlayedAction(boolean played) { havePlayed = played; }
+
 }
