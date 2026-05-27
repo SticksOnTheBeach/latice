@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -22,7 +23,7 @@ import latice.model.Player;
 import latice.model.Referee;
 
 public class GamePane extends BorderPane {
-    protected Label lblNbRound;
+    protected Label lblNbRound;	
     protected int   nbRound;
     protected Label lblPlayerRound;
     private Game    game;
@@ -161,7 +162,28 @@ public class GamePane extends BorderPane {
         actionShop.openPanel();
     }
 
+    public void showWinner(ArrayList<Player> players) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Fin de partie");
+        alert.setHeaderText("Victoire !");
+
+        String message;
+        if (players.size() == 1) {
+            message = players.get(0).getName() + " a gagné !";
+        } else {
+            message = "Les gagnants sont :\n";
+            for (Player player : players) {
+                message = message + "• " + player.getName() + "\n";
+            }
+        }
+
+        // CORRECTION : setContentText et showAndWait sont maintenant hors du else
+        // donc le message s'affiche correctement dans les deux cas
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }
-}
+}		

@@ -22,7 +22,7 @@ import latice.model.Referee;
 public class RackTransition {
     private static final int ANIM_DURATION = 500;
     
-    private static final double BLUR_RADIUS = 15.0;
+    private static final double BLUR_RADIUS = 15.0	;
     
     private static final double OFFSET_BAS    =  360;
     private static final double OFFSET_HAUT   = -360;
@@ -41,14 +41,14 @@ public class RackTransition {
     public RackTransition(StackPane container, ArrayList<Player> players, int currentPlayerIndex,
                           RoundController roundController, GameController gameController, Referee referee) {
         this.container          = container;
-        this.players            = players;
+        this.players  		          = players;
         this.currentPlayerIndex = currentPlayerIndex;
         this.roundController    = roundController;
         this.gameController     = gameController;
         this.playerSlots        = new ArrayList<>();
         this.rackBoxes          = new ArrayList<>();
 
-        for (Player player : players) {
+        for (Player player : players) {			
             RackBox rackBox = new RackBox(player.getRack());
             DeckBox deckBox = new DeckBox(roundController, gameController);
 

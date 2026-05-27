@@ -6,6 +6,8 @@ import latice.model.Player;
 import latice.model.Position;
 import latice.model.tile.Tile;
 
+import java.util.ArrayList;
+
 public class GameController {
     private GamePane mainPane;
     private RoundController roundController;
@@ -36,7 +38,15 @@ public class GameController {
 
         if (success) {
             hasEverPlayed = true;
-            hasPlayedAction = true;
+
+            // Vérifie d'abord la condition de victoire (rack + deck vides)
+            if (tileController.getReferee().winingConditionEmpty(currentPlayer)) {
+                ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
+                mainPane.showWinner(winner);
+                return true;
+            }
+
+            // Sinon, on passe automatiquement au joueur suivant
             passTurn();
             return true;
         }
@@ -59,6 +69,14 @@ public class GameController {
      */
     public void passTurn() {
         roundController.nextPlayerTurn();
+
+        // Vérifie la condition de victoire par nombre de cycles
+        if (tileController.getReferee().winingConditionCycles()) {
+            ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
+            mainPane.showWinner(winner);
+            return;
+        }
+
         hasPlayedAction = false;
         mainPane.updateDisplay();
         promptForActionIfPossible();

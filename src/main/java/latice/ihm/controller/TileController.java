@@ -4,11 +4,12 @@ import latice.model.*;
 import latice.model.square.Square;
 import latice.model.tile.Tile;
 
+import java.util.ArrayList;
+
 public class TileController {
 
     private Board board;
     private Referee referee;
-
     public TileController(Board board,  Referee referee) {
 
         this.board = board;
@@ -21,7 +22,7 @@ public class TileController {
      * @param position La position sur laquelle on veut poser la tuile.
      * @return True si la case est libre, false sinon.
      */
-    public boolean canPlaceTile(Position position, Tile tile) {
+    public boolean canPlaceTile(Position position, Tile tile ) {
         Square square = board.getSquare(position);
         if (square == null || square.isOccupied()) {
             return false;
@@ -43,7 +44,6 @@ public class TileController {
         board.getSquare(position).setTile(tile);
         player.getRack().getTiles().remove(tile);
         player.getRack().addTileFromDeck(player.getDeck());
-
         // Calcul et attribution des points
         int pointsGagnes = referee.calculatePoints(position, tile);
         System.out.println("Points gagnés : " + pointsGagnes + " | Score total : " + (player.getScore() + pointsGagnes));
@@ -52,7 +52,7 @@ public class TileController {
 
         return true;
     }
-    
+    public Referee getReferee() { return referee; }
     
     
 }

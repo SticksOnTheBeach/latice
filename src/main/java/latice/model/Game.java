@@ -111,15 +111,7 @@ public class Game {
         this.currentPlayerIndex = rand.nextInt(players.size());
     }
 
-    public void nextTurn() {
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % players.size();
-        System.out.println("C'est au tour de : " + getCurrentPlayer().getName());
+    public Board getBoard() {
+        return board;
     }
-    public void placeTile(Player player, Tile tile, Position position) {
-        if (referee.isValidMove(position, tile )) {
-            board.placeTile(position, tile);
-            player.getRack().getTiles().remove(tile);//TODO eviter les appeles en cascade
-        }
-    }
-
 }
