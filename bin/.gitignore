@@ -1,8 +1,0 @@
-# Configuration spécifique à l'IDE
-.classpath
-.project
-.settings/
-
-# Dossier de compilation
-target/
-/bin/

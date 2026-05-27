@@ -109,20 +109,36 @@ public class ActionShopDeck extends VBox {
 
         actionExchangeAllTiles.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            ArrayList<Tile> tilesToKeep = new ArrayList<>(); // TODO : UI pour sélectionner les tuiles à garder
-            new ExchangeRackAction().changeRack(current, referee, tilesToKeep);
+            // A déjà joué ET pas assez de points
+            if (referee.isHasPlayedAction() && current.getScore() < 2) {
+                showNotEnoughPoints();
+                return;
+            }
+            else if (!referee.isHasPlayedAction()) {
+                current.getRack().exchangeAllTiles(current.getDeck());
+                referee.setHasPlayedAction(true);
+            } else {
+                current.getRack().exchangeAllTiles(current.getDeck());
+                current.setScore(current.getScore() - 2);
+            }
             refreshPoints();
+           //mainPane.clearSelectedTiles(roundController.getCurrentPlayerIndex());
             mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
         });
-
         actionBuyExtraMove.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            boolean hadAction = referee.isHasPlayedAction();
-            new BuyExtraMoveAction().buyExtraMove(current, referee);
-            if (!hadAction) showNoPlayedYet();
-            else if (current.getScore() < 2) showNotEnoughPoints();
-            else refreshPoints();
 
+            if (!referee.isHasPlayedAction()) {
+                showNoPlayedYet();
+                return;
+            }
+            if (current.getScore() < 2) {
+                showNotEnoughPoints();
+                return;
+            }
+
+            new BuyExtraMoveAction().buyExtraMove(current, referee);
+            refreshPoints();
         });
     }
 

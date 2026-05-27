@@ -5,7 +5,7 @@ import latice.model.tile.Tile;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck extends Container implements TileContainer {
+public class Deck extends Container {
 
 
     /**
@@ -17,6 +17,10 @@ public class Deck extends Container implements TileContainer {
         super(tiles);
     }
 
+    public Tile getFirstTile() {
+            return tiles.get(0); //TODO: check if empty before
+
+    }
 
     @Override
     public String toString() {

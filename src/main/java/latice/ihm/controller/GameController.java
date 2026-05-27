@@ -4,6 +4,7 @@ import latice.ihm.view.GamePane;
 import latice.model.Player;
 import latice.model.Position;
 import latice.model.Rack;
+import latice.model.Referee;
 import latice.model.tile.Tile;
 
 import java.util.ArrayList;
@@ -12,13 +13,13 @@ public class GameController {
 	private GamePane mainPane;
 	private RoundController roundController;
 	private TileController tileController;
+    private Referee refree;
 
 
-    private boolean hasPlayedAction = false;
-	public GameController(RoundController roundController, TileController tileController) {
+	public GameController(RoundController roundController, TileController tileController, Referee referee) {
 		this.roundController = roundController;
 		this.tileController = tileController;
-	}
+        this.refree = referee;	}
 	
 	public void setView(GamePane mainPane) {
 		this.mainPane = mainPane;
@@ -29,7 +30,7 @@ public class GameController {
      */
     public boolean playTile(Tile tile, Position position) {
         Player currentPlayer = roundController.getCurrentPlayer();
-        if (!currentPlayer.getRack().getTiles().contains(tile)|| hasPlayedAction) {
+        if (!currentPlayer.getRack().getTiles().contains(tile)|| refree.isHasPlayedAction()) {
             return false;
         }
 
@@ -44,7 +45,7 @@ public class GameController {
                 return true;
             }
 
-            hasPlayedAction = true;
+            refree.setHasPlayedAction(true);
             mainPane.updateDisplay();
 
             return true;
@@ -80,7 +81,7 @@ public class GameController {
         }
 
         mainPane.updateDisplay();
-        hasPlayedAction = false;
+        refree.setHasPlayedAction(false);
 
     }
     
@@ -90,14 +91,6 @@ public class GameController {
     
     public int getRoundCount() {
         return roundController.getRoundCount();
-    }
-
-    public void setHasPlayedAction(boolean hasPlayedAction) {
-        this.hasPlayedAction = hasPlayedAction;
-    }
-
-    public boolean isHasPlayedAction() {
-        return hasPlayedAction;
     }
 
 }

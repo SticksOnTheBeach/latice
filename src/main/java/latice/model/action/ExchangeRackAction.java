@@ -21,7 +21,7 @@ public class ExchangeRackAction extends Action {
             } else {
                 current.setScore(current.getScore() - 2);
             }
-            current.getRack().exchangeSomeTiles(current.getDeck(), tilesToKeep);
+            current.getRack().exchangeAllTiles(current.getDeck());
             return true;
         }
         return false;

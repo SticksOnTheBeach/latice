@@ -40,7 +40,7 @@ public class DeckBox extends VBox {
         btnDeck.setGraphic(deckView);
         btnDeck.setOnMouseClicked(event -> {
           //  this.gameController.drawTile();
-            //TODO : a revoir car pas dans les regles du jeu et pose probleme car pioche infini, revoir la logique ou changer son fonctionnement
+            //TODO : a revoir car pas dans les regles du jeu et pose probleme car pioche infini, revoir la logique ou changer son fonctionnement"
         });
         
         horizontalLayout.getChildren().add(btnDeck);
