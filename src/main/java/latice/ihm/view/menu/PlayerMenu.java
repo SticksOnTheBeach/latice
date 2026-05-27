@@ -77,8 +77,10 @@ public class PlayerMenu extends BorderPane {
         Button btnStart = new Button("> Démarrer");
 
         btnBack.setStyle(Style.BTN_GHOST_STYLE);
+        btnBack.setOnMouseEntered(e -> btnBack.setStyle(Style.BTN_GHOST_HOVER_STYLE));
+        btnBack.setOnMouseExited(e  -> btnBack.setStyle(Style.BTN_GHOST_STYLE));
+        
         btnStart.setStyle(Style.BTN_STYLE);
-
         btnStart.setOnMouseEntered(e -> btnStart.setStyle(Style.BTN_HOVER_STYLE));
         btnStart.setOnMouseExited(e  -> btnStart.setStyle(Style.BTN_STYLE));
 
@@ -146,6 +148,8 @@ public class PlayerMenu extends BorderPane {
 
         Button btnOpt = new Button("⚙ options");
         btnOpt.setStyle(Style.BTN_GHOST_STYLE);
+        btnOpt.setOnMouseEntered(e -> btnOpt.setStyle(Style.BTN_GHOST_HOVER_STYLE));
+        btnOpt.setOnMouseExited(e -> btnOpt.setStyle(Style.BTN_GHOST_STYLE));
         btnOpt.setOnAction(e -> openAdvanced(i));
 
         // VBox afin d'accueillir les messages d'erreurs
@@ -165,6 +169,14 @@ public class PlayerMenu extends BorderPane {
         if (i == 1 && playerNames.size() < MAX_PLAYERS) {
             Button btnAdd = new Button("+");
             btnAdd.setStyle(Style.BTN_GHOST_STYLE);
+            String hoverAddStyle = Style.BTN_GHOST_STYLE + 
+            	    "-fx-background-color: rgba(85,255,85,0.2); " +
+            	    "-fx-border-color: #55ff55; " +
+            	    "-fx-text-fill: #55ff55;";
+            
+            
+            btnAdd.setOnMouseEntered(e -> btnAdd.setStyle(hoverAddStyle));
+            btnAdd.setOnMouseExited(e -> btnAdd.setStyle(Style.BTN_GHOST_STYLE));
             btnAdd.setOnAction(e -> {
                 playerNames.add("");
                 playerColors.add("rgba(168,216,168,0.3)");
@@ -175,10 +187,18 @@ public class PlayerMenu extends BorderPane {
 
         if (i >= 2) {
             Button btnRemove = new Button("×");
-            btnRemove.setStyle(Style.BTN_GHOST_STYLE +
-                "-fx-border-color: rgba(255,100,100,0.4); " +
-                "-fx-text-fill: rgba(255,120,120,0.8);"
-            );
+            String defaultRemoveStyle = Style.BTN_GHOST_STYLE + 
+            	    "-fx-border-color: rgba(255,100,100,0.4); " + 
+            	    "-fx-text-fill: rgba(255,120,120,0.8);";
+            	    
+            String hoverRemoveStyle = Style.BTN_GHOST_STYLE + 
+            	    "-fx-background-color: rgba(255,100,100,0.2); " +
+            	    "-fx-border-color: #ff5555; " + 
+            	    "-fx-text-fill: #ff5555;";
+
+            btnRemove.setStyle(defaultRemoveStyle);
+            btnRemove.setOnMouseEntered(e -> btnRemove.setStyle(hoverRemoveStyle));
+            btnRemove.setOnMouseExited(e -> btnRemove.setStyle(defaultRemoveStyle));
             btnRemove.setOnAction(e -> {
                 playerNames.remove(i);
                 playerColors.remove(i);
@@ -217,10 +237,21 @@ public class PlayerMenu extends BorderPane {
         Button btnYellow = new Button("🟡");
 
         btnRed.setStyle(Style.BTN_COLOR_STYLE);
+        btnRed.setOnMouseEntered(e -> btnRed.setStyle(Style.BTN_COLOR_HOVER_STYLE));
+        btnRed.setOnMouseExited(e -> btnRed.setStyle(Style.BTN_COLOR_STYLE));
+        
         btnBlue.setStyle(Style.BTN_COLOR_STYLE);
+        btnBlue.setOnMouseEntered(e -> btnBlue.setStyle(Style.BTN_COLOR_HOVER_STYLE));
+        btnBlue.setOnMouseExited(e -> btnBlue.setStyle(Style.BTN_COLOR_STYLE));
+        
         btnGreen.setStyle(Style.BTN_COLOR_STYLE);
+        btnGreen.setOnMouseEntered(e -> btnGreen.setStyle(Style.BTN_COLOR_HOVER_STYLE));
+        btnGreen.setOnMouseExited(e -> btnGreen.setStyle(Style.BTN_COLOR_STYLE));
+        
         btnYellow.setStyle(Style.BTN_COLOR_STYLE);
-
+        btnYellow.setOnMouseEntered(e -> btnYellow.setStyle(Style.BTN_COLOR_HOVER_STYLE));
+        btnYellow.setOnMouseExited(e -> btnYellow.setStyle(Style.BTN_COLOR_STYLE));
+        
         btnRed.setOnAction(e    -> { playerColors.set(currentPlayerIndex, "#ff5555"); refreshRows(); });
         btnBlue.setOnAction(e   -> { playerColors.set(currentPlayerIndex, "#55aaff"); refreshRows(); });
         btnGreen.setOnAction(e  -> { playerColors.set(currentPlayerIndex, "#55ff55"); refreshRows(); });
@@ -237,28 +268,13 @@ public class PlayerMenu extends BorderPane {
         Label lblIcon = new Label("Icône :");
         lblIcon.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
-        Button btnFox    = new Button("🦊");
-        Button btnDragon = new Button("🐉");
-        Button btnEagle  = new Button("🦅");
-        Button btnWolf   = new Button("🐺");
-
-        btnFox.setStyle(Style.BTN_GHOST_STYLE);
-        btnDragon.setStyle(Style.BTN_GHOST_STYLE);
-        btnEagle.setStyle(Style.BTN_GHOST_STYLE);
-        btnWolf.setStyle(Style.BTN_GHOST_STYLE);
-
-        btnFox.setOnAction(e    -> System.out.println("Icône Renard pour joueur "  + (currentPlayerIndex + 1)));
-        btnDragon.setOnAction(e -> System.out.println("Icône Dragon pour joueur "  + (currentPlayerIndex + 1)));
-        btnEagle.setOnAction(e  -> System.out.println("Icône Aigle pour joueur "   + (currentPlayerIndex + 1)));
-        btnWolf.setOnAction(e   -> System.out.println("Icône Loup pour joueur "    + (currentPlayerIndex + 1)));
-
-        HBox iconRow = new HBox(8, btnFox, btnDragon, btnEagle, btnWolf);
-
         Button btnClose = new Button("← Fermer");
         btnClose.setStyle(Style.BTN_GHOST_STYLE);
+        btnClose.setOnMouseEntered(e -> btnClose.setStyle(Style.BTN_GHOST_HOVER_STYLE));
+        btnClose.setOnMouseExited(e -> btnClose.setStyle(Style.BTN_GHOST_STYLE));
         btnClose.setOnAction(e -> closeAdvanced());
 
-        box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, iconRow, btnClose);
+        box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, btnClose);
 
         return box;
     }

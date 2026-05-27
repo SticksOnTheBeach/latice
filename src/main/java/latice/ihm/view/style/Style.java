@@ -9,7 +9,6 @@ public class Style {
         "-fx-text-fill: #1a2e35; " +
         "-fx-background-color: #a8d8a8; " +
         "-fx-background-radius: 0px; " +
-        "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
         "-fx-border-width: 3px; " +
         "-fx-padding: 10px 30px; " +
         "-fx-cursor: hand; " +
@@ -20,9 +19,9 @@ public class Style {
         "-fx-font-weight: bold; " +
         "-fx-font-family: \"Courier New\"; " +
         "-fx-text-fill: #1a2e35; " +
-        "-fx-background-color: #c8f8c8; " +
+        "-fx-background-color: #ffffff; " +
         "-fx-background-radius: 0px; " +
-        "-fx-border-color: #4a9e4a #1a5e1a #1a5e1a #4a9e4a; " +
+        "-fx-border-color: #ffffff #ffffff #ffffff #ffffff; " +
         "-fx-border-width: 3px; " +
         "-fx-padding: 10px 30px; " +
         "-fx-cursor: hand; " +
@@ -38,6 +37,17 @@ public class Style {
         "-fx-text-fill: rgba(168,216,168,0.8); " +
         "-fx-padding: 8px 14px; " +
         "-fx-cursor: hand;";
+    
+    public static final String BTN_GHOST_HOVER_STYLE =
+            "-fx-font-size: 14px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: #ffffff; " +
+            "-fx-border-radius: 6px; " +
+            "-fx-background-radius: 6px; " +
+            "-fx-text-fill: rgba(168,216,168,0.8); " +
+            "-fx-padding: 8px 14px; " +
+            "-fx-cursor: hand;";
 
     public static final String BTN_COLOR_STYLE =
         "-fx-font-size: 14px; " +
@@ -54,6 +64,22 @@ public class Style {
         "-fx-alignment: center; " +
         "-fx-text-fill: rgba(168,216,168,0.8); " +
         "-fx-cursor: hand;";
+    
+    public static final String BTN_COLOR_HOVER_STYLE =
+            "-fx-font-size: 14px; " +
+            "-fx-font-family: \"Courier New\"; " +
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: #ffffff; " +
+            "-fx-border-radius: 50em; " +
+            "-fx-background-radius: 50em; " +
+            "-fx-min-width: 28px; " +
+            "-fx-min-height: 28px; " +
+            "-fx-max-width: 28px; " +
+            "-fx-max-height: 28px; " +
+            "-fx-padding: 0; " +
+            "-fx-alignment: center; " +
+            "-fx-text-fill: rgba(168,216,168,0.8); " +
+            "-fx-cursor: hand;";
 
     public static final String INPUT_STYLE =
         "-fx-background-color: rgba(255,255,255,0.08); " +
