@@ -157,6 +157,10 @@ public class GamePane extends BorderPane {
         }
     }
 
+    public void openActionShop() {
+        actionShop.openPanel();
+    }
+
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }

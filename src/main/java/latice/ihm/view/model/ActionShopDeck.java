@@ -104,23 +104,24 @@ public class ActionShopDeck extends VBox {
 
         actionExchangeAllTiles.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            if (current.getScore() >= 2 || gameController.isHasPlayedAction() == false) {
-                if(gameController.isHasPlayedAction() == false) {
-                    gameController.setHasPlayedAction(true);
-                }
-                else {
-                    if(gameController.isHasPlayedAction() == true);
-                    current.setScore(current.getScore() - 2);
-                }
+
+            // N'a jamais joué → échange gratuit
+            if (!gameController.isHasEverPlayed()) {
                 current.getRack().exchangeAllTiles(current.getDeck());
                 refreshPoints();
                 mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
+
+                // A déjà joué → échange payant
+            } else if (current.getScore() >= 2) {
+                current.setScore(current.getScore() - 2);
+                current.getRack().exchangeAllTiles(current.getDeck());
+                refreshPoints();
+                mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
+
+                // Pas assez de points
             } else {
-                //condition si on a pas encore joué
-
-                    showNotEnoughPoints();
-                }
-
+                showNotEnoughPoints();
+            }
         });
 
         actionBuyExtraMove.setOnAction(e -> {
@@ -142,29 +143,44 @@ public class ActionShopDeck extends VBox {
 
     private void togglePanel() {
         if (!isOpen) {
-            panel.setVisible(true);
-            panel.setTranslateY(PANEL_HEIGHT);
-
-            TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
-            ttPanel.setToY(0);
-
-            TranslateTransition ttArrow = new TranslateTransition(Duration.millis(280), arrow);
-            ttArrow.setToY(-PANEL_HEIGHT);
-
-            ttPanel.play();
-            ttArrow.play();
+            openPanel();
         } else {
-            TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
-            ttPanel.setToY(PANEL_HEIGHT);
-            ttPanel.setOnFinished(e -> panel.setVisible(false));
-
-            TranslateTransition ttArrow = new TranslateTransition(Duration.millis(280), arrow);
-            ttArrow.setToY(0);
-
-            ttPanel.play();
-            ttArrow.play();
+            closePanel();
         }
-        isOpen = !isOpen;
+    }
+
+    public void openPanel() {
+        if (!isOpen) {
+            openPanelShop();
+        }
+    }
+
+    private void openPanelShop() {
+        panel.setVisible(true);
+        panel.setTranslateY(PANEL_HEIGHT);
+
+        TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
+        ttPanel.setToY(0);
+
+        TranslateTransition ttArrow = new TranslateTransition(Duration.millis(280), arrow);
+        ttArrow.setToY(-PANEL_HEIGHT);
+
+        ttPanel.play();
+        ttArrow.play();
+        isOpen = true;
+    }
+
+    private void closePanel() {
+        TranslateTransition ttPanel = new TranslateTransition(Duration.millis(280), panel);
+        ttPanel.setToY(PANEL_HEIGHT);
+        ttPanel.setOnFinished(e -> panel.setVisible(false));
+
+        TranslateTransition ttArrow = new TranslateTransition(Duration.millis(280), arrow);
+        ttArrow.setToY(0);
+
+        ttPanel.play();
+        ttArrow.play();
+        isOpen = false;
     }
 
 

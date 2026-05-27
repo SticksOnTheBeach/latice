@@ -49,6 +49,7 @@ public class TileController {
         System.out.println("Points gagnés : " + pointsGagnes + " | Score total : " + (player.getScore() + pointsGagnes));
         player.setScore(player.getScore() + pointsGagnes);
 
+
         return true;
     }
     
