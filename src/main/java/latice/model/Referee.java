@@ -27,14 +27,6 @@ public class Referee {
         this.gameboard = gameboard;
     }
 
-    /* TODO : méthodes qui se charge de savoir si le placement de la tuile est correcte
-     * si correct, on vérifie si y'a des tuiles aux alentours "valides"
-     * si valides : alors on donne le nombres de points correspondant
-     * puis on fait un getteur des points
-     * implémentation dans les paramètres du constructeur : roundController afin de gérer
-     * qui est entrain de jouer actuellement etc..
-     */
-
     public boolean isValidMove(Position position, Tile tile) {
         if (gameboard.isBoardEmpty() && position.equals(new Position(4, 4))) {
             return true;
@@ -42,13 +34,7 @@ public class Referee {
         if (!gameboard.isEmpty(position)) {
             return false;
         }
-        if (!hasAdjacentTile(position)) {
-            return false;
-        }
-        if (!hasAdjacentSameColor(position, tile) && !hasAdjacentSameShape(position, tile)) {
-            return false;
-        }
-        return true;
+        return hasValidNeighbors(position, tile);
     }
 
     public boolean hasAdjacentTile(Position position) {
@@ -104,6 +90,22 @@ public class Referee {
     /**
      * Compte le nombre de voisins qui matchent (même couleur OU même forme).
      */
+
+    public boolean hasValidNeighbors(Position position, Tile tile) {
+        boolean hasNeighbor = false;
+        for (Position neighbor : position.getAdjacentPositions()) {
+            Square neighborSquare = gameboard.getSquare(neighbor);
+            if (neighborSquare != null && neighborSquare.isOccupied()) {
+                hasNeighbor = true;
+                Tile neighborTile = neighborSquare.getTile();
+                if (neighborTile.getColor() != tile.getColor()
+                        && neighborTile.getShape() != tile.getShape()) {
+                    return false;
+                }
+            }
+        }
+        return hasNeighbor;
+    }
     private int countMatchingNeighbors(Position position, Tile tile) {
         int count = 0;
         for (Position neighbor : position.getAdjacentPositions()) {

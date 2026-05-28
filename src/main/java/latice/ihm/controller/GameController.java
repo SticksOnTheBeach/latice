@@ -16,7 +16,6 @@ public class GameController {
     private Referee refree;
 
     // hasEverPlayed reste local au controller (sert pour l'échange gratuit au tout 1er coup)
-    private boolean hasEverPlayed = false;
 
     public GameController(RoundController roundController, TileController tileController, Referee referee) {
         this.roundController = roundController;
@@ -41,7 +40,7 @@ public class GameController {
         boolean success = tileController.placeTile(currentPlayer, tile, position);
 
         if (success) {
-            hasEverPlayed = true;
+            refree.setHasPlayedAction(true);
 
             // Vérifie d'abord la condition de victoire (rack + deck vides)
             if (tileController.getReferee().winingConditionEmpty(currentPlayer)) {
@@ -74,12 +73,18 @@ public class GameController {
     public void passTurn() {
         roundController.nextPlayerTurn();
 
+        Player currentPlayer = roundController.getCurrentPlayer();
+        int currentIndex = roundController.getCurrentPlayerIndex();
+        currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
+        mainPane.rafraichirRackJoueur(currentIndex);
+
         // Vérifie la condition de victoire par nombre de cycles
         if (tileController.getReferee().winingConditionCycles()) {
             ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
             mainPane.showWinner(winner);
             return;
         }
+
 
         // hasPlayedAction est réinitialisé dans le Referee (refacto)
         refree.setHasPlayedAction(false);
@@ -104,9 +109,4 @@ public class GameController {
     public int getRoundCount() {
         return roundController.getRoundCount();
     }
-
-    public boolean isHasEverPlayed() {
-        return hasEverPlayed;
-    }
-
 }

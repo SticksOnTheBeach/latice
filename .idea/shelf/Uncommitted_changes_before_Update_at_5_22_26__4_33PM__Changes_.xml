@@ -1,0 +1,49 @@
+<changelist name="Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]" date="1779460397002" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 5/22/26, 4:33 PM [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/ihm/controller/GameMenuController.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/ihm/controller/GameMenuController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/GameMenuController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/model/Referee.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/model/Referee.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/Referee.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/test/java/latice/test/LaticeTestCases.class" />
+    <option name="AFTER_PATH" value="bin/src/test/java/latice/test/LaticeTestCases.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/LaticeTestCases.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/application/LaticeApplicationConsole.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/application/LaticeApplicationConsole.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/LaticeApplicationConsole.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/ihm/controller/TileController.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/ihm/controller/TileController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/TileController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/model/Position.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/model/Position.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/Position.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/model/Board.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/model/Board.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/Board.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/model/Game.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/model/Game.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/Game.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="bin/src/main/java/latice/model/square/Square.class" />
+    <option name="AFTER_PATH" value="bin/src/main/java/latice/model/square/Square.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_4_33 PM_[Changes]/Square.class" />
+  </binary>
+</changelist>

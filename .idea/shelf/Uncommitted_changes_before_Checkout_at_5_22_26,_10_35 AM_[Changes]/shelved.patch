@@ -1,0 +1,205 @@
+Index: src/main/java/latice/ihm/controller/GameController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.ihm.controller;\n\nimport latice.ihm.view.MainPane;\nimport latice.model.Player;\nimport latice.model.Position;\nimport latice.model.tile.Tile;\n\npublic class GameController {\n\tprivate MainPane mainPane;\n\tprivate RoundController roundController;\n\tprivate TileController tileController;\n\n\n    private boolean hasPlayedAction = false;\n\tpublic GameController(RoundController roundController, TileController tileController) {\n\t\tthis.roundController = roundController;\n\t\tthis.tileController = tileController;\n\t}\n\t\n\tpublic void setView(MainPane mainPane) {\n\t\tthis.mainPane = mainPane;\n\t}\n\t\n\t/**\n     * Gère le placement d'une tuile \n     */\n    public boolean playTile(Tile tile, Position position) {\n        Player currentPlayer = roundController.getCurrentPlayer();\n        if (!currentPlayer.getRack().getTiles().contains(tile)|| hasPlayedAction) {\n            return false;\n        }\n\n        boolean success = tileController.placeTile(currentPlayer, tile, position);\n\n        if (success) {\n            // On ne rafraîchit pas le rack visuellement\n            // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack\n            hasPlayedAction = true;\n            mainPane.updateDisplay();\n            return true;\n        }\n        return false;\n    }\n    \n    /**\n     * Pioche UNE SEULE tuile et met à jour l'interface immédiatement.\n     */\n    public void drawTile() {\n        Player currentPlayer = roundController.getCurrentPlayer();\n        int currentIndex = roundController.getCurrentPlayerIndex();\n        \n        currentPlayer.getRack().drawOneTile(currentPlayer.getDeck());\n        mainPane.rafraichirRackJoueur(currentIndex);\n    }\n    \n    /**\n     * Méthode pour passer son tour (Bouton \"Fin de tour\")\n     */\n    public void passTurn() {\n        Player currentPlayer = roundController.getCurrentPlayer();\n        int currentIndex = roundController.getCurrentPlayerIndex();\n        roundController.nextPlayerTurn();\n        mainPane.updateDisplay();\n        hasPlayedAction = false;\n    }\n    \n    public Player getCurrentPlayer() {\n        return roundController.getCurrentPlayer();\n    }\n    \n    public int getRoundCount() {\n        return roundController.getRoundCount();\n    }\n\n    public void setHasPlayedAction(boolean hasPlayedAction) {\n        this.hasPlayedAction = hasPlayedAction;\n    }\n\n    public boolean isHasPlayedAction() {\n        return hasPlayedAction;\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/latice/ihm/controller/GameController.java b/src/main/java/latice/ihm/controller/GameController.java
+--- a/src/main/java/latice/ihm/controller/GameController.java	(revision 8c61a8e57f6ce23962b8852eeae1e8b74ecd8543)
++++ b/src/main/java/latice/ihm/controller/GameController.java	(date 1779438875586)
+@@ -37,6 +37,7 @@
+             // Comme ça, le TileView se déplace sur le plateau et laisse un trou dans le rack
+             hasPlayedAction = true;
+             mainPane.updateDisplay();
++
+             return true;
+         }
+         return false;
+Index: src/test/java/latice/test/LaticeTestCases.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.test;\n\n\nimport java.util.ArrayList;\nimport java.util.List;\n\nimport latice.model.*;\nimport latice.model.square.Square;\nimport latice.model.square.SquareType;\nimport latice.model.tile.COLOR;\nimport latice.model.tile.SHAPE;\nimport org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Test;\n\nimport latice.model.tile.Tile;\n\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class LaticeTestCases {\n\n\tprivate Game               game;\n\tprivate ArrayList<Player> players;\n\n\t@BeforeEach\n\tpublic void init() {\n\t\tplayers = new ArrayList<>();\n\t\tplayers.add(new Player(new Rack(), \"testj1\"));\n\t\tplayers.add(new Player(new Rack(), \"testj2\"));\n\n\t\tReferee referee = new Referee(new Board());\n\t\tgame = new Game(players, referee, new Board());\n\t}\n\n\t//TODO : ajouter des test si il n'y a aucun joueur\n\n\t@Test\n\tpublic void checkNumberOfTiles() {\n\t\tList<Tile> listTiles = game.createTiles();\n\t\tassertEquals(60, listTiles.size());\n\t}\n\n\t@Test\n\tpublic void checkNumberOfEachDeckForTwoPlayers() {\n\t\tgame.shareTilesDynamically();\n\t\tfor (Player player : players) {\n\t\t\tassertEquals(30, player.getDeck().getTiles().size());\n\t\t}\n\t}\n\n\t@Test\n\tpublic void checkNumberOfEachDeckForThreePlayers() {\n\t\tplayers.add(new Player(new Rack(), \"testj3\"));\n\t\tgame.shareTilesDynamically();\n\t\tfor (Player player : players) {\n\t\t\tassertEquals(20, player.getDeck().getTiles().size());\n\t\t}\n\t}\n\n\n\t@Test\n\tpublic void checkTotalTilesAfterShare() {\n\t\tgame.shareTilesDynamically();\n\t\tint total = players.stream()\n\t\t\t\t.mapToInt(p -> p.getDeck().getTiles().size())\n\t\t\t\t.sum();\n\t\tassertEquals(60, total);\n\t}\n@Test\n\tpublic void removeAllTilesFromDeck() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\twhile (!player.getDeck().isEmpty()) {\n\t\t\tplayer.getDeck().remove();\n\t\t}\n\t\tassertTrue(player.getDeck().isEmpty());\n\t}\n\t\t@Test\n\tpublic void addTilesFromTheRack() {\n\t\tgame.shareTilesDynamically();\n\t\t\tPlayer player = players.get(0);\n\n\t\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\t\tassertEquals(25, player.getDeck().getTiles().size());\n\t\tassertEquals(5, player.getRack().getTiles().size());\n\t}\n\n\t@Test\n\tpublic void addTilesFromRackWhenDeckHasLessThanFiveTiles() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\n\t\t// ne laisser que 3 tuiles dans le deck\n\t\tfor (int i = 0; i < 27; i++) {\n\t\t\tplayer.getDeck().remove();\n\t\t}\n\t\tassertEquals(3, player.getDeck().getTiles().size());\n\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\t\tassertEquals(0, player.getDeck().getTiles().size());\n\t\tassertEquals(3, player.getRack().getTiles().size());\n\t}\n\n\t@Test\n\tvoid checkCreationOfTheGameBoard(){\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n assertEquals(SquareType.SUN, board.getSquare(new Position(0, 0)).getType());\n //TODO : verifier toutes les cases du plateau\n\t}\n\n\n\t@Test\n\tpublic void isEmptyReturnseWhenSquareHasNoTile() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tassertTrue(board.isEmpty(new Position(4, 4))); // aucune tuile posée\n\t}\n\n\t@Test\n\tpublic void isEmptyReturnsFalseenSquareIsOccupied() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tboard.placeTile(new Position(4, 4), new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\n\t\tassertFalse(board.isEmpty(new Position(4, 4)));\n\t}\n\n\n\n\t@Test\n\tpublic void isBoardEmptyReturnsFalseAfterOneTilePlaced() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tboard.placeTile(new Position(4, 4), new Tile(COLOR.TEAL, SHAPE.DOLPHIN));\n\n\t\tassertFalse(board.isBoardEmpty());\n\t}\n\n\t@Test\n\tpublic void isBoardEmptyReturnsFalseAfterMultipleTilesPlaced() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tboard.placeTile(new Position(4, 4), new Tile(COLOR.NAVY, SHAPE.FLOWER));\n\t\tboard.placeTile(new Position(4, 5), new Tile(COLOR.NAVY, SHAPE.GECKO));\n\n\t\tassertFalse(board.isBoardEmpty());\n\t}\n\n\n\t@Test\n\tpublic void placeTileMakesSquareOccupied() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tTile tile = new Tile(COLOR.MAGENTA, SHAPE.FEATHER);\n\t\tboard.placeTile(new Position(4, 4), tile);\n\n\t\tassertFalse(board.isEmpty(new Position(4, 4)));\n\t}\n\n\t@Test\n\tpublic void placeTileStoresCorrectTile() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tTile tile = new Tile(COLOR.REDGREEN, SHAPE.TURTLE);\n\t\tboard.placeTile(new Position(3, 3), tile);\n\n\t\tassertEquals(tile, board.getSquare(new Position(3, 3)).getTile());\n\t}\n\n\t@Test\n\tpublic void getSquareReturnsNonNullForValidPosition() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tassertNotNull(board.getSquare(new Position(0, 0)));\n\t}\n\n\t@Test\n\tpublic void getSquareReturnsNullForOutOfBoundsPosition() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tassertNull(board.getSquare(new Position(99, 99)));\n\t}\n\n\t@Test\n\tpublic void getSquareReturnsCorrectSquareAfterPlaceTile() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tboard.placeTile(new Position(2, 2), tile);\n\n\t\tSquare square = board.getSquare(new Position(2, 2));\n\t\tassertTrue(square.isOccupied());\n\t\tassertEquals(tile, square.getTile());\n\t}\n\n\n\n\n\t// Tests pour la classe Referee\n\t@Test\n\tpublic void firstMoveOnCenter() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tPosition center = new Position(4, 4);\n\n\t\tassertTrue(referee.isValidMove(center, tile));\n\t}\n\n\t@Test\n\tpublic void firstMoveNotOnCenter() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tPosition notCenter = new Position(0, 0);\n\n\t\tassertFalse(referee.isValidMove(notCenter, tile));\n\t}\n\n\t@Test\n\tpublic void moveOnOccupiedSquare() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile existingTile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tboard.getSquare(new Position(4, 4)).setTile(existingTile);\n\n\t\tTile newTile = new Tile(COLOR.NAVY, SHAPE.TURTLE);\n\t\tassertFalse(referee.isValidMove(new Position(4, 4), newTile));\n\t}\n\n\t@Test\n\tpublic void moveAdjacentWithSameColorIsValid() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.FEATHER));\n\n\t\tTile newTile = new Tile(COLOR.MAGENTA, SHAPE.GECKO);\n\t\tassertTrue(referee.isValidMove(new Position(4, 5), newTile));\n\t}\n\n\t@Test\n\tpublic void moveAdjacentWithSameShapeIsValid() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));\n\n\t\tTile newTile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);\n\t\tassertTrue(referee.isValidMove(new Position(4, 5), newTile));\n\t}\n\n\t@Test\n\tpublic void moveAdjacentWithDifferentColorAndShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\n\t\tTile newTile = new Tile(COLOR.TEAL, SHAPE.GECKO);\n\t\tassertFalse(referee.isValidMove(new Position(4, 5), newTile));\n\t}\n\n\t@Test\n\tpublic void moveWithNoAdjacentTileIsInvalid() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);\n\t\tassertFalse(referee.isValidMove(new Position(2, 2), tile)); // case isolée, plateau vide\n\t}\n\n\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameColoe() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));\n\n\t\tTile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));\n\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameColor() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));\n\n\t\tTile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameShapes() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\t\tboard.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsFalse() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\t\tassertFalse(referee.hasAdjacentTile(new Position(4, 4), tile)); // plateau vide\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsFalseWhenNeighborDifferentColorAndShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\t\tboard.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.TURTLE);\n\t\tassertFalse(referee.hasAdjacentTile(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\t\tboard.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));\n\t\tboard.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));\n\n\t\tTile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));\n\t}\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/latice/test/LaticeTestCases.java b/src/test/java/latice/test/LaticeTestCases.java
+--- a/src/test/java/latice/test/LaticeTestCases.java	(revision 8c61a8e57f6ce23962b8852eeae1e8b74ecd8543)
++++ b/src/test/java/latice/test/LaticeTestCases.java	(date 1779356379308)
+@@ -299,7 +299,7 @@
+ 		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));
+ 
+ 		Tile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
+ 	}
+ 
+ 	@Test
+@@ -311,7 +311,7 @@
+ 		board.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));
+ 
+ 		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
+ 	}
+ 
+ 	@Test
+@@ -323,7 +323,7 @@
+ 		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+ 
+ 		Tile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
+ 	}
+ 
+ 	@Test
+@@ -333,7 +333,7 @@
+ 		Referee referee = new Referee(board);
+ 		board.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));
+ 		Tile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
+ 	}
+ 
+ 	@Test
+@@ -343,18 +343,9 @@
+ 		Referee referee = new Referee(board);
+ 
+ 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+-		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile)); // plateau vide
++		assertFalse(referee.hasAdjacentTile(new Position(4, 4))); // plateau vide
+ 	}
+ 
+-	@Test
+-	public void hasAdjacentTileReturnsFalseWhenNeighborDifferentColorAndShape() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.TURTLE);
+-		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile));
+-	}
+ 
+ 	@Test
+ 	public void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {
+@@ -365,6 +356,6 @@
+ 		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));
+ 
+ 		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
+ 	}
+ }
+Index: src/main/java/latice/ihm/controller/TileController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.ihm.controller;\n\nimport latice.model.*;\nimport latice.model.square.Square;\nimport latice.model.tile.Tile;\n\npublic class TileController {\n\n    private Board board;\n    private Referee referee;\n\n    public TileController(Board board,  Referee referee) {\n\n        this.board = board;\n        this.referee = referee;\n    }\n\n    /**\n     * Vérifie si une tuile peut être placée sur une case.\n     *\n     * @param position La position sur laquelle on veut poser la tuile.\n     * @return True si la case est libre, false sinon.\n     */\n    public boolean canPlaceTile(Position position, Tile tile) {\n        Square square = board.getSquare(position);\n        if (square == null || square.isOccupied()) {\n            return false;\n        }\n        return referee.isValidMove(position, tile);\n    }\n\n    /**\n     * Place une tuile sur le board et la retire du rack du joueur.\n     *\n     * @param player   Le joueur qui pose la tuile.\n     * @param tile     La tuile à poser.\n     * @param position La position où poser la tuile.\n     * @return True si le placement a réussi, false sinon.\n     */\n    public boolean placeTile(Player player, Tile tile, Position position) {\n        if (!canPlaceTile(position, tile)) return false;\n\n        board.getSquare(position).setTile(tile);\n        player.getRack().getTiles().remove(tile);\n        player.getRack().addTileFromDeck(player.getDeck());\n\n        // Calcul et attribution des points\n        int pointsGagnes = referee.calculatePoints(position, tile);\n        System.out.println(\"Points gagnés : \" + pointsGagnes + \" | Score total : \" + (player.getScore() + pointsGagnes));\n        player.setScore(player.getScore() + pointsGagnes);\n\n        return true;\n    }\n    \n    \n    \n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/latice/ihm/controller/TileController.java b/src/main/java/latice/ihm/controller/TileController.java
+--- a/src/main/java/latice/ihm/controller/TileController.java	(revision 8c61a8e57f6ce23962b8852eeae1e8b74ecd8543)
++++ b/src/main/java/latice/ihm/controller/TileController.java	(date 1779438231910)
+@@ -4,11 +4,12 @@
+ import latice.model.square.Square;
+ import latice.model.tile.Tile;
+ 
++import java.util.ArrayList;
++
+ public class TileController {
+ 
+     private Board board;
+     private Referee referee;
+-
+     public TileController(Board board,  Referee referee) {
+ 
+         this.board = board;
+@@ -21,7 +22,7 @@
+      * @param position La position sur laquelle on veut poser la tuile.
+      * @return True si la case est libre, false sinon.
+      */
+-    public boolean canPlaceTile(Position position, Tile tile) {
++    public boolean canPlaceTile(Position position, Tile tile ) {
+         Square square = board.getSquare(position);
+         if (square == null || square.isOccupied()) {
+             return false;
+@@ -43,7 +44,6 @@
+         board.getSquare(position).setTile(tile);
+         player.getRack().getTiles().remove(tile);
+         player.getRack().addTileFromDeck(player.getDeck());
+-
+         // Calcul et attribution des points
+         int pointsGagnes = referee.calculatePoints(position, tile);
+         System.out.println("Points gagnés : " + pointsGagnes + " | Score total : " + (player.getScore() + pointsGagnes));
+Index: src/main/java/latice/model/Referee.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.model;\n\nimport latice.model.square.Square;\nimport latice.model.square.SquareType;\nimport latice.model.tile.Tile;\n\npublic class Referee {\n    private Player player;\n    private Board gameboard;\n    protected static int points=0;\n\n\n\n    private int roundCount = 1;\n    public Referee() {\n        this.roundCount = 1;\n    }\n\n    public Referee(Board gameboard) {\n        this.gameboard = gameboard;\n    }\n\n    \n\n    public Referee(Player player, Board gameboard) {\n        this.player = player;\n        this.gameboard = gameboard;\n    }\n\n    /* TODO : méthodes qui se charge de savoir si le placement de la tuile est correcte\n     * si correct, on vérifie si y'a des tuiles aux alentours \"valides\"\n     * si valides : alors on donne le nombres de points correspondant\n     * puis on fait un getteur des points\n     * implémentation dans les paramètres du constructeur : roundController afin de gérer\n     * qui est entrain de jouer actuellement etc..\n     */\n\n    public boolean isValidMove(Position position, Tile tile) {\n        if (gameboard.isBoardEmpty() && position.equals(new Position(4, 4))) {\n            return true;\n        }\n        if (!gameboard.isEmpty(position)) {\n            return false;\n        }\n        if (!hasAdjacentTile(position)) {\n            return false;\n        }\n        if (!hasAdjacentSameColor(position, tile) && !hasAdjacentSameShape(position, tile)) {\n            return false;\n        }\n        return true;\n    }\n    \n    private Position[] getAdjacentPositions(Position position) {\n    \treturn new Position[] { new Position(position.getPositionUp(), position.getCol()),\n    \t\t\t\t\t\t\tnew Position(position.getPositionDown(), position.getCol()),\n    \t\t\t\t\t\t\tnew Position(position.getRow(), position.getPositionLeft()),\n    \t\t\t\t\t\t\tnew Position(position.getRow(), position.getPositionRight())\n    \t};\n    }\n\n    public boolean hasAdjacentTile(Position position) {\n    \tfor (Position neighbor : getAdjacentPositions(position)) { // on parcours les différentes position AUTOUR de la position donnée\n    \t\tSquare neighborSquare = gameboard.getSquare(neighbor);\n    \t\tif (neighborSquare != null && neighborSquare.isOccupied()) { // on vérifie si dans l'une des position voisines il y'a une cases occupé \n    \t\t\treturn true;\n    \t\t}\n    \t}\n    \treturn false;\n    }\n    \n    /**\n     * Vérifie si au moins une tuile voisine est de la même couleur.\n     */\n    public boolean hasAdjacentSameColor(Position position, Tile tile) {\n        for (Position neighbor : getAdjacentPositions(position)) {\n            Square neighborSquare = gameboard.getSquare(neighbor);\n            if (neighborSquare != null && neighborSquare.isOccupied()) {\n                if (neighborSquare.getTile().getColor() == tile.getColor()) {\n                    return true;\n                }\n            }\n        }\n        return false;\n    }\n\n    /**\n     * Vérifie si au moins une tuile voisine est de la même forme.\n     */\n    public boolean hasAdjacentSameShape(Position position, Tile tile) {\n        for (Position neighbor : getAdjacentPositions(position)) {\n            Square neighborSquare = gameboard.getSquare(neighbor);\n            if (neighborSquare != null && neighborSquare.isOccupied()) {\n                if (neighborSquare.getTile().getShape() == tile.getShape()) {\n                    return true;\n                }\n            }\n        }\n        return false;\n    }\n    \n    /**\n     * Compte le nombre de voisins qui matchent (même couleur OU même forme).\n     */\n    private int countMatchingNeighbors(Position position, Tile tile) {\n        int count = 0;\n        for (Position neighbor : getAdjacentPositions(position)) {\n            Square neighborSquare = gameboard.getSquare(neighbor);\n            if (neighborSquare != null && neighborSquare.isOccupied()) {\n                Tile neighborTile = neighborSquare.getTile();\n                if (neighborTile.getColor() == tile.getColor() || neighborTile.getShape() == tile.getShape()) {\n                    count++;\n                }\n            }\n        }\n        return count;\n    }\n\n    public int calculatePoints(Position position, Tile tile) {\n        int points = 0;\n        int matchingSides = countMatchingNeighbors(position, tile);\n\n        if (matchingSides >= 4) {\n            points += 4;\n        } else if (matchingSides == 3) {\n            points += 3;\n        } else if (matchingSides == 2) {\n            points += 2;\n        } else if (matchingSides == 1) {\n            points += 1;\n        }\n\n        Square placedSquare = gameboard.getSquare(position);\n        if (placedSquare != null && placedSquare.getType() == SquareType.SUN) {\n            points += 2;\n        }\n\n        return points;\n    }\n    \n    public boolean winingCondition(Player player) {\n        if (player.getRack().isEmpty() && player.getDeck().isEmpty()) {\n        return true;\n        }\n        if (this.roundCount >= 10){\n            return true;\n        }\n        return false;\n\n    };\n    public void getWinner(){\n    }\n    public void setRoundCount(int roundCount) {\n        this.roundCount = roundCount;\n    }\n\n    public int getRoundCount() {\n        return roundCount;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/latice/model/Referee.java b/src/main/java/latice/model/Referee.java
+--- a/src/main/java/latice/model/Referee.java	(revision 8c61a8e57f6ce23962b8852eeae1e8b74ecd8543)
++++ b/src/main/java/latice/model/Referee.java	(date 1779437855110)
+@@ -4,8 +4,10 @@
+ import latice.model.square.SquareType;
+ import latice.model.tile.Tile;
+ 
++import java.util.ArrayList;
++
+ public class Referee {
+-    private Player player;
++    private ArrayList<Player> players;
+     private Board gameboard;
+     protected static int points=0;
+ 
+@@ -22,8 +24,8 @@
+ 
+     
+ 
+-    public Referee(Player player, Board gameboard) {
+-        this.player = player;
++    public Referee(ArrayList<Player> players, Board gameboard) {
++        this.players = players;
+         this.gameboard = gameboard;
+     }
+ 
+@@ -137,18 +139,34 @@
+ 
+         return points;
+     }
+-    
+-    public boolean winingCondition(Player player) {
++
++    public boolean winingConditionEmpty(Player player) {
++
+         if (player.getRack().isEmpty() && player.getDeck().isEmpty()) {
+         return true;
+         }
++
++        return false;
++
++    };
++    public boolean winingConditionCycles(){
+         if (this.roundCount >= 10){
+             return true;
+         }
+         return false;
++    }
++    public Player getWinner(ArrayList<Player> players){
++        Player winner = players.get(0);
++        for(Player player : players){
++            if (player.getRack().size()+player.getDeck().size() == 0) {
++                return player;
++            }
++            if(player.getRack().size()+player.getDeck().size() < winner.getRack().size()+winner.getDeck().size()){
++                winner = player;
++            }
+ 
+-    };
+-    public void getWinner(){
++        }
++        return winner; //TODO : gérer les égalités
+     }
+     public void setRoundCount(int roundCount) {
+         this.roundCount = roundCount;

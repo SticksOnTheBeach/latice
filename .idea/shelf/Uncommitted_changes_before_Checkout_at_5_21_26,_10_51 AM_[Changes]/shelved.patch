@@ -1,0 +1,77 @@
+Index: src/main/java/latice/model/Rack.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.model;\n\nimport latice.model.tile.Tile;\n\nimport java.util.ArrayList;\n\npublic class Rack implements TileContainer{\n\tint maxSize =5;\n    private ArrayList<Tile> tiles = new ArrayList<Tile>();\n    \n    \n    // Changer la méthode Rack, afin qu'au lancement/à l'initialisation du jeu, il est préalablement 5 tiles\n    public Rack() {\n    \t\n    }\n\n\n    public void addTileFromDeck(Deck deck) {\n        while (tiles.size() < maxSize && deck.isEmpty() == false) {\n                tiles.add(deck.getTiles().get(0));\n                deck.remove();\n        }\n\n    }\n\n    @Override\n    public void remove() {\n        if (tiles.size() > 0) {\n            tiles.remove(0);\n        }\n    }\n\n    public int size(){\n        return tiles.size();\n    }\n\n    @Override\n    public boolean isEmpty() {\n        if (tiles.size() == 0) {\n            return true;\n        }\n        return false;\n    }\n    @Override\n    public String toString() {\n        return \"Rack{\" +\n                \"tiles=\" + tiles +\n                '}';\n    }\n\n    public ArrayList<Tile> getTiles() {\n        return tiles;\n    }\n    \n    /**\n     * Pioche une seule et unique tuile depuis le deck.\n     */\n    public void drawOneTile(Deck deck) {\n        // On vérifie qu'il y a de la place (moins de maxSize) et que la pioche n'est pas vide\n        if (tiles.size() < maxSize && !deck.isEmpty()) {\n            tiles.add(deck.getTiles().get(0));\n            deck.remove();\n        }\n    }\n    \n    \n    public void exchangeAllTiles(Deck deck) {\n        // on remet les tuiles du rack dans le deck\n        deck.getTiles().addAll(tiles);\n        deck.shuffle();\n\n        // on clear le rack\n        tiles.clear();\n\n        // uis on pioche depuis le deck qu'on a\n        addTileFromDeck(deck);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/latice/model/Rack.java b/src/main/java/latice/model/Rack.java
+--- a/src/main/java/latice/model/Rack.java	(revision 82a5d6573ff2594a98db3ae619ec35e4172f9d87)
++++ b/src/main/java/latice/model/Rack.java	(date 1779353295638)
+@@ -4,14 +4,12 @@
+ 
+ import java.util.ArrayList;
+ 
+-public class Rack implements TileContainer{
++public class Rack extends Container implements TileContainer{
+ 	int maxSize =5;
+-    private ArrayList<Tile> tiles = new ArrayList<Tile>();
+-    
+     
+     // Changer la méthode Rack, afin qu'au lancement/à l'initialisation du jeu, il est préalablement 5 tiles
+     public Rack() {
+-    	
++        super();
+     }
+ 
+ 
+@@ -22,37 +20,7 @@
+         }
+ 
+     }
+-
+-    @Override
+-    public void remove() {
+-        if (tiles.size() > 0) {
+-            tiles.remove(0);
+-        }
+-    }
+-
+-    public int size(){
+-        return tiles.size();
+-    }
+-
+-    @Override
+-    public boolean isEmpty() {
+-        if (tiles.size() == 0) {
+-            return true;
+-        }
+-        return false;
+-    }
+-    @Override
+-    public String toString() {
+-        return "Rack{" +
+-                "tiles=" + tiles +
+-                '}';
+-    }
+-
+-    public ArrayList<Tile> getTiles() {
+-        return tiles;
+-    }
+-    
+-    /**
++        /**
+      * Pioche une seule et unique tuile depuis le deck.
+      */
+     public void drawOneTile(Deck deck) {
+@@ -75,4 +43,10 @@
+         // uis on pioche depuis le deck qu'on a
+         addTileFromDeck(deck);
+     }
++    @Override
++    public String toString() {
++        return "Rack{" + super.toString() +
++                '}';
++    }
++
+ }

@@ -1,0 +1,637 @@
+Index: src/test/java/latice/test/LaticeTestCases.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.test;\n\n\nimport java.util.ArrayList;\nimport java.util.List;\n\nimport latice.model.*;\nimport latice.model.square.Square;\nimport latice.model.square.SquareType;\nimport latice.model.tile.COLOR;\nimport latice.model.tile.SHAPE;\nimport org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Test;\n\nimport latice.model.tile.Tile;\n\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class LaticeTestCases {\n\n\tprivate Game               game;\n\tprivate ArrayList<Player> players;\n\n\t@BeforeEach\n\tpublic void init() {\n\t\tplayers = new ArrayList<>();\n\t\tplayers.add(new Player(new Rack(), \"testj1\"));\n\t\tplayers.add(new Player(new Rack(), \"testj2\"));\n\n\t\tReferee referee = new Referee(new Board());\n\t\tgame = new Game(players, referee, new Board());\n\t}\n\n\t//TODO : ajouter des test si il n'y a aucun joueur\n// ===================== Check Tiles =====================\n\n\t@Test\n\tpublic void checkNumberOfTiles() {\n\t\tList<Tile> listTiles = game.createTiles();\n\t\tassertEquals(60, listTiles.size());\n\t}\n\n\t@Test\n\tpublic void checkNumberOfEachDeckForTwoPlayers() {\n\t\tgame.shareTilesDynamically();\n\t\tfor (Player player : players) {\n\t\t\tassertEquals(30, player.getDeck().getTiles().size());\n\t\t}\n\t}\n\n\t@Test\n\tpublic void checkNumberOfEachDeckForThreePlayers() {\n\t\tplayers.add(new Player(new Rack(), \"testj3\"));\n\t\tgame.shareTilesDynamically();\n\t\tfor (Player player : players) {\n\t\t\tassertEquals(20, player.getDeck().getTiles().size());\n\t\t}\n\t}\n\n\n\t@Test\n\tpublic void checkTotalTilesAfterShare() {\n\t\tgame.shareTilesDynamically();\n\t\tint total = players.stream()\n\t\t\t\t.mapToInt(p -> p.getDeck().getTiles().size())\n\t\t\t\t.sum();\n\t\tassertEquals(60, total);\n\t}\n@Test\n\tpublic void removeAllTilesFromDeck() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\twhile (!player.getDeck().isEmpty()) {\n\t\t\tplayer.getDeck().remove();\n\t\t}\n\t\tassertTrue(player.getDeck().isEmpty());\n\t}\n\t\t@Test\n\tpublic void addTilesFromTheRack() {\n\t\tgame.shareTilesDynamically();\n\t\t\tPlayer player = players.get(0);\n\n\t\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\t\tassertEquals(25, player.getDeck().getTiles().size());\n\t\tassertEquals(5, player.getRack().getTiles().size());\n\t}\n\n\t@Test\n\tpublic void addTilesFromRackWhenDeckHasLessThanFiveTiles() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\n\t\t// ne laisser que 3 tuiles dans le deck\n\t\tfor (int i = 0; i < 27; i++) {\n\t\t\tplayer.getDeck().remove();\n\t\t}\n\t\tassertEquals(3, player.getDeck().getTiles().size());\n\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\t\tassertEquals(0, player.getDeck().getTiles().size());\n\t\tassertEquals(3, player.getRack().getTiles().size());\n\t}\n// ===================== Check Board =====================\n\n\t@Test\n\tvoid checkCreationOfTheGameBoard(){\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n assertEquals(SquareType.SUN, board.getSquare(new Position(0, 0)).getType());\n //TODO : verifier toutes les cases du plateau\n\t}\n\n\n\t@Test\n\tpublic void isEmptyReturnseWhenSquareHasNoTile() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tassertTrue(board.isEmpty(new Position(4, 4))); // aucune tuile posée\n\t}\n// ===================== Check Tiles Placement In board=====================\n\n\t@Test\n\tpublic void isEmptyReturnsFalseenSquareIsOccupied() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tboard.placeTile(new Position(4, 4), new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\n\t\tassertFalse(board.isEmpty(new Position(4, 4)));\n\t}\n\n\n\n\t@Test\n\tpublic void isBoardEmptyReturnsFalseAfterOneTilePlaced() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tboard.placeTile(new Position(4, 4), new Tile(COLOR.TEAL, SHAPE.DOLPHIN));\n\n\t\tassertFalse(board.isBoardEmpty());\n\t}\n\n\t@Test\n\tpublic void isBoardEmptyReturnsFalseAfterMultipleTilesPlaced() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tboard.placeTile(new Position(4, 4), new Tile(COLOR.NAVY, SHAPE.FLOWER));\n\t\tboard.placeTile(new Position(4, 5), new Tile(COLOR.NAVY, SHAPE.GECKO));\n\n\t\tassertFalse(board.isBoardEmpty());\n\t}\n\n\n\t@Test\n\tpublic void placeTileMakesSquareOccupied() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tTile tile = new Tile(COLOR.MAGENTA, SHAPE.FEATHER);\n\t\tboard.placeTile(new Position(4, 4), tile);\n\n\t\tassertFalse(board.isEmpty(new Position(4, 4)));\n\t}\n\n\t@Test\n\tpublic void placeTileStoresCorrectTile() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tTile tile = new Tile(COLOR.REDGREEN, SHAPE.TURTLE);\n\t\tboard.placeTile(new Position(3, 3), tile);\n\n\t\tassertEquals(tile, board.getSquare(new Position(3, 3)).getTile());\n\t}\n\n\t@Test\n\tpublic void getSquareReturnsNonNullForValidPosition() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tassertNotNull(board.getSquare(new Position(0, 0)));\n\t}\n\n\t@Test\n\tpublic void getSquareReturnsNullForOutOfBoundsPosition() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tassertNull(board.getSquare(new Position(99, 99)));\n\t}\n\n\t@Test\n\tpublic void getSquareReturnsCorrectSquareAfterPlaceTile() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tboard.placeTile(new Position(2, 2), tile);\n\n\t\tSquare square = board.getSquare(new Position(2, 2));\n\t\tassertTrue(square.isOccupied());\n\t\tassertEquals(tile, square.getTile());\n\t}\n\n// ===================== drawOneTile =====================\n\n\t@Test\n\tpublic void drawOneTileAddsTileToRack() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\tint deckSizeBefore = player.getDeck().getTiles().size();\n\n\t\tplayer.getRack().drawOneTile(player.getDeck());\n\n\t\tassertEquals(1, player.getRack().getTiles().size());\n\t\tassertEquals(deckSizeBefore - 1, player.getDeck().getTiles().size());\n\t}\n\n\t@Test\n\tpublic void drawOneTileDoesNothingWhenRackFull() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\n\t\t// remplir le rack jusqu'à maxSize\n\t\tplayer.getRack().addTileFromDeck(player.getDeck()); // ajoute 5 tuiles\n\t\tint deckSizeBefore = player.getDeck().getTiles().size();\n\n\t\tplayer.getRack().drawOneTile(player.getDeck()); // rack déjà plein\n\n\t\tassertEquals(deckSizeBefore, player.getDeck().getTiles().size());\n\t}\n\n\n\t@Test\n\tpublic void drawOneTileDrawsExactlyOneTile() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\n\t\tplayer.getRack().drawOneTile(player.getDeck());\n\t\tplayer.getRack().drawOneTile(player.getDeck());\n\n\t\t// chaque appel n'ajoute qu'une seule tuile\n\t\tassertEquals(2, player.getRack().getTiles().size());\n\t}\n// ===================== startGame =====================\n\n\t@Test\n\tpublic void startGameCreatesBoardNotNull() {\n\t\tgame.startGame();\n\t\tassertNotNull(game.getBoard());\n\t}\n\n\t@Test\n\tpublic void startGameFillsRackForAllPlayers() {\n\t\tgame.startGame();\n\t\tfor (Player player : players) {\n\t\t\tassertFalse(player.getRack().getTiles().isEmpty());\n\t\t}\n\t}\n\n\t@Test\n\tpublic void startGameDecksAreNotEmpty() {\n\t\tgame.startGame();\n\t\tfor (Player player : players) {\n\t\t\tassertFalse(player.getDeck().isEmpty());\n\t\t}\n\t}\n\n\t@Test\n\tpublic void startGameRackHasMaxFiveTiles() {\n\t\tgame.startGame();\n\t\tfor (Player player : players) {\n\t\t\tassertTrue(player.getRack().getTiles().size() <= 5);\n\t\t}\n\t}\n\n\t@Test\n\tpublic void startGameTotalTilesConserved() {\n\t\tgame.startGame();\n\t\tint total = players.stream()\n\t\t\t\t.mapToInt(p -> p.getRack().getTiles().size() + p.getDeck().getTiles().size())\n\t\t\t\t.sum();\n\t\tassertEquals(60, total);\n\t}\n// ===================== exchangeAllTiles =====================\n\n\t@Test\n\tpublic void exchangeAllTilesClearsRack() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\n\t\tplayer.getRack().exchangeAllTiles(player.getDeck());\n\n\t\t// après échange le rack est rechargé (pas vide si deck avait des tuiles)\n\t\t// mais les anciennes tuiles ne sont plus là → taille <= maxSize\n\t\tassertTrue(player.getRack().getTiles().size() <= 5);\n\t}\n\n\t@Test\n\tpublic void exchangeAllTilesReturnsTilesToDeck() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\tplayer.getRack().addTileFromDeck(player.getDeck()); // 5 tuiles dans rack, 25 dans deck\n\n\t\tint totalBefore = player.getRack().getTiles().size() + player.getDeck().getTiles().size();\n\t\tplayer.getRack().exchangeAllTiles(player.getDeck());\n\t\tint totalAfter = player.getRack().getTiles().size() + player.getDeck().getTiles().size();\n\n\t\t// le total de tuiles est conservé\n\t\tassertEquals(totalBefore, totalAfter);\n\t}\n\n\t@Test\n\tpublic void exchangeAllTilesRefillsRackFromDeck() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\n\t\tplayer.getRack().exchangeAllTiles(player.getDeck());\n\n\t\tassertEquals(5, player.getRack().getTiles().size());\n\t}\n\n\t// Tests pour la classe Referee\n\t@Test\n\tpublic void firstMoveOnCenter() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tPosition center = new Position(4, 4);\n\n\t\tassertTrue(referee.isValidMove(center, tile));\n\t}\n\n\t@Test\n\tpublic void firstMoveNotOnCenter() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tPosition notCenter = new Position(0, 0);\n\n\t\tassertFalse(referee.isValidMove(notCenter, tile));\n\t}\n\n\t@Test\n\tpublic void moveOnOccupiedSquare() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile existingTile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tboard.getSquare(new Position(4, 4)).setTile(existingTile);\n\n\t\tTile newTile = new Tile(COLOR.NAVY, SHAPE.TURTLE);\n\t\tassertFalse(referee.isValidMove(new Position(4, 4), newTile));\n\t}\n\n\t@Test\n\tpublic void moveAdjacentWithSameColorIsValid() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.FEATHER));\n\n\t\tTile newTile = new Tile(COLOR.MAGENTA, SHAPE.GECKO);\n\t\tassertTrue(referee.isValidMove(new Position(4, 5), newTile));\n\t}\n\n\t@Test\n\tpublic void moveAdjacentWithSameShapeIsValid() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));\n\n\t\tTile newTile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);\n\t\tassertTrue(referee.isValidMove(new Position(4, 5), newTile));\n\t}\n\n\t@Test\n\tpublic void moveAdjacentWithDifferentColorAndShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\n\t\tTile newTile = new Tile(COLOR.TEAL, SHAPE.GECKO);\n\t\tassertFalse(referee.isValidMove(new Position(4, 5), newTile));\n\t}\n\n\t@Test\n\tpublic void moveWithNoAdjacentTileIsInvalid() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);\n\t\tassertFalse(referee.isValidMove(new Position(2, 2), tile)); // case isolée, plateau vide\n\t}\n\n\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameColoe() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));\n\n\t\tTile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4)));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));\n\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4)));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameColor() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));\n\n\t\tTile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4)));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWhenSameShapes() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\t\tboard.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4)));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsFalse() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\t\tassertFalse(referee.hasAdjacentTile(new Position(4, 4))); // plateau vide\n\t}\n\n\n\t@Test\n\tpublic void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\t\tboard.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));\n\t\tboard.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));\n\n\t\tTile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);\n\t\tassertTrue(referee.hasAdjacentTile(new Position(4, 4)));\n\t}\n\t// ===================== calculatePoints =====================\n\n\t@Test\n\tpublic void calculatePointsOneNeighbor() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\n\t\tassertEquals(1, referee.calculatePoints(new Position(4, 5), tile));\n\t}\n\n\t@Test\n\tpublic void calculatePointsTwoNeighbors() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\t\tboard.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE));\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\n\t\tassertEquals(2, referee.calculatePoints(new Position(4, 5), tile));\n\t}\n\n\t@Test\n\tpublic void calculatePointsOnSunSquareAddsBonus() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\t// (0,0) est une case SUN d'après ton test checkCreationOfTheGameBoard\n\t\tboard.getSquare(new Position(0, 1)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\n\t\tint points = referee.calculatePoints(new Position(0, 0), tile);\n\t\tassertTrue(points >= 3); // 1 voisin + 2 bonus SUN\n\t}\n\n// ===================== winingConditionEmpty =====================\n\t@Test\n\tpublic void winingConditionEmptyReturnsFalseWhenRackNotEmpty() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer player = players.get(0);\n\t\tplayer.getRack().addTileFromDeck(player.getDeck());\n\n\t\tReferee referee = new Referee(new Board());\n\t\tassertFalse(referee.winingConditionEmpty(player));\n\t}\n// ===================== winingConditionCycles =====================\n\t@Test\n\tpublic void winingConditionCyclesReturnsFalseAtStart() {\n\t\tReferee referee = new Referee(new Board());\n\t\tassertFalse(referee.winingConditionCycles());\n\t}\n\t@Test\n\tpublic void winingConditionCyclesReturnsTrueAfter10Rounds() {\n\t\tReferee referee = new Referee(new Board());\n\t\treferee.setRoundCount(11);\n\t\tassertTrue(referee.winingConditionCycles());\n\t}\n\t@Test\n\tpublic void winingConditionCyclesReturnsFalseAtExactly10() {\n\t\tReferee referee = new Referee(new Board());\n\t\treferee.setRoundCount(10);\n\t\tassertFalse(referee.winingConditionCycles());\n\t}\n// ===================== getWinner =====================\n\t@Test\n\tpublic void getWinnerReturnsPlayerWithFewestTiles() {\n\t\tgame.shareTilesDynamically();\n\t\tPlayer p1 = players.get(0);\n\t\tPlayer p2 = players.get(1);\n\t\twhile (p1.getDeck().getTiles().size() > 1) {\n\t\t\tp1.getDeck().remove();\n\t\t}\n\t\tReferee referee = new Referee(new Board());\n\t\tassertEquals(List.of(p1), referee.getWinner(players));\n\t}\n\t// ===================== hasAdjacentSameColor =====================\n\n\t@Test\n\tpublic void hasAdjacentSameColorReturnsTrueWhenNeighborSameColor() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\n\t\tassertTrue(referee.hasAdjacentSameColor(new Position(4, 5), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentSameColorReturnsFalseWhenNoNeighborSameColor() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.GECKO);\n\n\t\tassertFalse(referee.hasAdjacentSameColor(new Position(4, 5), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentSameColorReturnsFalseWhenNoNeighborAtAll() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);\n\t\tassertFalse(referee.hasAdjacentSameColor(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentSameColorReturnsTrueWithMultipleNeighborsOneMatches() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));   // pas même couleur\n\t\tboard.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE)); // même couleur\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);\n\n\t\tassertTrue(referee.hasAdjacentSameColor(new Position(4, 5), tile));\n\t}\n\n// ===================== hasAdjacentSameShape =====================\n\n\t@Test\n\tpublic void hasAdjacentSameShapeReturnsTrueWhenNeighborSameShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);\n\n\t\tassertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentSameShapeReturnsFalseWhenNoNeighborSameShape() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));\n\t\tTile tile = new Tile(COLOR.TEAL, SHAPE.BIRD);\n\n\t\tassertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentSameShapeReturnsFalseWhenNoNeighborAtAll() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tTile tile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);\n\t\tassertFalse(referee.hasAdjacentSameShape(new Position(4, 4), tile));\n\t}\n\n\t@Test\n\tpublic void hasAdjacentSameShapeReturnsTrueWithMultipleNeighborsOneMatches() {\n\t\tBoard board = new Board();\n\t\tboard.createGameBoard();\n\t\tReferee referee = new Referee(board);\n\n\t\tboard.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));\n\t\tboard.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));\n\t\tTile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN);\n\n\t\tassertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));\n\t}\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/latice/test/LaticeTestCases.java b/src/test/java/latice/test/LaticeTestCases.java
+--- a/src/test/java/latice/test/LaticeTestCases.java	(revision 7e6546aade39b86ed07f1e7e66035fd5de41f118)
++++ b/src/test/java/latice/test/LaticeTestCases.java	(date 1779460320933)
+@@ -1,9 +1,6 @@
+ package latice.test;
+-
+-
+ import java.util.ArrayList;
+ import java.util.List;
+-
+ import latice.model.*;
+ import latice.model.square.Square;
+ import latice.model.square.SquareType;
+@@ -32,7 +29,6 @@
+ 	}
+ 
+ 	//TODO : ajouter des test si il n'y a aucun joueur
+-// ===================== Check Tiles =====================
+ 
+ 	@Test
+ 	public void checkNumberOfTiles() {
+@@ -99,7 +95,37 @@
+ 		assertEquals(0, player.getDeck().getTiles().size());
+ 		assertEquals(3, player.getRack().getTiles().size());
+ 	}
+-// ===================== Check Board =====================
++	@Test
++	public void RemovesFirstTile() {
++		game.shareTilesDynamically();
++		Player player = players.get(0);
++		player.getDeck().remove();
++		assertEquals(29, player.getDeck().size());
++	}
++
++
++	@Test
++	public void shuffle_preservesAllTiles() {
++		game.shareTilesDynamically();
++		Player player = players.get(0);
++		player.getDeck().shuffle();
++		assertEquals(30,player.getDeck().size());
++	}
++	@Test
++	public void playerNotEmpty(){
++		assertFalse(game.isPlayersEmpty());
++	}
++	@Test
++	public void playerEmpty(){
++		players.clear();
++		assertTrue(game.isPlayersEmpty());
++	}
++	@Test
++	public void nextPlayer(){
++		Player current = game.getCurrentPlayer();
++		game.nextTurn();
++		assertNotEquals(current, game.getCurrentPlayer());
++	}
+ 
+ 	@Test
+ 	void checkCreationOfTheGameBoard(){
+@@ -117,7 +143,6 @@
+ 
+ 		assertTrue(board.isEmpty(new Position(4, 4))); // aucune tuile posée
+ 	}
+-// ===================== Check Tiles Placement In board=====================
+ 
+ 	@Test
+ 	public void isEmptyReturnsFalseenSquareIsOccupied() {
+@@ -204,125 +229,8 @@
+ 		assertEquals(tile, square.getTile());
+ 	}
+ 
+-// ===================== drawOneTile =====================
+-
+-	@Test
+-	public void drawOneTileAddsTileToRack() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-		int deckSizeBefore = player.getDeck().getTiles().size();
+-
+-		player.getRack().drawOneTile(player.getDeck());
+-
+-		assertEquals(1, player.getRack().getTiles().size());
+-		assertEquals(deckSizeBefore - 1, player.getDeck().getTiles().size());
+-	}
+-
+-	@Test
+-	public void drawOneTileDoesNothingWhenRackFull() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-
+-		// remplir le rack jusqu'à maxSize
+-		player.getRack().addTileFromDeck(player.getDeck()); // ajoute 5 tuiles
+-		int deckSizeBefore = player.getDeck().getTiles().size();
+-
+-		player.getRack().drawOneTile(player.getDeck()); // rack déjà plein
+-
+-		assertEquals(deckSizeBefore, player.getDeck().getTiles().size());
+-	}
+-
+-
+-	@Test
+-	public void drawOneTileDrawsExactlyOneTile() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-
+-		player.getRack().drawOneTile(player.getDeck());
+-		player.getRack().drawOneTile(player.getDeck());
+ 
+-		// chaque appel n'ajoute qu'une seule tuile
+-		assertEquals(2, player.getRack().getTiles().size());
+-	}
+-// ===================== startGame =====================
+ 
+-	@Test
+-	public void startGameCreatesBoardNotNull() {
+-		game.startGame();
+-		assertNotNull(game.getBoard());
+-	}
+-
+-	@Test
+-	public void startGameFillsRackForAllPlayers() {
+-		game.startGame();
+-		for (Player player : players) {
+-			assertFalse(player.getRack().getTiles().isEmpty());
+-		}
+-	}
+-
+-	@Test
+-	public void startGameDecksAreNotEmpty() {
+-		game.startGame();
+-		for (Player player : players) {
+-			assertFalse(player.getDeck().isEmpty());
+-		}
+-	}
+-
+-	@Test
+-	public void startGameRackHasMaxFiveTiles() {
+-		game.startGame();
+-		for (Player player : players) {
+-			assertTrue(player.getRack().getTiles().size() <= 5);
+-		}
+-	}
+-
+-	@Test
+-	public void startGameTotalTilesConserved() {
+-		game.startGame();
+-		int total = players.stream()
+-				.mapToInt(p -> p.getRack().getTiles().size() + p.getDeck().getTiles().size())
+-				.sum();
+-		assertEquals(60, total);
+-	}
+-// ===================== exchangeAllTiles =====================
+-
+-	@Test
+-	public void exchangeAllTilesClearsRack() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-		player.getRack().addTileFromDeck(player.getDeck());
+-
+-		player.getRack().exchangeAllTiles(player.getDeck());
+-
+-		// après échange le rack est rechargé (pas vide si deck avait des tuiles)
+-		// mais les anciennes tuiles ne sont plus là → taille <= maxSize
+-		assertTrue(player.getRack().getTiles().size() <= 5);
+-	}
+-
+-	@Test
+-	public void exchangeAllTilesReturnsTilesToDeck() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-		player.getRack().addTileFromDeck(player.getDeck()); // 5 tuiles dans rack, 25 dans deck
+-
+-		int totalBefore = player.getRack().getTiles().size() + player.getDeck().getTiles().size();
+-		player.getRack().exchangeAllTiles(player.getDeck());
+-		int totalAfter = player.getRack().getTiles().size() + player.getDeck().getTiles().size();
+-
+-		// le total de tuiles est conservé
+-		assertEquals(totalBefore, totalAfter);
+-	}
+-
+-	@Test
+-	public void exchangeAllTilesRefillsRackFromDeck() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-		player.getRack().addTileFromDeck(player.getDeck());
+-
+-		player.getRack().exchangeAllTiles(player.getDeck());
+-
+-		assertEquals(5, player.getRack().getTiles().size());
+-	}
+ 
+ 	// Tests pour la classe Referee
+ 	@Test
+@@ -419,7 +327,7 @@
+ 		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));
+ 
+ 		Tile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+ 	}
+ 
+ 	@Test
+@@ -431,7 +339,7 @@
+ 		board.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));
+ 
+ 		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+ 	}
+ 
+ 	@Test
+@@ -443,7 +351,7 @@
+ 		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+ 
+ 		Tile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+ 	}
+ 
+ 	@Test
+@@ -453,7 +361,7 @@
+ 		Referee referee = new Referee(board);
+ 		board.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));
+ 		Tile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+ 	}
+ 
+ 	@Test
+@@ -463,198 +371,28 @@
+ 		Referee referee = new Referee(board);
+ 
+ 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+-		assertFalse(referee.hasAdjacentTile(new Position(4, 4))); // plateau vide
++		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile)); // plateau vide
+ 	}
+-
+ 
+ 	@Test
+-	public void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {
++	public void hasAdjacentTileReturnsFalseWhenNeighborDifferentColorAndShape() {
+ 		Board board = new Board();
+ 		board.createGameBoard();
+ 		Referee referee = new Referee(board);
+ 		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+-		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));
+-
+-		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);
+-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
++		Tile tile = new Tile(COLOR.YELLOW, SHAPE.TURTLE);
++		assertFalse(referee.hasAdjacentTile(new Position(4, 4), tile));
+ 	}
+-	// ===================== calculatePoints =====================
+ 
+ 	@Test
+-	public void calculatePointsOneNeighbor() {
++	public void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {
+ 		Board board = new Board();
+ 		board.createGameBoard();
+ 		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
++		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
++		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));
+ 
+-		assertEquals(1, referee.calculatePoints(new Position(4, 5), tile));
++		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);
++		assertTrue(referee.hasAdjacentTile(new Position(4, 4), tile));
+ 	}
+-
+-	@Test
+-	public void calculatePointsTwoNeighbors() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+-		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE));
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+-
+-		assertEquals(2, referee.calculatePoints(new Position(4, 5), tile));
+-	}
+-
+-	@Test
+-	public void calculatePointsOnSunSquareAddsBonus() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		// (0,0) est une case SUN d'après ton test checkCreationOfTheGameBoard
+-		board.getSquare(new Position(0, 1)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+-
+-		int points = referee.calculatePoints(new Position(0, 0), tile);
+-		assertTrue(points >= 3); // 1 voisin + 2 bonus SUN
+-	}
+-
+-// ===================== winingConditionEmpty =====================
+-	@Test
+-	public void winingConditionEmptyReturnsFalseWhenRackNotEmpty() {
+-		game.shareTilesDynamically();
+-		Player player = players.get(0);
+-		player.getRack().addTileFromDeck(player.getDeck());
+-
+-		Referee referee = new Referee(new Board());
+-		assertFalse(referee.winingConditionEmpty(player));
+-	}
+-// ===================== winingConditionCycles =====================
+-	@Test
+-	public void winingConditionCyclesReturnsFalseAtStart() {
+-		Referee referee = new Referee(new Board());
+-		assertFalse(referee.winingConditionCycles());
+-	}
+-	@Test
+-	public void winingConditionCyclesReturnsTrueAfter10Rounds() {
+-		Referee referee = new Referee(new Board());
+-		referee.setRoundCount(11);
+-		assertTrue(referee.winingConditionCycles());
+-	}
+-	@Test
+-	public void winingConditionCyclesReturnsFalseAtExactly10() {
+-		Referee referee = new Referee(new Board());
+-		referee.setRoundCount(10);
+-		assertFalse(referee.winingConditionCycles());
+-	}
+-// ===================== getWinner =====================
+-	@Test
+-	public void getWinnerReturnsPlayerWithFewestTiles() {
+-		game.shareTilesDynamically();
+-		Player p1 = players.get(0);
+-		Player p2 = players.get(1);
+-		while (p1.getDeck().getTiles().size() > 1) {
+-			p1.getDeck().remove();
+-		}
+-		Referee referee = new Referee(new Board());
+-		assertEquals(List.of(p1), referee.getWinner(players));
+-	}
+-	// ===================== hasAdjacentSameColor =====================
+-
+-	@Test
+-	public void hasAdjacentSameColorReturnsTrueWhenNeighborSameColor() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+-
+-		assertTrue(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+-	}
+-
+-	@Test
+-	public void hasAdjacentSameColorReturnsFalseWhenNoNeighborSameColor() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+-		Tile tile = new Tile(COLOR.TEAL, SHAPE.GECKO);
+-
+-		assertFalse(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+-	}
+-
+-	@Test
+-	public void hasAdjacentSameColorReturnsFalseWhenNoNeighborAtAll() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
+-		assertFalse(referee.hasAdjacentSameColor(new Position(4, 4), tile));
+-	}
+-
+-	@Test
+-	public void hasAdjacentSameColorReturnsTrueWithMultipleNeighborsOneMatches() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));   // pas même couleur
+-		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE)); // même couleur
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
+-
+-		assertTrue(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+-	}
+-
+-// ===================== hasAdjacentSameShape =====================
+-
+-	@Test
+-	public void hasAdjacentSameShapeReturnsTrueWhenNeighborSameShape() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
+-		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
+-
+-		assertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+-	}
+-
+-	@Test
+-	public void hasAdjacentSameShapeReturnsFalseWhenNoNeighborSameShape() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
+-		Tile tile = new Tile(COLOR.TEAL, SHAPE.BIRD);
+-
+-		assertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+-	}
+-
+-	@Test
+-	public void hasAdjacentSameShapeReturnsFalseWhenNoNeighborAtAll() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		Tile tile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);
+-		assertFalse(referee.hasAdjacentSameShape(new Position(4, 4), tile));
+-	}
+-
+-	@Test
+-	public void hasAdjacentSameShapeReturnsTrueWithMultipleNeighborsOneMatches() {
+-		Board board = new Board();
+-		board.createGameBoard();
+-		Referee referee = new Referee(board);
+-
+-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
+-		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN);
+-
+-		assertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+-	}
+-
+ }
+Index: src/main/java/latice/model/Game.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package latice.model;\n\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Random;\n\nimport latice.model.tile.COLOR;\nimport latice.model.tile.SHAPE;\nimport latice.model.tile.Tile;\n\npublic class Game {\n\n    // Tout passe par la liste players,\n    // pour que getCurrentPlayer() et nextTurn() fonctionnent dans tous les cas.\n    protected ArrayList<Player> players = new ArrayList<Player>();\n\n    protected Referee referee;\n\n    protected int CurrentCycle;\n    protected Board board;\n\n    protected int currentPlayerIndex;\n\n    Random rand = new Random();\n\n\n\n    /**\n     * Initializes a game for a dynamic number of players.\n     *\n     * @param players A list containing all the players participating in the game.\n     * @param referee The referee overseeing the game rules and logic.\n     */\n    public Game(ArrayList<Player> players, Referee referee, Board board) {\n        this.players = players;\n        this.referee = referee;\n        this.board = board;\n    }\n\n    public void startGame() {\n        board.createGameBoard();\n        createTiles();\n        shareTilesDynamically();\n        choseFirstPlayer();\n        for (Player player : players) {\n            player.getRack().addTileFromDeck(player.getDeck());\n        }\n    }\n\n    /**\n     * Creates a complete set of tiles for the game and shuffles them randomly.\n     *\n     * @return A list of newly created and shuffled tiles.\n     */\n    public List<Tile> createTiles() {\n        final List<Tile> listTile = new ArrayList<Tile>();\n        for (COLOR color : COLOR.values()) {\n            for (SHAPE shape : SHAPE.values()) {\n                listTile.add(new Tile(color, shape));\n                listTile.add(new Tile(color, shape));\n            }\n        }\n        return listTile;\n    }\n\n    public String showRack(Player pLayer) {\n        return pLayer.getRack().toString();\n    }\n\n    /**\n     * Distributes tiles dynamically among all players.\n     */\n    public void shareTilesDynamically() {\n        if (players == null || players.isEmpty()) {\n            return;\n        }\n\n        final List<Tile> allTiles = createTiles();\n        int nbOfPlayers = players.size();\n        int tilesPerPlayer = allTiles.size() / nbOfPlayers;\n        int startIndex = 0;\n        for (Player player : players) {\n            List<Tile> subList = allTiles.subList(startIndex, startIndex + tilesPerPlayer);\n            ArrayList<Tile> playerTiles = new ArrayList<>(subList);\n            player.setDeck(new Deck(playerTiles));\n            player.getDeck().shuffle();\n            startIndex += tilesPerPlayer;\n        }\n\n        System.out.println(\"Distribution terminée : \" + tilesPerPlayer + \" tuiles par joueur.\");\n    }\n\n    /**\n     * Checks if the list of players is empty.\n     *\n     * @return True if there are no players in the list, false otherwise.\n     */\n    public boolean isPlayersEmpty() {\n        int numberOfPlayers = players.size();\n        if (numberOfPlayers == 0) {\n            return true;\n        }\n        return false;\n    }\n\n    public Player getCurrentPlayer() {\n        return players.get(currentPlayerIndex);\n    }\n\n    public void choseFirstPlayer() {\n        this.currentPlayerIndex = rand.nextInt(players.size());\n    }\n\n    public Board getBoard() {\n        return board;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/latice/model/Game.java b/src/main/java/latice/model/Game.java
+--- a/src/main/java/latice/model/Game.java	(revision 7e6546aade39b86ed07f1e7e66035fd5de41f118)
++++ b/src/main/java/latice/model/Game.java	(date 1779460317990)
+@@ -9,25 +9,31 @@
+ import latice.model.tile.Tile;
+ 
+ public class Game {
+-
+-    // Tout passe par la liste players,
++	
++    // CORRECTION : suppression de player1/player2 séparés.
++    // Tout passe maintenant par la liste players, 
+     // pour que getCurrentPlayer() et nextTurn() fonctionnent dans tous les cas.
+     protected ArrayList<Player> players = new ArrayList<Player>();
+-
++    
+     protected Referee referee;
+-
++    
+     protected int CurrentCycle;
+     protected Board board;
+-
+-    protected int currentPlayerIndex;
+-
++    
++    protected int currentPlayerIndex;  
++    
+     Random rand = new Random();
+ 
+-
+-
++    /**
++     * Initializes a game for two specific players.
++     * 
++     * @param player1 The first player of the game.
++     * @param player2 The second player of the game.
++     * @param referee The referee overseeing the game rules and logic.
++     */
+     /**
+      * Initializes a game for a dynamic number of players.
+-     *
++     * 
+      * @param players A list containing all the players participating in the game.
+      * @param referee The referee overseeing the game rules and logic.
+      */
+@@ -36,49 +42,47 @@
+         this.referee = referee;
+         this.board = board;
+     }
+-
+-    public void startGame() {
++    public void startGame(){
+         board.createGameBoard();
+         createTiles();
+         shareTilesDynamically();
+         choseFirstPlayer();
+-        for (Player player : players) {
++        for (Player player :players){
+             player.getRack().addTileFromDeck(player.getDeck());
+         }
+     }
+-
++     
+     /**
+      * Creates a complete set of tiles for the game and shuffles them randomly.
+-     *
++     * 
+      * @return A list of newly created and shuffled tiles.
+      */
+     public List<Tile> createTiles() {
+-        final List<Tile> listTile = new ArrayList<Tile>();
+-        for (COLOR color : COLOR.values()) {
+-            for (SHAPE shape : SHAPE.values()) {
++        final List<Tile> listTile =new ArrayList<Tile>();
++        for (COLOR color : COLOR.values() ){
++            for (SHAPE shape : SHAPE.values() ){
+                 listTile.add(new Tile(color, shape));
+                 listTile.add(new Tile(color, shape));
+             }
+         }
+         return listTile;
+     }
+-
+-    public String showRack(Player pLayer) {
+-        return pLayer.getRack().toString();
++    public String showRack(Player pLayer){
++        return  pLayer.getRack().toString();
+     }
+-
+-    /**
++	
++	/**
+      * Distributes tiles dynamically among all players.
+      */
+     public void shareTilesDynamically() {
+-        if (players == null || players.isEmpty()) {
+-            return;
++    	if (players == null || players.isEmpty()) {
++            return; 
+         }
+ 
+         final List<Tile> allTiles = createTiles();
+         int nbOfPlayers = players.size();
+         int tilesPerPlayer = allTiles.size() / nbOfPlayers;
+-        int startIndex = 0;
++        int startIndex = 0; 
+         for (Player player : players) {
+             List<Tile> subList = allTiles.subList(startIndex, startIndex + tilesPerPlayer);
+             ArrayList<Tile> playerTiles = new ArrayList<>(subList);
+@@ -86,32 +90,39 @@
+             player.getDeck().shuffle();
+             startIndex += tilesPerPlayer;
+         }
+-
++        
+         System.out.println("Distribution terminée : " + tilesPerPlayer + " tuiles par joueur.");
+     }
+-
++	
+     /**
+      * Checks if the list of players is empty.
+-     *
++     * 
+      * @return True if there are no players in the list, false otherwise.
+      */
+-    public boolean isPlayersEmpty() {
+-        int numberOfPlayers = players.size();
+-        if (numberOfPlayers == 0) {
+-            return true;
+-        }
+-        return false;
+-    }
+-
+-    public Player getCurrentPlayer() {
++	public boolean isPlayersEmpty() {
++		int numberOfPlayers = players.size();
++		if (numberOfPlayers == 0) {
++			return true;
++		}
++		return false;
++	}
++	
++	public Player getCurrentPlayer() {
+         return players.get(currentPlayerIndex);
+     }
+-
+     public void choseFirstPlayer() {
+         this.currentPlayerIndex = rand.nextInt(players.size());
+     }
+-
+-    public Board getBoard() {
+-        return board;
++	
++	public void nextTurn() {
++        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % players.size();
++        
++        System.out.println("C'est au tour de : " + getCurrentPlayer().getName());
++    }
++    public void placeTile(Player player, Tile tile, Position position) { //pas utile pour l'instant voir si on la garde
++        if (referee.isValidMove(position, tile )) {
++            board.placeTile(position, tile);
++            player.getRack().getTiles().remove(tile);//TODO eviter les appeles en cascade
++        }
+     }
+ }
+\ No newline at end of file
+Index: bin/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n\t<modelVersion>4.0.0</modelVersion>\n\t<groupId>fr.unilim.iut</groupId>\n\t<artifactId>hellomaven</artifactId>\n\t<version>0.0.1-SNAPSHOT</version>\n\n\t<properties>\n\t\t<maven.compiler.source>21</maven.compiler.source>\n\t\t<maven.compiler.target>21</maven.compiler.target>\n\t\t<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n\t</properties>\n\n\t<dependencies>\n\t\t<!-- JUnit 5 -->\n\t\t<dependency>\n\t\t\t<groupId>org.junit.jupiter</groupId>\n\t\t\t<artifactId>junit-jupiter</artifactId>\n\t\t\t<version>5.10.2</version>\n\t\t\t<scope>test</scope>\n\t\t</dependency>\n\t</dependencies>\n\n\t<build>\n\t\t<plugins>\n\t\t\t<!-- Plugin pour l'exécution des tests compatibles JUnit 5 -->\n\t\t\t<plugin>\n\t\t\t\t<artifactId>maven-surefire-plugin</artifactId>\n\t\t\t\t<version>3.2.5</version>\n\t\t\t</plugin>\n\t\t</plugins>\n\t</build>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/bin/pom.xml b/bin/pom.xml
+--- a/bin/pom.xml	(revision 7e6546aade39b86ed07f1e7e66035fd5de41f118)
++++ b/bin/pom.xml	(date 1779460300201)
+@@ -27,6 +27,7 @@
+ 				<artifactId>maven-surefire-plugin</artifactId>
+ 				<version>3.2.5</version>
+ 			</plugin>
++
+ 		</plugins>
+ 	</build>
+ </project>
+\ No newline at end of file

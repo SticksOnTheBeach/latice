@@ -109,23 +109,14 @@ public class ActionShopDeck extends VBox {
         actionExchangeAllTiles.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
             ExchangeRackAction exchange = new ExchangeRackAction();
-
-            // Si le joueur n'a jamais joué : échange gratuit
-            if (!gameController.isHasEverPlayed()) {
-                current.getRack().exchangeAllTiles(current.getDeck());
-                refreshPoints();
-                mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
-                return;
-            }
-
-            // Sinon échange payant via la classe Action
-            if (!exchange.hasEnoughPoints(current)) {
+            if(!exchange.hasEnoughPoints(current) && referee.isHasPlayedAction()) {
                 showNotEnoughPoints();
                 return;
             }
             exchange.exchangeRack(current, referee);
             refreshPoints();
             mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
+
         });
 
         actionBuyExtraMove.setOnAction(e -> {
