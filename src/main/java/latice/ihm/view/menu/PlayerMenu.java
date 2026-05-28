@@ -265,8 +265,6 @@ public class PlayerMenu extends BorderPane {
         colorGrid.add(btnGreen,  2, 0);
         colorGrid.add(btnYellow, 3, 0);
 
-        Label lblIcon = new Label("Icône :");
-        lblIcon.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
         Button btnClose = new Button("← Fermer");
         btnClose.setStyle(Style.BTN_GHOST_STYLE);
@@ -274,7 +272,7 @@ public class PlayerMenu extends BorderPane {
         btnClose.setOnMouseExited(e -> btnClose.setStyle(Style.BTN_GHOST_STYLE));
         btnClose.setOnAction(e -> closeAdvanced());
 
-        box.getChildren().addAll(lblTitle, lblColor, colorGrid, lblIcon, btnClose);
+        box.getChildren().addAll(lblTitle, lblColor, colorGrid, btnClose);
 
         return box;
     }
