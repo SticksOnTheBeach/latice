@@ -11,8 +11,9 @@ public class ExchangeRackAction extends Action {
 
     public void exchangeRack(Player current, Referee referee) {
         if (!referee.isHasPlayedAction()) {
-        current.getRack().exchangeAllTiles(current.getDeck());
-        referee.setHasPlayedAction(true);
+        	current.getRack().exchangeAllTiles(current.getDeck());
+        	referee.setHasPlayedAction(true);
+        	// FAIRE UN REFEREE.nextplayerturn pour faire en sorte que dès que l'on échange notre rack ça passe au joueur suivant
     } else {
         current.getRack().exchangeAllTiles(current.getDeck());
         current.setScore(current.getScore() - 2);

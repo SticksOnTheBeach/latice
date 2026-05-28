@@ -52,6 +52,12 @@ public class Referee {
     }
 
     public boolean hasAdjacentTile(Position position) {
+    	// TODO : FIX : problème lorsque 'lon pose une tuile
+    	/*
+    	 * en gros c'est mal géré, c'est à dire que l'on ne peut pas poser une tuile
+    	 * d'une couleur bleu, et par exemple plume, sur une case contenant aux alentours une tuile bleu d'une forme
+    	 * quelconque, et d'une tuile cyan avec une forme de plume, c'est un bug
+    	 */
         for (Position neighbor : position.getAdjacentPositions()) { // on parcours les différentes position AUTOUR de la position donnée
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) { // on vérifie si dans l'une des position voisines il y'a une cases occupé
