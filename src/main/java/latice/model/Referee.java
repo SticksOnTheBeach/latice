@@ -51,16 +51,8 @@ public class Referee {
         return true;
     }
 
-    private Position[] getAdjacentPositions(Position position) {
-        return new Position[] { new Position(position.getPositionUp(), position.getCol()),
-                new Position(position.getPositionDown(), position.getCol()),
-                new Position(position.getRow(), position.getPositionLeft()),
-                new Position(position.getRow(), position.getPositionRight())
-        };
-    }
-
     public boolean hasAdjacentTile(Position position) {
-        for (Position neighbor : getAdjacentPositions(position)) { // on parcours les différentes position AUTOUR de la position donnée
+        for (Position neighbor : position.getAdjacentPositions(position)) { // on parcours les différentes position AUTOUR de la position donnée
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) { // on vérifie si dans l'une des position voisines il y'a une cases occupé
                 return true;

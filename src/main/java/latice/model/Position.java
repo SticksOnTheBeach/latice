@@ -35,7 +35,13 @@ public class Position {
         Position other = (Position) obj;
         return Objects.equals(col, other.col) && Objects.equals(row, other.row);
     }
-    
+    private Position[] getAdjacentPositions(Position position) {
+        return new Position[] { new Position(position.getPositionUp(), position.getCol()),
+                new Position(position.getPositionDown(), position.getCol()),
+                new Position(position.getRow(), position.getPositionLeft()),
+                new Position(position.getRow(), position.getPositionRight())
+        };
+    }
     public int getPositionRight() {
     	return col+1;
     }

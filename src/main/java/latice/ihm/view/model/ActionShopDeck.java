@@ -109,35 +109,28 @@ public class ActionShopDeck extends VBox {
 
         actionExchangeAllTiles.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-            // A déjà joué ET pas assez de points
-            if (referee.isHasPlayedAction() && current.getScore() < 2) {
+            ExchangeRackAction exchange = new ExchangeRackAction();
+            if(!exchange.hasEnoughPoints(current) && referee.isHasPlayedAction()) {
                 showNotEnoughPoints();
                 return;
-            }
-            else if (!referee.isHasPlayedAction()) {
-                current.getRack().exchangeAllTiles(current.getDeck());
-                referee.setHasPlayedAction(true);
-            } else {
-                current.getRack().exchangeAllTiles(current.getDeck());
-                current.setScore(current.getScore() - 2);
-            }
+                    }
+            exchange.exchangeRack(current, referee);
             refreshPoints();
-           //mainPane.clearSelectedTiles(roundController.getCurrentPlayerIndex());
             mainPane.rafraichirRackJoueur(roundController.getCurrentPlayerIndex());
+
         });
         actionBuyExtraMove.setOnAction(e -> {
             Player current = roundController.getCurrentPlayer();
-
+            BuyExtraMoveAction extra = new BuyExtraMoveAction();
             if (!referee.isHasPlayedAction()) {
                 showNoPlayedYet();
                 return;
             }
-            if (current.getScore() < 2) {
+            if (!extra.hasEnoughPoints(current)) {
                 showNotEnoughPoints();
                 return;
             }
-
-            new BuyExtraMoveAction().buyExtraMove(current, referee);
+            extra.buyExtraMove(current, referee);
             refreshPoints();
         });
     }
@@ -264,7 +257,6 @@ public class ActionShopDeck extends VBox {
         alert.setContentText("Vous n'avez pas encore fait de tour !");
         alert.showAndWait();
     }
-
     public void refreshPoints() {
         Player current = roundController.getCurrentPlayer();
         points.setText("POINTS : " + current.getScore());
