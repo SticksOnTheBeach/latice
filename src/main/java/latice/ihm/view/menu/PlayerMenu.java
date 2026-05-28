@@ -324,9 +324,22 @@ public class PlayerMenu extends BorderPane {
         for (int i = 0; i < playerNames.size(); i++) {
             if (playerNames.get(i).isEmpty()) {
                 errorLabels.get(i).setVisible(true);
+                errorLabels.get(i).setText("ERROR : PLEASE ENTER A NAME");
+
                 correct = false;
             } else {
                 errorLabels.get(i).setVisible(false);
+            }
+            if(correct == true) { // Pour eviter de faire une boucle inutile si un des champs est vide
+                for (int j = i + 1; j < playerNames.size(); j++) {
+                    if (playerNames.get(i).equals(playerNames.get(j))) {
+                        errorLabels.get(i).setText("ERROR : NAME ALREADY USED");
+                        errorLabels.get(i).setVisible(true);
+                        errorLabels.get(j).setText("ERROR : NAME ALREADY USED");
+                        errorLabels.get(j).setVisible(true);
+                        correct = false;
+                    }
+                }
             }
         }
 

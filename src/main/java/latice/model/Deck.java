@@ -5,7 +5,7 @@ import latice.model.tile.Tile;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck extends Container implements TileContainer {
+public class Deck extends Container {
 
 
     /**
@@ -15,6 +15,14 @@ public class Deck extends Container implements TileContainer {
      */
     public Deck(ArrayList<Tile> tiles) {
         super(tiles);
+    }
+
+    public Tile getFirstTile() {
+        if(tiles.isEmpty()) {
+            return null; // TODO : throw an exception
+        }
+            return tiles.get(0);
+
     }
 
     @Override

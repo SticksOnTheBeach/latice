@@ -59,6 +59,18 @@ public class SquarePane extends StackPane {
             }
             event.consume();
         });
+        setOnMouseClicked(event -> {
+            if (!isOccupied && TileView.selectedTile != null) {
+                TileView tileView = TileView.selectedTile;
+                boolean success = gameController.playTile(tileView.getTile(), position);
+                if (success) {
+                    tileView.setStyle("");
+                    placeTile(tileView);
+                    TileView.selectedTile = null;
+                }
+            }
+            event.consume();
+        });
     }
 
     private void placeTile(TileView tileView) {

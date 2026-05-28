@@ -35,20 +35,12 @@ public class Position {
         Position other = (Position) obj;
         return Objects.equals(col, other.col) && Objects.equals(row, other.row);
     }
-    
-    public int getPositionRight() {
-    	return col+1;
-    }
-    
-    public int getPositionLeft() {
-    	return col-1;
-    }
-    
-    public int getPositionUp() {
-    	return row+1;
-    }
-    
-    public int getPositionDown() {
-    	return row-1;
+    public Position[] getAdjacentPositions() {
+        return new Position[]{
+                new Position(row - 1, col), // haut
+                new Position(row + 1, col), // bas
+                new Position(row, col - 1), // gauche
+                new Position(row, col + 1)  // droite
+        };
     }
 }

@@ -4,6 +4,7 @@ import latice.ihm.view.GamePane;
 import latice.ihm.view.model.ActionPromptDialog;
 import latice.model.Player;
 import latice.model.Position;
+import latice.model.Referee;
 import latice.model.tile.Tile;
 
 import java.util.ArrayList;
@@ -12,13 +13,15 @@ public class GameController {
     private GamePane mainPane;
     private RoundController roundController;
     private TileController tileController;
+    private Referee refree;
 
-
-    private boolean hasPlayedAction = false;
+    // hasEverPlayed reste local au controller (sert pour l'échange gratuit au tout 1er coup)
     private boolean hasEverPlayed = false;
-    public GameController(RoundController roundController, TileController tileController) {
+
+    public GameController(RoundController roundController, TileController tileController, Referee referee) {
         this.roundController = roundController;
         this.tileController = tileController;
+        this.refree = referee;
     }
 
     public void setView(GamePane mainPane) {
@@ -30,7 +33,8 @@ public class GameController {
      */
     public boolean playTile(Tile tile, Position position) {
         Player currentPlayer = roundController.getCurrentPlayer();
-        if (!currentPlayer.getRack().getTiles().contains(tile)|| hasPlayedAction) {
+        // hasPlayedAction vient maintenant du Referee (refacto)
+        if (!currentPlayer.getRack().getTiles().contains(tile) || refree.isHasPlayedAction()) {
             return false;
         }
 
@@ -46,7 +50,7 @@ public class GameController {
                 return true;
             }
 
-            // Sinon, on passe automatiquement au joueur suivant
+            // Sinon, on passe automatiquement au joueur suivant (fonctionnalité ihm)
             passTurn();
             return true;
         }
@@ -77,7 +81,8 @@ public class GameController {
             return;
         }
 
-        hasPlayedAction = false;
+        // hasPlayedAction est réinitialisé dans le Referee (refacto)
+        refree.setHasPlayedAction(false);
         mainPane.updateDisplay();
         promptForActionIfPossible();
     }
@@ -98,14 +103,6 @@ public class GameController {
 
     public int getRoundCount() {
         return roundController.getRoundCount();
-    }
-
-    public void setHasPlayedAction(boolean hasPlayedAction) {
-        this.hasPlayedAction = hasPlayedAction;
-    }
-
-    public boolean isHasPlayedAction() {
-        return hasPlayedAction;
     }
 
     public boolean isHasEverPlayed() {

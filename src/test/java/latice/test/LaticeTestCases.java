@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import latice.model.*;
+import latice.model.action.BuyExtraMoveAction;
+import latice.model.action.ExchangeRackAction;
 import latice.model.square.Square;
 import latice.model.square.SquareType;
 import latice.model.tile.COLOR;
@@ -99,7 +101,6 @@ public class LaticeTestCases {
 		assertEquals(0, player.getDeck().getTiles().size());
 		assertEquals(3, player.getRack().getTiles().size());
 	}
-// ===================== Check Board =====================
 
 	@Test
 	void checkCreationOfTheGameBoard(){
@@ -489,7 +490,7 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
 
-		assertEquals(1, referee.calculatePoints(new Position(4, 5), tile));
+		assertEquals(0, referee.calculatePoints(new Position(4, 5), tile));
 	}
 
 	@Test
@@ -502,7 +503,7 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE));
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
 
-		assertEquals(2, referee.calculatePoints(new Position(4, 5), tile));
+		assertEquals(1, referee.calculatePoints(new Position(4, 5), tile));
 	}
 
 	@Test
@@ -516,7 +517,7 @@ public class LaticeTestCases {
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
 
 		int points = referee.calculatePoints(new Position(0, 0), tile);
-		assertTrue(points >= 3); // 1 voisin + 2 bonus SUN
+		assertTrue(points >= 2); // 1 voisin + 2 bonus SUN
 	}
 
 // ===================== winingConditionEmpty =====================
@@ -596,7 +597,7 @@ public class LaticeTestCases {
 	}
 
 	@Test
-	public void hasAdjacentSameColorReturnsTrueWithMultipleNeighborsOneMatches() {
+	public void hasAdjacentSameColorReturnsFalseeWithMultipleNeighborsOneMatches() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
@@ -605,10 +606,23 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE)); // même couleur
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
 
-		assertTrue(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+		assertFalse(referee.hasAdjacentSameColor(new Position(4, 5), tile));
 	}
 
 // ===================== hasAdjacentSameShape =====================
+
+	@Test
+	public void hasAdjacentSameShapeReturnsFalseWhenNoNeighborSameShape() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
+		Tile tile = new Tile(COLOR.TEAL, SHAPE.BIRD);
+
+		assertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+	}
+	// ===================== hasAdjacentSameShape=====================
 
 	@Test
 	public void hasAdjacentSameShapeReturnsTrueWhenNeighborSameShape() {
@@ -622,16 +636,119 @@ public class LaticeTestCases {
 		assertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));
 	}
 
+// ===================== BuyExtraMoveAction =====================
+
 	@Test
-	public void hasAdjacentSameShapeReturnsFalseWhenNoNeighborSameShape() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
+	public void buyExtraMove_deductsPointsAndResetsFlag_whenConditionsMet() {
+		Rack rack = new Rack();
+		Player player = new Player(rack, "TestPlayer");
+		ArrayList<Tile> tiles = new ArrayList<>();
+		for (int i = 0; i < 10; i++) tiles.add(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
+		player.setDeck(new Deck(tiles));
+		player.setScore(5);
 
-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
-		Tile tile = new Tile(COLOR.TEAL, SHAPE.BIRD);
+		Referee referee = new Referee(new Board());
+		referee.setHasPlayedAction(true);
 
-		assertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+		new BuyExtraMoveAction().buyExtraMove(player, referee);
+
+		assertEquals(3, player.getScore());
+		assertFalse(referee.isHasPlayedAction());
+	}
+
+	@Test
+	public void buyExtraMove_doesNothing_whenScoreTooLow() {
+		Rack rack = new Rack();
+		Player player = new Player(rack, "TestPlayer");
+		player.setDeck(new Deck(new ArrayList<>()));
+		player.setScore(1);
+
+		Referee referee = new Referee(new Board());
+		referee.setHasPlayedAction(true);
+
+		new BuyExtraMoveAction().buyExtraMove(player, referee);
+
+		assertEquals(1, player.getScore());
+		assertTrue(referee.isHasPlayedAction());
+	}
+
+	@Test
+	public void buyExtraMove_doesNothing_whenFlagIsFalse() {
+		Rack rack = new Rack();
+		Player player = new Player(rack, "TestPlayer");
+		player.setDeck(new Deck(new ArrayList<>()));
+		player.setScore(5);
+
+		Referee referee = new Referee(new Board());
+		referee.setHasPlayedAction(false);
+
+		new BuyExtraMoveAction().buyExtraMove(player, referee);
+
+		assertEquals(5, player.getScore());
+		assertFalse(referee.isHasPlayedAction());
+	}
+
+	@Test
+	public void buyExtraMove_worksWithExactlyTwoPoints() {
+		Rack rack = new Rack();
+		Player player = new Player(rack, "TestPlayer");
+		player.setDeck(new Deck(new ArrayList<>()));
+		player.setScore(2);
+
+		Referee referee = new Referee(new Board());
+		referee.setHasPlayedAction(true);
+
+		new BuyExtraMoveAction().buyExtraMove(player, referee);
+
+		assertEquals(0, player.getScore());
+		assertFalse(referee.isHasPlayedAction());
+	}
+
+// ===================== ExchangeRackAction =====================
+
+	@Test
+	public void exchangeRack_setsFlag_whenNoActionPlayedYet() {
+		game.startGame();
+		Player player = players.get(0);
+		Referee referee = new Referee(game.getBoard());
+		referee.setHasPlayedAction(false);
+
+		new ExchangeRackAction().exchangeRack(player, referee);
+
+		assertTrue(referee.isHasPlayedAction());
+		assertEquals(5, player.getRack().getTiles().size());
+	}
+
+	@Test
+	public void exchangeRack_deductsTwoPoints_whenActionAlreadyPlayed() {
+		game.startGame();
+		Player player = players.get(0);
+		player.setScore(4);
+		Referee referee = new Referee(game.getBoard());
+		referee.setHasPlayedAction(true);
+
+		new ExchangeRackAction().exchangeRack(player, referee);
+
+		assertEquals(2, player.getScore());
+		assertEquals(5, player.getRack().getTiles().size());
+	}
+
+// ===================== Deck =====================
+
+	@Test
+	public void deck_getFirstTile_returnsFirstElement() {
+		ArrayList<Tile> tiles = new ArrayList<>();
+		Tile first = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
+		tiles.add(first);
+		tiles.add(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
+		Deck d = new Deck(tiles);
+
+		assertEquals(first, d.getFirstTile());
+	}
+
+	@Test
+	public void deck_getFirstTile_returnsNull_whenEmpty() {
+		assertNull(new Deck(new ArrayList<>()).getFirstTile());
 	}
 
 	@Test
@@ -645,7 +762,7 @@ public class LaticeTestCases {
 	}
 
 	@Test
-	public void hasAdjacentSameShapeReturnsTrueWithMultipleNeighborsOneMatches() {
+	public void hasAdjacentSameShapeReturnsFalseWithMultipleNeighborsOneMatches() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
@@ -654,7 +771,7 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN);
 
-		assertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+		assertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));
 	}
 
 }

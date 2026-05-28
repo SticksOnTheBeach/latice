@@ -15,10 +15,7 @@ public class Game {
     protected ArrayList<Player> players = new ArrayList<Player>();
 
     protected Referee referee;
-
-    protected int CurrentCycle;
     protected Board board;
-
     protected int currentPlayerIndex;
 
     Random rand = new Random();
@@ -102,11 +99,9 @@ public class Game {
         }
         return false;
     }
-
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
-
     public void choseFirstPlayer() {
         this.currentPlayerIndex = rand.nextInt(players.size());
     }

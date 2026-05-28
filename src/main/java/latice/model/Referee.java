@@ -10,9 +10,7 @@ public class Referee {
     private Player player;
     private Board gameboard;
     protected static int points=0;
-
-
-
+    private boolean havePlayed = false;
     private int roundCount = 1;
     public Referee() {
         this.roundCount = 1;
@@ -53,16 +51,8 @@ public class Referee {
         return true;
     }
 
-    private Position[] getAdjacentPositions(Position position) {
-        return new Position[] { new Position(position.getPositionUp(), position.getCol()),
-                new Position(position.getPositionDown(), position.getCol()),
-                new Position(position.getRow(), position.getPositionLeft()),
-                new Position(position.getRow(), position.getPositionRight())
-        };
-    }
-
     public boolean hasAdjacentTile(Position position) {
-        for (Position neighbor : getAdjacentPositions(position)) { // on parcours les différentes position AUTOUR de la position donnée
+        for (Position neighbor : position.getAdjacentPositions()) { // on parcours les différentes position AUTOUR de la position donnée
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) { // on vérifie si dans l'une des position voisines il y'a une cases occupé
                 return true;
@@ -75,30 +65,34 @@ public class Referee {
      * Vérifie si au moins une tuile voisine est de la même couleur.
      */
     public boolean hasAdjacentSameColor(Position position, Tile tile) {
-        for (Position neighbor : getAdjacentPositions(position)) {
+        boolean hasNeighbor = false;
+        for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
-                if (neighborSquare.getTile().getColor() == tile.getColor()) {
-                    return true;
+                hasNeighbor = true;
+                if (neighborSquare.getTile().getColor() != tile.getColor()) {
+                    return false;
                 }
             }
         }
-        return false;
+        return hasNeighbor;
     }
 
     /**
      * Vérifie si au moins une tuile voisine est de la même forme.
      */
     public boolean hasAdjacentSameShape(Position position, Tile tile) {
-        for (Position neighbor : getAdjacentPositions(position)) {
+        boolean hasNeighbor = false;
+        for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
-                if (neighborSquare.getTile().getShape() == tile.getShape()) {
-                    return true;
+                hasNeighbor = true;
+                if (neighborSquare.getTile().getShape() != tile.getShape()) {
+                    return false;
                 }
             }
         }
-        return false;
+        return hasNeighbor;
     }
 
     /**
@@ -106,7 +100,7 @@ public class Referee {
      */
     private int countMatchingNeighbors(Position position, Tile tile) {
         int count = 0;
-        for (Position neighbor : getAdjacentPositions(position)) {
+        for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
                 Tile neighborTile = neighborSquare.getTile();
@@ -125,10 +119,8 @@ public class Referee {
         if (matchingSides >= 4) {
             points += 4;
         } else if (matchingSides == 3) {
-            points += 3;
-        } else if (matchingSides == 2) {
             points += 2;
-        } else if (matchingSides == 1) {
+        } else if (matchingSides == 2) {
             points += 1;
         }
 
@@ -167,7 +159,11 @@ public class Referee {
         }
 
 
-        return winner;//TODO gerer les cas rare ou plusieurs joueurs on memes tuilles et points
+        return winner;
+    }
+
+    public void resetTurn() {
+        havePlayed = false;
     }
     public void setRoundCount(int roundCount) {
         this.roundCount = roundCount;
@@ -176,4 +172,7 @@ public class Referee {
     public int getRoundCount() {
         return roundCount;
     }
+    public boolean isHasPlayedAction() { return havePlayed; }
+    public void setHasPlayedAction(boolean played) { havePlayed = played; }
+
 }

@@ -4,7 +4,7 @@ import latice.model.tile.Tile;
 
 import java.util.ArrayList;
 
-public class Rack extends Container implements TileContainer{
+public class Rack extends Container {
 	int maxSize =5;
     
     // Changer la méthode Rack, afin qu'au lancement/à l'initialisation du jeu, il est préalablement 5 tiles
@@ -15,7 +15,7 @@ public class Rack extends Container implements TileContainer{
 
     public void addTileFromDeck(Deck deck) {
         while (tiles.size() < maxSize && deck.isEmpty() == false) {
-                tiles.add(deck.getTiles().get(0));
+                tiles.add(deck.getFirstTile());
                 deck.remove();
         }
 
@@ -27,23 +27,36 @@ public class Rack extends Container implements TileContainer{
     public void drawOneTile(Deck deck) {
         // On vérifie qu'il y a de la place (moins de maxSize) et que la pioche n'est pas vide probablement inutile comme methode
         if (tiles.size() < maxSize && !deck.isEmpty()) {
-            tiles.add(deck.getTiles().get(0));
+            tiles.add(deck.getFirstTile());
             deck.remove();
         }
     }
-    
-    
+
+
     public void exchangeAllTiles(Deck deck) {
-        // on remet les tuiles du rack dans le deck
-        deck.getTiles().addAll(tiles);
+            deck.getTiles().addAll(tiles);// CASCADE a refaire
+            deck.shuffle();
+            tiles.clear();
+        addTileFromDeck(deck);
+
+
+    }
+/*
+NOT USED FOR NOW, BUT COULD BE USEFUL IN THE FUTURE IF WE WANT TO IMPLEMENT A "EXCHANGE SOME TILES" FEATURE
+    public void exchangeSomeTiles(Deck deck, ArrayList<Tile> tilesToKeep) {
+        int targetSize = tiles.size();
+
+        for (Tile tile : tiles) {
+            if (!tilesToKeep.contains(tile)) {
+                deck.getTiles().add(tile);
+            }
+        }
         deck.shuffle();
-
-        // on clear le rack
         tiles.clear();
-
-        // uis on pioche depuis le deck qu'on a
+        tiles.addAll(tilesToKeep);
         addTileFromDeck(deck);
     }
+*/
     @Override
     public String toString() {
         return "Rack{" +
