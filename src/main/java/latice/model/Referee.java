@@ -52,7 +52,7 @@ public class Referee {
     }
 
     public boolean hasAdjacentTile(Position position) {
-        for (Position neighbor : position.getAdjacentPositions(position)) { // on parcours les différentes position AUTOUR de la position donnée
+        for (Position neighbor : position.getAdjacentPositions()) { // on parcours les différentes position AUTOUR de la position donnée
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) { // on vérifie si dans l'une des position voisines il y'a une cases occupé
                 return true;
@@ -65,30 +65,34 @@ public class Referee {
      * Vérifie si au moins une tuile voisine est de la même couleur.
      */
     public boolean hasAdjacentSameColor(Position position, Tile tile) {
-        for (Position neighbor : getAdjacentPositions(position)) {
+        boolean hasNeighbor = false;
+        for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
-                if (neighborSquare.getTile().getColor() == tile.getColor()) {
-                    return true;
+                hasNeighbor = true;
+                if (neighborSquare.getTile().getColor() != tile.getColor()) {
+                    return false;
                 }
             }
         }
-        return false;
+        return hasNeighbor;
     }
 
     /**
      * Vérifie si au moins une tuile voisine est de la même forme.
      */
     public boolean hasAdjacentSameShape(Position position, Tile tile) {
-        for (Position neighbor : getAdjacentPositions(position)) {
+        boolean hasNeighbor = false;
+        for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
-                if (neighborSquare.getTile().getShape() == tile.getShape()) {
-                    return true;
+                hasNeighbor = true;
+                if (neighborSquare.getTile().getShape() != tile.getShape()) {
+                    return false;
                 }
             }
         }
-        return false;
+        return hasNeighbor;
     }
 
     /**
@@ -96,7 +100,7 @@ public class Referee {
      */
     private int countMatchingNeighbors(Position position, Tile tile) {
         int count = 0;
-        for (Position neighbor : getAdjacentPositions(position)) {
+        for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
             if (neighborSquare != null && neighborSquare.isOccupied()) {
                 Tile neighborTile = neighborSquare.getTile();

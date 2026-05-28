@@ -18,7 +18,10 @@ public class Deck extends Container {
     }
 
     public Tile getFirstTile() {
-            return tiles.get(0); //TODO: check if empty before
+        if(tiles.isEmpty()) {
+            return null; // TODO : throw an exception
+        }
+            return tiles.get(0);
 
     }
 
