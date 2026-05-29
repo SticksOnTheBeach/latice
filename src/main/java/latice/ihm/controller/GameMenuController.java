@@ -18,12 +18,13 @@ public class GameMenuController {
 
     private Stage stage;
     private PlayerMenu gameMenu;
-
+    private MainMenuPane mainMenu;
     public GameMenuController(Stage stage) {
         this.stage = stage;
     }
 
-    public void setGameMenu(PlayerMenu gameMenu) {
+    public void setGameMenu(PlayerMenu gameMenu, MainMenuPane mainMenu) {
+        this.gameMenu = gameMenu;
         this.gameMenu = gameMenu;
     }
 
@@ -63,7 +64,9 @@ public class GameMenuController {
         TileController tileController = new TileController(board, referee);
         RoundController roundController = new RoundController(players, referee);
         GameController gameController = new GameController(roundController, tileController, referee, stage);
+
         GamePane mainPane = new GamePane(board, game, tileController, roundController, gameController, referee);
+
         mainPane.setStyle("-fx-background-color: linear-gradient(to bottom right, #3e2723, #6d4c41);");
 
         stage.setScene(new Scene(mainPane, 1000, 900));

@@ -1,10 +1,11 @@
 package latice.ihm.view.menu;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import latice.model.Player;
@@ -14,25 +15,30 @@ import java.util.ArrayList;
 public class WinMenu extends BorderPane {
 
     private Label lblVictory;
-
     private Button btnReplay = new Button("> REPLAY");
     private Button btnExit = new Button("> EXIT");
-    private BorderPane mainPane;
 
     public WinMenu(Stage stage, ArrayList<Player> winners) {
-        mainPane = new BorderPane();
 
-        lblVictory = new Label("Victoire !");
-        VBox winnersBox = new VBox(8);
+        this.setStyle("-fx-background-color: #1a2e35;");
+
+        lblVictory = new Label("Victory !");
+        lblVictory.setStyle("-fx-font-size: 32px; -fx-font-family: \"Courier New\"; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        VBox topBox = new VBox(lblVictory);
+        topBox.setAlignment(Pos.CENTER);
+        topBox.setStyle("-fx-padding: 40px 0 0 0;");
+        this.setTop(topBox);
+
+        VBox winnersBox = new VBox(12);
         winnersBox.setAlignment(Pos.CENTER);
-        BorderPane.setAlignment(winnersBox, Pos.CENTER);
         getWinnerLabel(winners, winnersBox);
-        mainPane.setTop(lblVictory);
-        mainPane.setCenter(winnersBox);
-        mainPane.setBottom(new VBox(btnReplay, btnExit));
-        this.getChildren().add(mainPane);
-        mainPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-        getWinnerLabel(winners, winnersBox);
+        this.setCenter(winnersBox);
+
+        HBox buttonBox = new HBox(20, btnReplay, btnExit);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setStyle("-fx-padding: 0 0 40px 0;");
+        this.setBottom(buttonBox);
 
         String btnStyle =
                 "-fx-font-size: 20px; " +
@@ -81,17 +87,22 @@ public class WinMenu extends BorderPane {
 
         btnExit.setOnMouseEntered(e -> btnExit.setStyle(btnHoverStyle));
         btnExit.setOnMouseExited(e -> btnExit.setStyle(btnStyle));
-        btnExit.setOnMousePressed(e -> btnReplay.setStyle(btnPressedStyle));
+        btnExit.setOnMousePressed(e -> btnExit.setStyle(btnPressedStyle));
         btnExit.setOnMouseReleased(e -> btnExit.setStyle(btnHoverStyle));
 
-
         btnReplay.setOnAction(e -> {
-             // TODO : relancer une partie
-         });
-         btnExit.setOnAction(e -> {
-             stage.close();
-         });
-    }public void getWinnerLabel(ArrayList<Player> players, VBox container) {
+            stage.close();
+            MainMenuPane newMenu = new MainMenuPane(stage);
+            stage.setScene(new Scene(newMenu, 1000, 700));
+            stage.show();
+        });
+
+        btnExit.setOnAction(e -> {
+            stage.close();
+        });
+    }
+
+    public void getWinnerLabel(ArrayList<Player> players, VBox container) {
         container.getChildren().clear();
 
         String titleStyle =
@@ -103,7 +114,7 @@ public class WinMenu extends BorderPane {
             lbl.setStyle(titleStyle);
             container.getChildren().add(lbl);
         } else {
-            Label title = new Label("Les gagnants sont :");
+            Label title = new Label("The winners are :");
             title.setStyle(titleStyle);
             container.getChildren().add(title);
             for (Player player : players) {
@@ -114,5 +125,3 @@ public class WinMenu extends BorderPane {
         }
     }
 }
-
-

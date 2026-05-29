@@ -115,7 +115,7 @@ public class MainMenuPane extends BorderPane {
         btnExit.setOnMousePressed(e -> btnExit.setStyle(btnPressedStyle));
         btnExit.setOnMouseReleased(e -> btnExit.setStyle(btnHoverStyle));
         
-        btnPlay.setOnAction(e -> handleStart(stage));
+        btnPlay.setOnAction(e -> handleStart(stage  ));
         btnExit.setOnAction(e -> System.exit(0));
 
         GridPane gridMid = new GridPane();
@@ -138,7 +138,7 @@ public class MainMenuPane extends BorderPane {
             e -> controller.handleBack(e),
             e -> controller.handleStart(e)
         );
-        controller.setGameMenu(gameMenu);
+        controller.setGameMenu(gameMenu, this); //Le met en parametre du controller pour qu'il puisse y accéder et faire le lien entre les deux
  
         stage.setScene(new Scene(gameMenu, 1000, 700));
     }

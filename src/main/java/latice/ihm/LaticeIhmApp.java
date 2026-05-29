@@ -48,8 +48,8 @@ public class LaticeIhmApp extends Application {
         MainMenuPane mainMenu = new MainMenuPane(primaryStage);
         
         //GameMenu gameMenu = new GameMenu(e -> controller.handleBack(e));
-        controller.setGameMenu(gameMenu);
-        
+        controller.setGameMenu(gameMenu, mainMenu);
+
         primaryStage.setResizable(false);
         primaryStage.setTitle("Latice");
         primaryStage.setScene(new Scene(mainMenu, 1000, 700));

@@ -38,7 +38,6 @@ public class ActionShopDeck extends VBox {
     private boolean         isOpen = false;
     private VBox            panel;
     private Polygon         arrow;
-    private GamePane        mainPane;
 
     public ActionShopDeck(GameController gameController,
                           RoundController roundController,
@@ -46,8 +45,6 @@ public class ActionShopDeck extends VBox {
         this.gameController  = gameController;
         this.roundController = roundController;
         this.referee         = referee;
-        this.mainPane        = mainPane;
-
         setAlignment(Pos.BOTTOM_CENTER);
         setPickOnBounds(false);
 
