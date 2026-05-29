@@ -12,13 +12,9 @@ public class Game {
 
     // Tout passe par la liste players,
     // pour que getCurrentPlayer() et nextTurn() fonctionnent dans tous les cas.
-    protected ArrayList<Player> players = new ArrayList<Player>();
-
-    protected Referee referee;
-    protected Board board;
-    protected int currentPlayerIndex;
-
-    Random rand = new Random();
+    private ArrayList<Player> players = new ArrayList<Player>();
+    private Referee referee;
+    private Board board;
 
 
 
@@ -36,9 +32,7 @@ public class Game {
 
     public void startGame() {
         board.createGameBoard();
-        createTiles();
         shareTilesDynamically();
-        choseFirstPlayer();
         for (Player player : players) {
             player.getRack().addTileFromDeck(player.getDeck());
         }
@@ -49,7 +43,7 @@ public class Game {
      *
      * @return A list of newly created and shuffled tiles.
      */
-    public List<Tile> createTiles() {
+    private List<Tile> createTiles() {
         final List<Tile> listTile = new ArrayList<Tile>();
         for (COLOR color : COLOR.values()) {
             for (SHAPE shape : SHAPE.values()) {
@@ -60,10 +54,6 @@ public class Game {
         return listTile;
     }
 
-    public String showRack(Player pLayer) {
-        return pLayer.getRack().toString();
-    }
-
     /**
      * Distributes tiles dynamically among all players.
      */
@@ -71,7 +61,7 @@ public class Game {
         if (players == null || players.isEmpty()) {
             return;
         }
-
+ 
         final List<Tile> allTiles = createTiles();
         int nbOfPlayers = players.size();
         int tilesPerPlayer = allTiles.size() / nbOfPlayers;
@@ -83,30 +73,8 @@ public class Game {
             player.getDeck().shuffle();
             startIndex += tilesPerPlayer;
         }
-
+ 
         System.out.println("Distribution terminée : " + tilesPerPlayer + " tuiles par joueur.");
     }
 
-    /**
-     * Checks if the list of players is empty.
-     *
-     * @return True if there are no players in the list, false otherwise.
-     */
-    public boolean isPlayersEmpty() {
-        int numberOfPlayers = players.size();
-        if (numberOfPlayers == 0) {
-            return true;
-        }
-        return false;
-    }
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
-    public void choseFirstPlayer() {
-        this.currentPlayerIndex = rand.nextInt(players.size());
-    }
-
-    public Board getBoard() {
-        return board;
-    }
 }
