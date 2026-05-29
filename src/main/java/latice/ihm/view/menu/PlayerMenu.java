@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import latice.ihm.view.style.Style;
 
@@ -37,7 +38,7 @@ public class PlayerMenu extends BorderPane {
     private ArrayList<String> playerNames = new ArrayList<>();
     private int currentPlayerIndex = -1;
     private ArrayList<String> playerColors = new ArrayList<>();
-    private ArrayList<String> playersIcon = new ArrayList<>();
+
 
     private Label lblTitle;
     private VBox playersBox;
@@ -118,7 +119,7 @@ public class PlayerMenu extends BorderPane {
     }
 
     private HBox buildPlayerRow(int i) {
-        Label lblNum = new Label((i + 1) + ".");
+        Label lblNum = new Label((i + 1) + "");
         lblNum.setStyle(
             "-fx-font-family: \"Courier New\"; " +
             "-fx-text-fill: #a8d8a8; " +
@@ -318,14 +319,19 @@ public class PlayerMenu extends BorderPane {
     
     private boolean handleStart() {
         boolean correct = true;
-
         for (int i = 0; i < playerNames.size(); i++) {
             if (playerNames.get(i).isEmpty()) {
                 errorLabels.get(i).setVisible(true);
                 errorLabels.get(i).setText("ERROR : PLEASE ENTER A NAME");
-
                 correct = false;
-            } else {
+            } 
+            else if(playerNames.get(i).length() >= 12) {
+            	errorLabels.get(i).setVisible(true);
+            	errorLabels.get(i).setTextFill(Color.ORANGE);
+            	errorLabels.get(i).setText("The lenght of your names must be \n inferior or equal to 12");
+            	correct =  false;
+            }
+            else {
                 errorLabels.get(i).setVisible(false);
             }
             if(correct == true) { // Pour eviter de faire une boucle inutile si un des champs est vide
@@ -342,7 +348,7 @@ public class PlayerMenu extends BorderPane {
         }
 
         if (correct) {
-            System.out.println("[GameMenu] Démarrage avec : " + playerNames);
+            System.out.println("Démarrage avec : " + playerNames);
         }
 
         return correct;
