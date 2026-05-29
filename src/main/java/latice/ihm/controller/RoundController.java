@@ -14,7 +14,7 @@ public class RoundController {
 	private Referee referee;
 	public RoundController(ArrayList<Player> players, Referee referee) {
 	     this.players = players;
-	     this.currentPlayerIndex = new Random().nextInt(players.size()); // on choisit aléatoirement le joueur qui joue 
+	     this.currentPlayerIndex = new Random().nextInt(players.size()); // on choisit aléatoirement le joueur qui joue ( LE PREMIER ) 
 		 this.referee = referee;
 	}
 
