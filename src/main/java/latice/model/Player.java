@@ -5,8 +5,6 @@ public class Player {
     private int score;
     private Rack rack;
     private Deck deck;
-
-    private boolean hasPlayedAction = false;
     public Player(Rack rack, String name) {
         this.rack = rack;
         this.score = 0;
