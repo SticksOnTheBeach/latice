@@ -1,6 +1,7 @@
 package latice.ihm.controller;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import latice.model.Player;
 import latice.model.Referee;
@@ -11,11 +12,11 @@ public class RoundController {
 	private ArrayList<Player> players;
 
 	private Referee referee;
-	 public RoundController(ArrayList<Player> players, Referee referee) {
-	        this.players = players;
-	        this.currentPlayerIndex = 0;
+	public RoundController(ArrayList<Player> players, Referee referee) {
+	     this.players = players;
+	     this.currentPlayerIndex = new Random().nextInt(players.size()); // on choisit aléatoirement le joueur qui joue 
 		 this.referee = referee;
-	    }
+	}
 
 	
 	public Player getCurrentPlayer() {
