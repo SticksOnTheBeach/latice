@@ -1,5 +1,7 @@
 package latice.ihm.controller;
 
+import java.util.ArrayList;
+
 import latice.ihm.view.GamePane;
 import latice.ihm.view.model.ActionPromptDialog;
 import latice.model.Player;
@@ -7,20 +9,16 @@ import latice.model.Position;
 import latice.model.Referee;
 import latice.model.tile.Tile;
 
-import java.util.ArrayList;
-
 public class GameController {
     private GamePane mainPane;
     private RoundController roundController;
     private TileController tileController;
-    private Referee refree;
-
-    // hasEverPlayed reste local au controller (sert pour l'échange gratuit au tout 1er coup)
+    private Referee referee;
 
     public GameController(RoundController roundController, TileController tileController, Referee referee) {
         this.roundController = roundController;
         this.tileController = tileController;
-        this.refree = referee;
+        this.referee = referee;
     }
 
     public void setView(GamePane mainPane) {
@@ -28,28 +26,27 @@ public class GameController {
     }
 
     /**
-     * Gère le placement d'une tuile 
+     * Gère le placement d'une tuile.
      */
     public boolean playTile(Tile tile, Position position) {
         Player currentPlayer = roundController.getCurrentPlayer();
-        // hasPlayedAction vient maintenant du Referee (refacto)
-        if (!currentPlayer.getRack().getTiles().contains(tile) || refree.isHasPlayedAction()) {
+        if (!currentPlayer.getRack().getTiles().contains(tile) || referee.isHasPlayedAction()) {
             return false;
         }
 
         boolean success = tileController.placeTile(currentPlayer, tile, position);
 
         if (success) {
-            refree.setHasPlayedAction(true);
+            referee.setHasPlayedAction(true);
 
             // Vérifie d'abord la condition de victoire (rack + deck vides)
-            if (tileController.getReferee().winingConditionEmpty(currentPlayer)) {
-                ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
+            if (referee.winingConditionEmpty(currentPlayer)) {
+                ArrayList<Player> winner = referee.getWinner(roundController.getPlayers());
                 mainPane.showWinner(winner);
                 return true;
             }
 
-            // Sinon, on passe automatiquement au joueur suivant (fonctionnalité ihm)
+            // Sinon on passe automatiquement au joueur suivant
             passTurn();
             return true;
         }
@@ -68,26 +65,20 @@ public class GameController {
     }
 
     /**
-     * Méthode pour passer son tour (Bouton "Fin de tour")
+     * Méthode pour passer son tour (Bouton "Fin de tour").
+     * Le rack du joueur précédent est déjà rechargé dans TileController.placeTile().
      */
     public void passTurn() {
         roundController.nextPlayerTurn();
 
-        Player currentPlayer = roundController.getCurrentPlayer();
-        int currentIndex = roundController.getCurrentPlayerIndex();
-        currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
-        mainPane.rafraichirRackJoueur(currentIndex);
-
         // Vérifie la condition de victoire par nombre de cycles
-        if (tileController.getReferee().winingConditionCycles()) {
-            ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
+        if (referee.winingConditionCycles()) {
+            ArrayList<Player> winner = referee.getWinner(roundController.getPlayers());
             mainPane.showWinner(winner);
             return;
         }
 
-
-        // hasPlayedAction est réinitialisé dans le Referee (refacto)
-        refree.setHasPlayedAction(false);
+        referee.setHasPlayedAction(false);
         mainPane.updateDisplay();
         promptForActionIfPossible();
     }
