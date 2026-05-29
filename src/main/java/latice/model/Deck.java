@@ -24,6 +24,14 @@ public class Deck extends Container {
             return tiles.get(0);
 
     }
+    
+    /**
+     * Mélange aléatoirement les tuiles du deck.
+     * Présent uniquement sur Deck (un Rack ne se mélange pas).
+     */
+    public void shuffle() {
+        Collections.shuffle(tiles);
+    }
 
     @Override
     public String toString() {
