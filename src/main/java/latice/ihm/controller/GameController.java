@@ -7,6 +7,7 @@ import latice.ihm.view.menu.WinMenu;
 import latice.ihm.view.model.ActionPromptDialog;
 import latice.model.Player;
 import latice.model.Position;
+import latice.model.Rack;
 import latice.model.Referee;
 import latice.model.tile.Tile;
 
@@ -55,9 +56,10 @@ public class GameController {
                 mainPane.showWinner(winner);
                 return true;
             }
+            //Refacto s'occupe du pass turn via cette methode car plus agreable et fluide
+            promptForActionIfPossible();
 
-            // Sinon, on passe automatiquement au joueur suivant (fonctionnalité ihm)
-            passTurn();
+
             return true;
         }
         return false;
@@ -94,16 +96,23 @@ public class GameController {
         // hasPlayedAction est réinitialisé dans le Referee (refacto)
         refree.setHasPlayedAction(false);
         mainPane.updateDisplay();
-        promptForActionIfPossible();
+        // TODO a discuter si on garde ou pas ici
+        //promptForActionIfPossible();
     }
-
     private void promptForActionIfPossible() {
         Player currentPlayer = roundController.getCurrentPlayer();
         if (currentPlayer.getScore() >= 2) {
             boolean accept = new ActionPromptDialog().askBuyAction();
             if (accept) {
+
                 mainPane.openActionShop();
+                mainPane.updateDisplay();
+
+            } else {
+                passTurn();
             }
+        } else {
+            passTurn();
         }
     }
 

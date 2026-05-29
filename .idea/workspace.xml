@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f10cfdd2-f564-41e8-9131-701a0dfc1102" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_26,_10_51 AM_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_26__10_51AM__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_22_26,_10_35 AM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_22_26__10_35AM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26,_10_36 AM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_22_26__10_36AM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameMenuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/view/menu/WinMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/view/menu/WinMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/view/model/ActionPromptDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/view/model/ActionPromptDialog.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
