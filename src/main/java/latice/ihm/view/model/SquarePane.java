@@ -16,27 +16,21 @@ public class SquarePane extends StackPane {
 
     private static final int SIZE = 60;
     private Position position;
-    private Square square;
     private boolean isOccupied = false;
-    private GameController gameController;
 
-    public SquarePane(Square square, Position position, TileController tileController, RoundController roundController, GamePane mainPane, GameController gameController) {
-        this.square = square;
+    public SquarePane(Square square, Position position, TileController tileController,
+                      RoundController roundController, GamePane mainPane, GameController gameController) {
         this.position = position;
-        this.gameController = gameController;
-        
+
         try {
-        // ✅ Image depuis getImagePath() au lieu du Rectangle + Label
-        ImageView imageView = new ImageView(ImageLoader.load(square.getType().getImagePath()));
-        imageView.setFitWidth(SIZE);
-        imageView.setFitHeight(SIZE);
-        imageView.setPreserveRatio(false);
-        getChildren().add(imageView);
+            ImageView imageView = new ImageView(ImageLoader.load(square.getType().getImagePath()));
+            imageView.setFitWidth(SIZE);
+            imageView.setFitHeight(SIZE);
+            imageView.setPreserveRatio(false);
+            getChildren().add(imageView);
         } catch (InvalidImagePathException e) {
-        	System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
-
-
 
         setOnDragOver(event -> {
             if (!isOccupied && event.getGestureSource() instanceof TileView && event.getDragboard().hasString()) {
@@ -46,7 +40,6 @@ public class SquarePane extends StackPane {
         });
 
         setOnDragDropped(event -> {
-            System.out.println("DragDropped sur " + position.getRow() + "," + position.getCol());
             if (!isOccupied) {
                 TileView tileView = (TileView) event.getGestureSource();
                 boolean success = gameController.playTile(tileView.getTile(), position);
@@ -59,6 +52,7 @@ public class SquarePane extends StackPane {
             }
             event.consume();
         });
+
         setOnMouseClicked(event -> {
             if (!isOccupied && TileView.selectedTile != null) {
                 TileView tileView = TileView.selectedTile;
