@@ -1,6 +1,9 @@
 package latice.ihm.controller;
 
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import latice.ihm.view.GamePane;
+import latice.ihm.view.menu.WinMenu;
 import latice.ihm.view.model.ActionPromptDialog;
 import latice.model.Player;
 import latice.model.Position;
@@ -14,13 +17,17 @@ public class GameController {
     private RoundController roundController;
     private TileController tileController;
     private Referee refree;
+    Stage stage;
+
+
 
     // hasEverPlayed reste local au controller (sert pour l'échange gratuit au tout 1er coup)
 
-    public GameController(RoundController roundController, TileController tileController, Referee referee) {
+    public GameController(RoundController roundController, TileController tileController, Referee referee, Stage stage ) {
         this.roundController = roundController;
         this.tileController = tileController;
         this.refree = referee;
+        this.stage = stage;
     }
 
     public void setView(GamePane mainPane) {
@@ -81,9 +88,7 @@ public class GameController {
         // Vérifie la condition de victoire par nombre de cycles
         if (tileController.getReferee().winingConditionCycles()) {
             ArrayList<Player> winner = tileController.getReferee().getWinner(roundController.getPlayers());
-            mainPane.showWinner(winner);
-            return;
-        }
+            stage.setScene(new Scene(new WinMenu(stage, winner), 1000, 700));        }
 
 
         // hasPlayedAction est réinitialisé dans le Referee (refacto)

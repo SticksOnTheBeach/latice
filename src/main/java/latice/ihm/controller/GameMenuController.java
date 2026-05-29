@@ -62,7 +62,7 @@ public class GameMenuController {
 
         TileController tileController = new TileController(board, referee);
         RoundController roundController = new RoundController(players, referee);
-        GameController gameController = new GameController(roundController, tileController, referee);
+        GameController gameController = new GameController(roundController, tileController, referee, stage);
         GamePane mainPane = new GamePane(board, game, tileController, roundController, gameController, referee);
         mainPane.setStyle("-fx-background-color: linear-gradient(to bottom right, #3e2723, #6d4c41);");
 

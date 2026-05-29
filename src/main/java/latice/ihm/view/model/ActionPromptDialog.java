@@ -14,7 +14,7 @@ public class ActionPromptDialog {
      *
      * @return true si le joueur clique sur "Oui", false sinon
      */
-    //TODO : ameliorer les apels de cette methode pour rendre le jeu plsu agreable 
+    //TODO : ameliorer les appels de cette methode pour rendre le jeu plsu agreable
     public boolean askBuyAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Action Shop");

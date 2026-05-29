@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f10cfdd2-f564-41e8-9131-701a0dfc1102" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_26,_10_51 AM_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_26__10_51AM__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/controller/GameMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/view/menu/WinMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/view/menu/WinMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/view/model/ActionPromptDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/view/model/ActionPromptDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/latice/ihm/view/model/ActionShopDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/ihm/view/model/ActionShopDeck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/latice/model/Referee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/latice/model/Referee.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,42 +83,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.LaticeApplicationConsole.executor": "Run",
-    "Application.LaticeIhmApp.executor": "Run",
-    "JUnit.LaticeTestCases.RemovesFirstTile.executor": "Run",
-    "JUnit.LaticeTestCases.addTilesFromTheRack.executor": "Run",
-    "JUnit.LaticeTestCases.addTilesFromTheRackWhenDeckisLessThan5Tiles.executor": "Run",
-    "JUnit.LaticeTestCases.checkCreationOfTheGameBoard.executor": "Run",
-    "JUnit.LaticeTestCases.checkIfTheDeckIsEmpty.executor": "Run",
-    "JUnit.LaticeTestCases.checkNumberOfEachDeck.executor": "Run",
-    "JUnit.LaticeTestCases.checkNumberOfEachDeckForThreePlayers.executor": "Run",
-    "JUnit.LaticeTestCases.checkNumberOfEachDeckForTreePlayer.executor": "Run",
-    "JUnit.LaticeTestCases.checkNumberOfTiles.executor": "Run",
-    "JUnit.LaticeTestCases.drawOneTileDoesNothingWhenDeckEmpty.executor": "Run",
-    "JUnit.LaticeTestCases.executor": "Run",
-    "JUnit.LaticeTestCases.getWinnerReturnsPlayerWithFewestTiles.executor": "Run",
-    "JUnit.LaticeTestCases.isPlayerNotEmpty.executor": "Run",
-    "JUnit.LaticeTestCases.nextPlayer.executor": "Run",
-    "JUnit.LaticeTestCases.playerEmpty.executor": "Run",
-    "JUnit.LaticeTestCases.removeAllTilesFromDeck.executor": "Run",
-    "JUnit.LaticeTestCases.removeTheTilesFromTheDeck.executor": "Run",
-    "JUnit.LaticeTestCases.shuffle_preservesAllTiles.executor": "Run",
-    "JUnit.LaticeTestCases.test.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "ihm",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/powpow/Documents/prog/java/saebut1/SickLaticeSAE/pom.xml",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "vcs.Git"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.LaticeApplicationConsole.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LaticeIhmApp.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.RemovesFirstTile.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.addTilesFromTheRack.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.addTilesFromTheRackWhenDeckisLessThan5Tiles.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.checkCreationOfTheGameBoard.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.checkIfTheDeckIsEmpty.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.checkNumberOfEachDeck.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.checkNumberOfEachDeckForThreePlayers.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.checkNumberOfEachDeckForTreePlayer.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.checkNumberOfTiles.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.drawOneTileDoesNothingWhenDeckEmpty.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.getWinnerReturnsPlayerWithFewestTiles.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.isPlayerNotEmpty.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.nextPlayer.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.playerEmpty.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.removeAllTilesFromDeck.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.removeTheTilesFromTheDeck.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.shuffle_preservesAllTiles.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LaticeTestCases.test.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ihm&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/powpow/Documents/prog/java/saebut1/SickLaticeSAE/pom.xml&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.LaticeIhmApp">
     <configuration name="LaticeIhmApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="liberica-21" />
@@ -196,17 +199,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="hellomaven" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="hellomaven" />
-      <option name="filePath" />
-      <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Application.LaticeIhmApp" />
