@@ -15,7 +15,7 @@ import latice.ihm.view.GamePane;
 
 /**
  * Boîte de dialogue qui demande au joueur s'il veut acheter une action.
- * S'affiche par-dessus le GamePane avec une animation scale + fade.
+ * S'affiche par-dessus le centre du GamePane avec une animation scale + fade.
  */
 public class ActionPromptDialog extends StackPane {
 
@@ -27,6 +27,8 @@ public class ActionPromptDialog extends StackPane {
 
     public ActionPromptDialog(GamePane mainPane) {
         this.mainPane = mainPane;
+
+        // Overlay semi-transparent qui couvre toute la zone du centerStack
         setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         setAlignment(Pos.CENTER);
 
@@ -41,7 +43,7 @@ public class ActionPromptDialog extends StackPane {
         );
 
         // --- BOUTONS ---
-        Button btnYes = buildButton("Yes"); // methode juste pour simplifier la lisibilité du code
+        Button btnYes = buildButton("Yes");
         Button btnNo  = buildButton("No");
 
         btnYes.setOnAction(e -> {
@@ -53,6 +55,7 @@ public class ActionPromptDialog extends StackPane {
         HBox buttonsRow = new HBox(20, btnYes, btnNo);
         buttonsRow.setAlignment(Pos.CENTER);
 
+        // --- BOÎTE GLASSMORPHISM ---
         dialogBox = new VBox(20, lblTitle, buttonsRow);
         dialogBox.setAlignment(Pos.CENTER);
         dialogBox.setPadding(new Insets(30, 40, 30, 40));
@@ -68,7 +71,7 @@ public class ActionPromptDialog extends StackPane {
 
         getChildren().add(dialogBox);
 
-        // État initial : invisible et petit pour la transitiob
+        // État initial : invisible et petit (pour la transition d'entrée)
         setOpacity(0);
         dialogBox.setScaleX(0.5);
         dialogBox.setScaleY(0.5);
@@ -108,10 +111,10 @@ public class ActionPromptDialog extends StackPane {
     }
 
     /**
-     * Affiche le dialogue par-dessus le GamePane avec une animation d'entrée.
+     * Affiche le dialogue par-dessus le centre du GamePane avec une animation.
      */
     public void show() {
-        mainPane.getChildren().add(this);
+        mainPane.addOverlay(this);
 
         FadeTransition fade = new FadeTransition(Duration.millis(ANIM_DURATION), this);
         fade.setFromValue(0);
@@ -127,7 +130,7 @@ public class ActionPromptDialog extends StackPane {
     }
 
     /**
-     * Cache le dialogue avec une animation de sortie, puis le retire du GamePane.
+     * Cache le dialogue avec une animation, puis le retire du GamePane.
      */
     private void hide() {
         FadeTransition fade = new FadeTransition(Duration.millis(ANIM_DURATION), this);
@@ -141,7 +144,7 @@ public class ActionPromptDialog extends StackPane {
         scale.setToY(0.5);
 
         ParallelTransition pt = new ParallelTransition(fade, scale);
-        pt.setOnFinished(e -> mainPane.getChildren().remove(this));
+        pt.setOnFinished(e -> mainPane.removeOverlay(this));
         pt.play();
     }
 }
