@@ -86,10 +86,8 @@ public class GameController {
     private void promptForActionIfPossible() {
         Player currentPlayer = roundController.getCurrentPlayer();
         if (currentPlayer.getScore() >= 2) {
-            boolean accept = new ActionPromptDialog().askBuyAction();
-            if (accept) {
-                mainPane.openActionShop();
-            }
+            ActionPromptDialog dialog = new ActionPromptDialog(mainPane);
+            dialog.show();
         }
     }
 

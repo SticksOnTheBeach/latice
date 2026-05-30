@@ -1,32 +1,147 @@
 package latice.ihm.view.model;
 
-import java.util.Optional;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+import latice.ihm.view.GamePane;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-
-public class ActionPromptDialog {
+/**
+ * Boîte de dialogue qui demande au joueur s'il veut acheter une action.
+ * S'affiche par-dessus le GamePane avec une animation scale + fade.
+ */
+public class ActionPromptDialog extends StackPane {
 
     private static final int COUT_ACTION = 2;
+    private static final int ANIM_DURATION = 250;
+
+    private VBox dialogBox;
+    private GamePane mainPane;
+
+    public ActionPromptDialog(GamePane mainPane) {
+        this.mainPane = mainPane;
+        setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        setAlignment(Pos.CENTER);
+
+        // --- TITRE ---
+        Label lblTitle = new Label("Do you want to buy an action ? (Cost : " + COUT_ACTION + " points)");
+        lblTitle.setWrapText(true);
+        lblTitle.setStyle(
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 16px; " +
+            "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
+            "-fx-font-weight: 500;"
+        );
+
+        // --- BOUTONS ---
+        Button btnYes = buildButton("Yes"); // methode juste pour simplifier la lisibilité du code
+        Button btnNo  = buildButton("No");
+
+        btnYes.setOnAction(e -> {
+            hide();
+            mainPane.openActionShop();
+        });
+        btnNo.setOnAction(e -> hide());
+
+        HBox buttonsRow = new HBox(20, btnYes, btnNo);
+        buttonsRow.setAlignment(Pos.CENTER);
+
+        dialogBox = new VBox(20, lblTitle, buttonsRow);
+        dialogBox.setAlignment(Pos.CENTER);
+        dialogBox.setPadding(new Insets(30, 40, 30, 40));
+        dialogBox.setMaxWidth(400);
+        dialogBox.setStyle(
+            "-fx-background-color: rgba(255, 255, 255, 0.15); " +
+            "-fx-background-radius: 20px; " +
+            "-fx-border-color: rgba(255, 255, 255, 0.4); " +
+            "-fx-border-width: 1.5px; " +
+            "-fx-border-radius: 20px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 25, 0, 0, 8);"
+        );
+
+        getChildren().add(dialogBox);
+
+        // État initial : invisible et petit pour la transitiob
+        setOpacity(0);
+        dialogBox.setScaleX(0.5);
+        dialogBox.setScaleY(0.5);
+    }
+
+    private Button buildButton(String text) {
+        Button btn = new Button(text);
+        String style =
+            "-fx-background-color: rgba(255, 255, 255, 0.12); " +
+            "-fx-background-radius: 20px; " +
+            "-fx-border-color: rgba(255, 255, 255, 0.4); " +
+            "-fx-border-width: 1px; " +
+            "-fx-border-radius: 20px; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
+            "-fx-font-weight: 500; " +
+            "-fx-padding: 8px 30px; " +
+            "-fx-cursor: hand;";
+        String hoverStyle =
+            "-fx-background-color: rgba(255, 255, 255, 0.25); " +
+            "-fx-background-radius: 20px; " +
+            "-fx-border-color: rgba(255, 255, 255, 0.6); " +
+            "-fx-border-width: 1px; " +
+            "-fx-border-radius: 20px; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
+            "-fx-font-weight: 500; " +
+            "-fx-padding: 8px 30px; " +
+            "-fx-cursor: hand;";
+
+        btn.setStyle(style);
+        btn.setOnMouseEntered(e -> btn.setStyle(hoverStyle));
+        btn.setOnMouseExited(e  -> btn.setStyle(style));
+        return btn;
+    }
 
     /**
-     * Affiche une boîte de dialogue demandant au joueur s'il veut acheter une action.
-     *
-     * @return true si le joueur clique sur "Oui", false sinon
+     * Affiche le dialogue par-dessus le GamePane avec une animation d'entrée.
      */
-    //TODO : ameliorer les apels de cette methode pour rendre le jeu plsu agreable 
-    public boolean askBuyAction() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Action Shop");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you want to buy an action ? (Cost : " + COUT_ACTION + " points)");
+    public void show() {
+        mainPane.getChildren().add(this);
 
+        FadeTransition fade = new FadeTransition(Duration.millis(ANIM_DURATION), this);
+        fade.setFromValue(0);
+        fade.setToValue(1);
 
-        ButtonType btnYes = new ButtonType("Yes");
-        ButtonType btnNo = new ButtonType("No");
-        alert.getButtonTypes().setAll(btnYes, btnNo);
+        ScaleTransition scale = new ScaleTransition(Duration.millis(ANIM_DURATION), dialogBox);
+        scale.setFromX(0.5);
+        scale.setFromY(0.5);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
 
-        Optional<ButtonType> response = alert.showAndWait();
-        return response.isPresent() && response.get() == btnYes;
+        new ParallelTransition(fade, scale).play();
+    }
+
+    /**
+     * Cache le dialogue avec une animation de sortie, puis le retire du GamePane.
+     */
+    private void hide() {
+        FadeTransition fade = new FadeTransition(Duration.millis(ANIM_DURATION), this);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+
+        ScaleTransition scale = new ScaleTransition(Duration.millis(ANIM_DURATION), dialogBox);
+        scale.setFromX(1.0);
+        scale.setFromY(1.0);
+        scale.setToX(0.5);
+        scale.setToY(0.5);
+
+        ParallelTransition pt = new ParallelTransition(fade, scale);
+        pt.setOnFinished(e -> mainPane.getChildren().remove(this));
+        pt.play();
     }
 }

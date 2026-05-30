@@ -24,25 +24,30 @@ import latice.model.Referee;
 
 public class GamePane extends BorderPane {
     protected Label lblNbRound;	
-    protected int   nbRound;
+    protected int nbRound;
     protected Label lblPlayerRound;
-    private Game    game;
+    private Game game;
 
     private RoundController roundController;
-    private RackTransition  rackTransition;
-    private GameController  gameController;
-    private Referee         referee;
+    private RackTransition rackTransition;
+    private GameController gameController;
+    private Referee referee;
     private ActionShopDeck  actionShop;
+    // BorderPane interne qui contient tout le jeu.
+    // GamePane lui-même est un StackPane pour permettre d'afficher
+    // des overlays (ActionPromptDialog) par-dessus le jeu.
+    private BorderPane gameContent;
 
     public GamePane(Board board, Game game, TileController tileController,
                     RoundController roundController, GameController gameController,
                     Referee referee) {
-        this.game            = game;
-        this.gameController  = gameController;
+        this.game = game;
+        this.gameController = gameController;
         gameController.setView(this);
         this.roundController = roundController;
-        this.referee         = referee;
-        this.nbRound         = roundController.getRoundCount();
+        this.referee = referee;
+        this.nbRound = roundController.getRoundCount();
+        
 
 
         lblNbRound     = new Label("Round : " + nbRound);
@@ -144,7 +149,7 @@ public class GamePane extends BorderPane {
 
         setCenter(centerStack);
         BorderPane.setMargin(centerStack, new Insets(20));
-
+        
         updateDisplay();
     }
 

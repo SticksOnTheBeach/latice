@@ -61,6 +61,13 @@ public class TileView extends StackPane {
     public Tile getTile() {
         return tile;
     }
+    
+    /*
+     *   TODO : TileView.resetSelection(); afin qu'entre deux parties on reset la selection, par ailleurs pour la  V8 on pourrait implémenter
+     *	un système  de classement, mais surtout de  pouvoir rejouer, et donc  d'avoir  à  la fin de la partie un écran de fin de win général
+     *	
+     */
+    
 
 
     private Color getTileColor(Tile tile) {
