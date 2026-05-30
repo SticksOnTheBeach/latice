@@ -27,8 +27,6 @@ public class ActionPromptDialog extends StackPane {
 
     public ActionPromptDialog(GamePane mainPane) {
         this.mainPane = mainPane;
-
-        // Overlay semi-transparent qui couvre toute la zone du centerStack
         setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         setAlignment(Pos.CENTER);
 
@@ -37,14 +35,61 @@ public class ActionPromptDialog extends StackPane {
         lblTitle.setWrapText(true);
         lblTitle.setStyle(
             "-fx-text-fill: white; " +
-            "-fx-font-size: 16px; " +
+            "-fx-font-size: 13px; " +
             "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
-            "-fx-font-weight: 500;"
+            "-fx-font-weight: 500; " +
+            "-fx-text-alignment: center;"
         );
 
         // --- BOUTONS ---
-        Button btnYes = buildButton("Yes");
-        Button btnNo  = buildButton("No");
+        Button btnYes = new Button("Yes");
+        Button btnNo  = new Button("No");
+        String styleBtn =
+            "-fx-background-color: rgba(255, 255, 255, 0.12); " +
+            "-fx-background-radius: 16px; " +
+            "-fx-border-color: rgba(255, 255, 255, 0.4); " +
+            "-fx-border-width: 1px; " +
+            "-fx-border-radius: 16px; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 12px; " +
+            "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
+            "-fx-font-weight: 500; " +
+            "-fx-padding: 6px 22px; " +
+            "-fx-cursor: hand;";
+        
+        String hoverStyleBtnYes =
+                "-fx-background-color: green; " +
+                "-fx-background-radius: 16px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.6); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 16px; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 12px; " +
+                "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
+                "-fx-font-weight: 500; " +
+                "-fx-padding: 6px 22px; " +
+                "-fx-cursor: hand;";
+        
+        String hoverStyleBtnNo =
+                "-fx-background-color: red; " +
+                "-fx-background-radius: 16px; " +
+                "-fx-border-color: rgba(255, 255, 255, 0.6); " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 16px; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 12px; " +
+                "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
+                "-fx-font-weight: 500; " +
+                "-fx-padding: 6px 22px; " +
+                "-fx-cursor: hand;";
+
+        btnYes.setStyle(styleBtn);
+        btnYes.setOnMouseEntered(e -> btnYes.setStyle(hoverStyleBtnYes));
+        btnYes.setOnMouseExited(e  -> btnYes.setStyle(styleBtn));
+        
+        btnNo.setStyle(styleBtn);
+        btnNo.setOnMouseEntered(e -> btnNo.setStyle(hoverStyleBtnNo));
+        btnNo.setOnMouseExited(e  -> btnNo.setStyle(styleBtn));
 
         btnYes.setOnAction(e -> {
             hide();
@@ -55,18 +100,18 @@ public class ActionPromptDialog extends StackPane {
         HBox buttonsRow = new HBox(20, btnYes, btnNo);
         buttonsRow.setAlignment(Pos.CENTER);
 
-        // --- BOÎTE GLASSMORPHISM ---
-        dialogBox = new VBox(20, lblTitle, buttonsRow);
+        dialogBox = new VBox(15, lblTitle, buttonsRow);
         dialogBox.setAlignment(Pos.CENTER);
-        dialogBox.setPadding(new Insets(30, 40, 30, 40));
-        dialogBox.setMaxWidth(400);
+        dialogBox.setPadding(new Insets(20, 25, 20, 25));
+        dialogBox.setMaxWidth(280);
+        dialogBox.setMaxHeight(140);
         dialogBox.setStyle(
             "-fx-background-color: rgba(255, 255, 255, 0.15); " +
-            "-fx-background-radius: 20px; " +
+            "-fx-background-radius: 16px; " +
             "-fx-border-color: rgba(255, 255, 255, 0.4); " +
             "-fx-border-width: 1.5px; " +
-            "-fx-border-radius: 20px; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 25, 0, 0, 8);"
+            "-fx-border-radius: 16px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0, 0, 6);"
         );
 
         getChildren().add(dialogBox);
@@ -77,42 +122,7 @@ public class ActionPromptDialog extends StackPane {
         dialogBox.setScaleY(0.5);
     }
 
-    private Button buildButton(String text) {
-        Button btn = new Button(text);
-        String style =
-            "-fx-background-color: rgba(255, 255, 255, 0.12); " +
-            "-fx-background-radius: 20px; " +
-            "-fx-border-color: rgba(255, 255, 255, 0.4); " +
-            "-fx-border-width: 1px; " +
-            "-fx-border-radius: 20px; " +
-            "-fx-text-fill: white; " +
-            "-fx-font-size: 14px; " +
-            "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
-            "-fx-font-weight: 500; " +
-            "-fx-padding: 8px 30px; " +
-            "-fx-cursor: hand;";
-        String hoverStyle =
-            "-fx-background-color: rgba(255, 255, 255, 0.25); " +
-            "-fx-background-radius: 20px; " +
-            "-fx-border-color: rgba(255, 255, 255, 0.6); " +
-            "-fx-border-width: 1px; " +
-            "-fx-border-radius: 20px; " +
-            "-fx-text-fill: white; " +
-            "-fx-font-size: 14px; " +
-            "-fx-font-family: 'SF Pro Display', 'Helvetica Neue', Arial; " +
-            "-fx-font-weight: 500; " +
-            "-fx-padding: 8px 30px; " +
-            "-fx-cursor: hand;";
 
-        btn.setStyle(style);
-        btn.setOnMouseEntered(e -> btn.setStyle(hoverStyle));
-        btn.setOnMouseExited(e  -> btn.setStyle(style));
-        return btn;
-    }
-
-    /**
-     * Affiche le dialogue par-dessus le centre du GamePane avec une animation.
-     */
     public void show() {
         mainPane.addOverlay(this);
 
@@ -129,9 +139,6 @@ public class ActionPromptDialog extends StackPane {
         new ParallelTransition(fade, scale).play();
     }
 
-    /**
-     * Cache le dialogue avec une animation, puis le retire du GamePane.
-     */
     private void hide() {
         FadeTransition fade = new FadeTransition(Duration.millis(ANIM_DURATION), this);
         fade.setFromValue(1);
