@@ -41,14 +41,14 @@ public class GamePane extends BorderPane {
     public GamePane(Board board, Game game, TileController tileController,
                     RoundController roundController, GameController gameController,
                     Referee referee) {
-        this.game            = game;
-        this.gameController  = gameController;
+        this.game = game;
+        this.gameController = gameController;
         gameController.setView(this);
         this.roundController = roundController;
-        this.referee         = referee;
-        this.nbRound         = roundController.getRoundCount();
+        this.referee = referee;
+        this.nbRound = roundController.getRoundCount();
 
-        lblNbRound     = new Label("Round : " + nbRound);
+        lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
 
         Button btnEndTurn = new Button("End Turn");
