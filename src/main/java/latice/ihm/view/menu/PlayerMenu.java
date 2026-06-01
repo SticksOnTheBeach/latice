@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import latice.ihm.view.style.Style;
 
@@ -37,7 +38,7 @@ public class PlayerMenu extends BorderPane {
     private ArrayList<String> playerNames = new ArrayList<>();
     private int currentPlayerIndex = -1;
     private ArrayList<String> playerColors = new ArrayList<>();
-    private ArrayList<String> playersIcon = new ArrayList<>();
+
 
     private Label lblTitle;
     private VBox playersBox;
@@ -118,7 +119,7 @@ public class PlayerMenu extends BorderPane {
     }
 
     private HBox buildPlayerRow(int i) {
-        Label lblNum = new Label((i + 1) + ".");
+        Label lblNum = new Label((i + 1) + "");
         lblNum.setStyle(
             "-fx-font-family: \"Courier New\"; " +
             "-fx-text-fill: #a8d8a8; " +
@@ -231,26 +232,26 @@ public class PlayerMenu extends BorderPane {
         Label lblColor = new Label("Couleur :");
         lblColor.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 12px;");
 
-        Button btnRed    = new Button("🔴");
-        Button btnBlue   = new Button("🔵");
-        Button btnGreen  = new Button("🟢");
-        Button btnYellow = new Button("🟡");
+        Button btnRed = new Button();
+        Button btnBlue = new Button();
+        Button btnGreen = new Button();
+        Button btnYellow = new Button();
 
-        btnRed.setStyle(Style.BTN_COLOR_STYLE);
-        btnRed.setOnMouseEntered(e -> btnRed.setStyle(Style.BTN_COLOR_HOVER_STYLE));
-        btnRed.setOnMouseExited(e -> btnRed.setStyle(Style.BTN_COLOR_STYLE));
+        btnRed.setStyle(Style.BTN_COLOR_RED);
+        btnRed.setOnMouseEntered(e -> btnRed.setStyle(Style.BTN_COLOR_RED_HOVER));
+        btnRed.setOnMouseExited(e -> btnRed.setStyle(Style.BTN_COLOR_RED));
         
-        btnBlue.setStyle(Style.BTN_COLOR_STYLE);
-        btnBlue.setOnMouseEntered(e -> btnBlue.setStyle(Style.BTN_COLOR_HOVER_STYLE));
-        btnBlue.setOnMouseExited(e -> btnBlue.setStyle(Style.BTN_COLOR_STYLE));
+        btnBlue.setStyle(Style.BTN_COLOR_BLUE);
+        btnBlue.setOnMouseEntered(e -> btnBlue.setStyle(Style.BTN_COLOR_BLUE_HOVER));
+        btnBlue.setOnMouseExited(e -> btnBlue.setStyle(Style.BTN_COLOR_BLUE));
         
-        btnGreen.setStyle(Style.BTN_COLOR_STYLE);
-        btnGreen.setOnMouseEntered(e -> btnGreen.setStyle(Style.BTN_COLOR_HOVER_STYLE));
-        btnGreen.setOnMouseExited(e -> btnGreen.setStyle(Style.BTN_COLOR_STYLE));
+        btnGreen.setStyle(Style.BTN_COLOR_GREEN);
+        btnGreen.setOnMouseEntered(e -> btnGreen.setStyle(Style.BTN_COLOR_GREEN_HOVER));
+        btnGreen.setOnMouseExited(e -> btnGreen.setStyle(Style.BTN_COLOR_GREEN));
         
-        btnYellow.setStyle(Style.BTN_COLOR_STYLE);
-        btnYellow.setOnMouseEntered(e -> btnYellow.setStyle(Style.BTN_COLOR_HOVER_STYLE));
-        btnYellow.setOnMouseExited(e -> btnYellow.setStyle(Style.BTN_COLOR_STYLE));
+        btnYellow.setStyle(Style.BTN_COLOR_YELLOW);
+        btnYellow.setOnMouseEntered(e -> btnYellow.setStyle(Style.BTN_COLOR_YELLOW_HOVER));
+        btnYellow.setOnMouseExited(e -> btnYellow.setStyle(Style.BTN_COLOR_YELLOW));
         
         btnRed.setOnAction(e    -> { playerColors.set(currentPlayerIndex, "#ff5555"); refreshRows(); });
         btnBlue.setOnAction(e   -> { playerColors.set(currentPlayerIndex, "#55aaff"); refreshRows(); });
@@ -260,10 +261,10 @@ public class PlayerMenu extends BorderPane {
         GridPane colorGrid = new GridPane();
         colorGrid.setHgap(8);
         colorGrid.setVgap(8);
-        colorGrid.add(btnRed,    0, 0);
-        colorGrid.add(btnBlue,   1, 0);
-        colorGrid.add(btnGreen,  2, 0);
-        colorGrid.add(btnYellow, 3, 0);
+        colorGrid.add(btnRed,0, 0);
+        colorGrid.add(btnBlue,1, 0);
+        colorGrid.add(btnGreen,2, 0);
+        colorGrid.add(btnYellow,3, 0);
 
 
         Button btnClose = new Button("← Fermer");
@@ -318,14 +319,19 @@ public class PlayerMenu extends BorderPane {
     
     private boolean handleStart() {
         boolean correct = true;
-
         for (int i = 0; i < playerNames.size(); i++) {
             if (playerNames.get(i).isEmpty()) {
                 errorLabels.get(i).setVisible(true);
                 errorLabels.get(i).setText("ERROR : PLEASE ENTER A NAME");
-
                 correct = false;
-            } else {
+            } 
+            else if(playerNames.get(i).length() >= 12) {
+            	errorLabels.get(i).setVisible(true);
+            	errorLabels.get(i).setTextFill(Color.ORANGE);
+            	errorLabels.get(i).setText("The lenght of your names must be \n inferior or equal to 12");
+            	correct =  false;
+            }
+            else {
                 errorLabels.get(i).setVisible(false);
             }
             if(correct == true) { // Pour eviter de faire une boucle inutile si un des champs est vide
@@ -342,7 +348,7 @@ public class PlayerMenu extends BorderPane {
         }
 
         if (correct) {
-            System.out.println("[GameMenu] Démarrage avec : " + playerNames);
+            System.out.println("Démarrage avec : " + playerNames);
         }
 
         return correct;

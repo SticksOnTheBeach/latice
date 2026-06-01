@@ -49,21 +49,48 @@ public class Style {
             "-fx-padding: 8px 14px; " +
             "-fx-cursor: hand;";
 
-    public static final String BTN_COLOR_STYLE =
-        "-fx-font-size: 14px; " +
-        "-fx-font-family: \"Courier New\"; " +
-        "-fx-background-color: transparent; " +
-        "-fx-border-color: rgba(168,216,168,0.4); " +
-        "-fx-border-radius: 50em; " +
-        "-fx-background-radius: 50em; " +
-        "-fx-min-width: 28px; " +
-        "-fx-min-height: 28px; " +
-        "-fx-max-width: 28px; " +
-        "-fx-max-height: 28px; " +
-        "-fx-padding: 0; " +
-        "-fx-alignment: center; " +
-        "-fx-text-fill: rgba(168,216,168,0.8); " +
-        "-fx-cursor: hand;";
+    private static final String BTN_COLOR_BASE = 
+            "-fx-border-radius: 50em; " +
+            "-fx-background-radius: 50em; " +
+            "-fx-min-width: 28px; " +
+            "-fx-min-height: 28px; " +
+            "-fx-max-width: 28px; " +
+            "-fx-max-height: 28px; " +
+            "-fx-border-width: 2px; " +
+            "-fx-padding: 0; " +
+            "-fx-cursor: hand;";
+
+        // Rouge
+        public static final String BTN_COLOR_RED = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: red; -fx-border-color: red;";
+        public static final String BTN_COLOR_RED_HOVER = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: red; -fx-border-color: #ffffff;";
+
+        // Bleu
+        public static final String BTN_COLOR_BLUE = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: blue; -fx-border-color: blue;";
+        public static final String BTN_COLOR_BLUE_HOVER = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: blue; -fx-border-color: #ffffff;";
+
+        // Vert
+        public static final String BTN_COLOR_GREEN = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: green; -fx-border-color: green;";
+        public static final String BTN_COLOR_GREEN_HOVER = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: green; -fx-border-color: #ffffff;";
+
+        // Jaune
+        public static final String BTN_COLOR_YELLOW = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: yellow; -fx-border-color: yellow;";
+        public static final String BTN_COLOR_YELLOW_HOVER = 
+        		BTN_COLOR_BASE + 
+        		"-fx-background-color: yellow; -fx-border-color: #ffffff;";
     
     public static final String BTN_COLOR_HOVER_STYLE =
             "-fx-font-size: 14px; " +

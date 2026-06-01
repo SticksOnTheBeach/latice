@@ -21,9 +21,8 @@ import latice.model.Referee;
 
 public class RackTransition {
     private static final int ANIM_DURATION = 500;
-    
-    private static final double BLUR_RADIUS = 15.0	;
-    
+    private static final double BLUR_RADIUS = 15.0;
+
     private static final double OFFSET_BAS    =  360;
     private static final double OFFSET_HAUT   = -360;
     private static final double OFFSET_GAUCHE = -440;
@@ -41,21 +40,20 @@ public class RackTransition {
     public RackTransition(StackPane container, ArrayList<Player> players, int currentPlayerIndex,
                           RoundController roundController, GameController gameController, Referee referee) {
         this.container          = container;
-        this.players  		          = players;
+        this.players            = players;
         this.currentPlayerIndex = currentPlayerIndex;
         this.roundController    = roundController;
         this.gameController     = gameController;
         this.playerSlots        = new ArrayList<>();
         this.rackBoxes          = new ArrayList<>();
 
-        for (Player player : players) {			
+        for (Player player : players) {
             RackBox rackBox = new RackBox(player.getRack());
             DeckBox deckBox = new DeckBox(roundController, gameController);
 
             HBox slot = new HBox(15, deckBox, rackBox);
             slot.setAlignment(Pos.CENTER);
             slot.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            // IMPORTANT : le slot ne capte que ce qui est visuellement dedans
             slot.setPickOnBounds(false);
 
             rackBoxes.add(rackBox);
@@ -66,18 +64,17 @@ public class RackTransition {
         firstRackPosition();
     }
 
-    	
     /**
      * Applique ou retire le flou sur un slot selon s'il est actif ou non.
      */
     private void applyBlurForOthersPlayers(HBox slot, boolean isCurrentPlayer) {
         if (isCurrentPlayer) {
-            slot.setEffect(null); // pas de flou pour le joueur actif
+            slot.setEffect(null);
         } else {
-            slot.setEffect(new GaussianBlur(BLUR_RADIUS)); // flou pour les autres
+            slot.setEffect(new GaussianBlur(BLUR_RADIUS));
         }
     }
-    
+
     private void firstRackPosition() {
         int nbJoueurs = players.size();
         for (int i = 0; i < nbJoueurs; i++) {
@@ -90,13 +87,11 @@ public class RackTransition {
             slot.setRotate(getTargetAngle(positionRelative, nbJoueurs));
 
             if (i == currentPlayerIndex) {
-                // Joueur actif : cliquable, mais ne bloque pas le board derrière
                 slot.setMouseTransparent(false);
                 slot.setPickOnBounds(false);
                 slot.setOpacity(1.0);
                 applyBlurForOthersPlayers(slot, true);
             } else {
-                // Joueurs inactifs : totalement transparents aux événements
                 slot.setMouseTransparent(true);
                 slot.setOpacity(0.5);
                 applyBlurForOthersPlayers(slot, false);
@@ -134,7 +129,6 @@ public class RackTransition {
                 ft.setToValue(1.0);
                 applyBlurForOthersPlayers(slot, true);
             } else {
-                // Joueurs inactifs : complètement transparents aux événements souris/drag
                 slot.setMouseTransparent(true);
                 ft.setToValue(0.5);
                 applyBlurForOthersPlayers(slot, false);
@@ -155,16 +149,16 @@ public class RackTransition {
             }
         } else if (nbJoueurs == 3) {
             switch (positionRelative) {
-                case 0:  return new double[]{ 0,OFFSET_BAS };
+                case 0:  return new double[]{ 0,             OFFSET_BAS };
                 case 1:  return new double[]{ OFFSET_DROITE, 0 };
                 case 2:  return new double[]{ OFFSET_GAUCHE, 0 };
                 default: return new double[]{ 0, 0 };
             }
         } else {
             switch (positionRelative) {
-                case 0:  return new double[]{ 0,OFFSET_BAS };
+                case 0:  return new double[]{ 0,             OFFSET_BAS };
                 case 1:  return new double[]{ OFFSET_DROITE, 0 };
-                case 2:  return new double[]{ 0,OFFSET_HAUT };
+                case 2:  return new double[]{ 0,             OFFSET_HAUT };
                 case 3:  return new double[]{ OFFSET_GAUCHE, 0 };
                 default: return new double[]{ 0, 0 };
             }

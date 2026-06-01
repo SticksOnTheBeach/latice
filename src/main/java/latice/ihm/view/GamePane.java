@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,7 +24,7 @@ import latice.model.Player;
 import latice.model.Referee;
 
 public class GamePane extends BorderPane {
-    protected Label lblNbRound;	
+    protected Label lblNbRound;
     protected int   nbRound;
     protected Label lblPlayerRound;
     private Game    game;
@@ -34,20 +35,26 @@ public class GamePane extends BorderPane {
     private Referee         referee;
     private ActionShopDeck  actionShop;
 
+    // StackPane central qui contient le board, les racks, et les overlays (dialogues)
+    private StackPane centerStack;
+    
+    private Button btnOption;
+
     public GamePane(Board board, Game game, TileController tileController,
                     RoundController roundController, GameController gameController,
                     Referee referee) {
-        this.game            = game;
-        this.gameController  = gameController;
+        this.game = game;
+        this.gameController = gameController;
         gameController.setView(this);
         this.roundController = roundController;
-        this.referee         = referee;
-        this.nbRound         = roundController.getRoundCount();
+        this.referee = referee;
+        this.nbRound = roundController.getRoundCount();
 
-
-        lblNbRound     = new Label("Round : " + nbRound);
+        lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
-        
+        // btnOption = new  Button();
+        // btnOption.set
+
         Button btnEndTurn = new Button("End Turn");
         String btnEndTurnStyle =
                 "-fx-background-color: rgba(255, 255, 255, 0.12); " +
@@ -62,7 +69,7 @@ public class GamePane extends BorderPane {
                 "-fx-padding: 8px 22px; " +
                 "-fx-cursor: hand; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 4);";
-        
+
         String btnEndTurnHoverStyle =
                 "-fx-background-color: rgba(255, 255, 255, 0.22); " +
                 "-fx-background-radius: 20px; " +
@@ -76,7 +83,7 @@ public class GamePane extends BorderPane {
                 "-fx-padding: 8px 22px; " +
                 "-fx-cursor: hand; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 14, 0, 0, 6);";
-        
+
         String btnEndTurnPressedStyle =
                 "-fx-background-color: rgba(255, 255, 255, 0.50); " +
                 "-fx-background-radius: 20px; " +
@@ -90,19 +97,14 @@ public class GamePane extends BorderPane {
                 "-fx-padding: 8px 22px; " +
                 "-fx-cursor: hand; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 14, 0, 0, 6);";
-        
-        
-        
+
         btnEndTurn.setStyle(btnEndTurnStyle);
-        btnEndTurn.setOnMouseEntered(e-> btnEndTurn.setStyle(btnEndTurnHoverStyle));
-        btnEndTurn.setOnMouseExited(e-> btnEndTurn.setStyle(btnEndTurnStyle));
-        btnEndTurn.setOnMousePressed(e-> btnEndTurn.setStyle(btnEndTurnPressedStyle));
-        btnEndTurn.setOnMouseReleased(e-> btnEndTurn.setStyle(btnEndTurnHoverStyle));
-        btnEndTurn.setOnAction(e -> {
-            gameController.passTurn();
-        });
-        
-        
+        btnEndTurn.setOnMouseEntered(e  -> btnEndTurn.setStyle(btnEndTurnHoverStyle));
+        btnEndTurn.setOnMouseExited(e   -> btnEndTurn.setStyle(btnEndTurnStyle));
+        btnEndTurn.setOnMousePressed(e  -> btnEndTurn.setStyle(btnEndTurnPressedStyle));
+        btnEndTurn.setOnMouseReleased(e -> btnEndTurn.setStyle(btnEndTurnHoverStyle));
+        btnEndTurn.setOnAction(e -> gameController.passTurn());
+
         lblNbRound.setStyle("-fx-text-fill: white;");
         lblPlayerRound.setStyle("-fx-text-fill: white;");
 
@@ -120,7 +122,7 @@ public class GamePane extends BorderPane {
         boardPane.setAlignment(Pos.CENTER);
         boardPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        StackPane centerStack = new StackPane();
+        centerStack = new StackPane();
         centerStack.setAlignment(Pos.CENTER);
         centerStack.getChildren().add(boardPane);
 
@@ -162,6 +164,20 @@ public class GamePane extends BorderPane {
         actionShop.openPanel();
     }
 
+    /**
+     * Ajoute un overlay (ex: ActionPromptDialog) par-dessus le centre du jeu.
+     */
+    public void addOverlay(Node overlay) {
+        centerStack.getChildren().add(overlay);
+    }
+
+    /**
+     * Retire un overlay du centre du jeu.
+     */
+    public void removeOverlay(Node overlay) {
+        centerStack.getChildren().remove(overlay);
+    }
+
     public void showWinner(ArrayList<Player> players) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Fin de partie");
@@ -177,8 +193,6 @@ public class GamePane extends BorderPane {
             }
         }
 
-        // CORRECTION : setContentText et showAndWait sont maintenant hors du else
-        // donc le message s'affiche correctement dans les deux cas
         alert.setContentText(message);
         alert.showAndWait();
     }
@@ -186,4 +200,4 @@ public class GamePane extends BorderPane {
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }
-}		
+}

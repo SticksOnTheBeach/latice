@@ -31,9 +31,7 @@ public abstract class Container {
             tiles.remove(0);
         }
     }
-    public  void shuffle() {
-        Collections.shuffle(tiles);
-    }
+
     /**
      * Gets the number of tiles currently in the deck.
      *
