@@ -37,6 +37,8 @@ public class GamePane extends BorderPane {
 
     // StackPane central qui contient le board, les racks, et les overlays (dialogues)
     private StackPane centerStack;
+    
+    private Button btnOption;
 
     public GamePane(Board board, Game game, TileController tileController,
                     RoundController roundController, GameController gameController,
@@ -50,6 +52,8 @@ public class GamePane extends BorderPane {
 
         lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
+        // btnOption = new  Button();
+        // btnOption.set
 
         Button btnEndTurn = new Button("End Turn");
         String btnEndTurnStyle =
