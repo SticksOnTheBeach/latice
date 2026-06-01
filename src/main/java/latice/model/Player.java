@@ -5,6 +5,7 @@ public class Player {
     private int score;
     private Rack rack;
     private Deck deck;
+    private String color;
     public Player(Rack rack, String name) {
         this.rack = rack;
         this.score = 0;
@@ -32,6 +33,14 @@ public class Player {
 
     public void setScore(int score) {
         this.score = score;
+    }
+    
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
     
     @Override

@@ -39,10 +39,16 @@ public class GameMenuController {
 
     // Démarrer la partie
     public void handleStart(ArrayList<String> playerNames) {
-        // Créer les joueurs dynamiquement selon les noms saisis
-        ArrayList<Player> players = new ArrayList<>();
-        for (String name : playerNames) {
-            players.add(new Player(new Rack(), name));
+    	ArrayList<String> colors = gameMenu.getPlayerColors();
+    	ArrayList<Player> players = new ArrayList<>();
+    	/*for (String name : playerNames) {
+        	players.add(new Player(new Rack(), name));
+    	} */
+        
+        for (int i = 0; i < playerNames.size(); i++) {
+            Player p = new Player(new Rack(), playerNames.get(i));
+            p.setColor(colors.get(i));
+            players.add(p);
         }
  
         Board board = new Board();

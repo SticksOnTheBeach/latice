@@ -48,7 +48,7 @@ public class RackTransition {
         this.rackBoxes          = new ArrayList<>();
 
         for (Player player : players) {
-            RackBox rackBox = new RackBox(player.getRack());
+            RackBox rackBox = new RackBox(player.getRack(), player.getColor());
             DeckBox deckBox = new DeckBox(roundController, gameController);
 
             HBox slot = new HBox(15, deckBox, rackBox);
@@ -191,7 +191,7 @@ public class RackTransition {
         RackBox oldRack = rackBoxes.get(playerIndex);
         slot.getChildren().remove(oldRack);
 
-        RackBox newRack = new RackBox(players.get(playerIndex).getRack());
+        RackBox newRack = new RackBox(players.get(playerIndex).getRack(), players.get(playerIndex).getColor());
         rackBoxes.set(playerIndex, newRack);
 
         slot.getChildren().add(1, newRack);

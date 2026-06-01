@@ -357,4 +357,9 @@ public class PlayerMenu extends BorderPane {
     public ArrayList<String> getPlayerNames() {
         return playerNames;
     }
+    
+    public ArrayList<String> getPlayerColors() {
+        return playerColors;
+    }
+    
 }

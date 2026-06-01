@@ -13,7 +13,7 @@ import latice.model.tile.Tile;
 public class RackBox extends HBox {
     private static final int MAX_TILES_IN_RACK = 5;
 
-    public RackBox(Rack rack) {
+    public RackBox(Rack rack, String borderColor  ) {
         setSpacing(12);
         setAlignment(Pos.CENTER);
         setPadding(new Insets(15));
@@ -24,7 +24,7 @@ public class RackBox extends HBox {
                 "-fx-background-color: rgba(255, 255, 255, 0.15); " +
                 "-fx-background-radius: 20; " +
                 "-fx-border-radius: 20; " +
-                "-fx-border-color: rgba(255, 255, 255, 0.4); " +
+                "-fx-border-color:" + borderColor +  ";" +
                 "-fx-border-width: 1.5; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 20, 0, 0, 8);"
             );
