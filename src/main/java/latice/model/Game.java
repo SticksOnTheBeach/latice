@@ -2,8 +2,6 @@ package latice.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import latice.model.tile.COLOR;
 import latice.model.tile.SHAPE;
 import latice.model.tile.Tile;
@@ -13,7 +11,6 @@ public class Game {
     // Tout passe par la liste players,
     // pour que getCurrentPlayer() et nextTurn() fonctionnent dans tous les cas.
     private ArrayList<Player> players = new ArrayList<Player>();
-    private Referee referee;
     private Board board;
 
 
@@ -22,11 +19,10 @@ public class Game {
      * Initializes a game for a dynamic number of players.
      *
      * @param players A list containing all the players participating in the game.
-     * @param referee The referee overseeing the game rules and logic.
      */
-    public Game(ArrayList<Player> players, Referee referee, Board board) {
+    public Game(ArrayList<Player> players, Board board) {
         this.players = players;
-        this.referee = referee;
+
         this.board = board;
     }
 
@@ -43,7 +39,7 @@ public class Game {
      *
      * @return A list of newly created and shuffled tiles.
      */
-    private List<Tile> createTiles() {
+    public List<Tile> createTiles() {
         final List<Tile> listTile = new ArrayList<Tile>();
         for (COLOR color : COLOR.values()) {
             for (SHAPE shape : SHAPE.values()) {
@@ -75,6 +71,9 @@ public class Game {
         }
  
         System.out.println("Distribution terminée : " + tilesPerPlayer + " tuiles par joueur.");
+    }
+    public Board getBoard() {
+        return this.board;
     }
 
 }

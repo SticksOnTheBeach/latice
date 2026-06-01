@@ -114,12 +114,4 @@ public class GameController {
         ArrayList<Player> winner = referee.getWinner(roundController.getPlayers());
         stage.setScene(new Scene(new WinMenu(stage, winner), 1000, 700));
     }
-
-    public Player getCurrentPlayer() {
-        return roundController.getCurrentPlayer();
-    }
-
-    public int getRoundCount() {
-        return roundController.getRoundCount();
-    }
 }
