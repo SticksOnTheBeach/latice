@@ -7,9 +7,7 @@ import latice.model.tile.Tile;
 import java.util.ArrayList;
 
 public class Referee {
-    private Player player;
     private Board gameboard;
-    protected static int points=0;
     private boolean havePlayed = false;
     private int roundCount = 1;
     
@@ -47,7 +45,7 @@ public class Referee {
         }
         return hasNeighbor;
     }
-    private int countMatchingNeighbors(Position position, Tile tile) {
+    public int countMatchingNeighbors(Position position, Tile tile) {
         int count = 0;
         for (Position neighbor : position.getAdjacentPositions()) {
             Square neighborSquare = gameboard.getSquare(neighbor);
@@ -114,10 +112,6 @@ public class Referee {
         return winner;
     }
 
-    public void resetTurn() {
-        havePlayed = false;
-    }
-    
     public void setRoundCount(int roundCount) {
         this.roundCount = roundCount;
     }

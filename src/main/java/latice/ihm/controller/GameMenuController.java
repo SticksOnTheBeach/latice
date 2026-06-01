@@ -54,7 +54,7 @@ public class GameMenuController {
         Board board = new Board();
         Referee referee = new Referee(board);
  
-        Game game = new Game(players, referee, board);
+        Game game = new Game(players,board);
         game.startGame();
  
         TileController tileController = new TileController(board, referee);

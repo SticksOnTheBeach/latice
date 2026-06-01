@@ -81,7 +81,10 @@ public class GameController {
             showWinMenu();
             return;
         }
-
+        Player currentPlayer = roundController.getCurrentPlayer();
+        currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
+        int currentIndex = roundController.getCurrentPlayerIndex();
+        mainPane.rafraichirRackJoueur(currentIndex);
         referee.setHasPlayedAction(false);
         mainPane.updateDisplay();
     }
@@ -110,13 +113,5 @@ public class GameController {
     private void showWinMenu() {
         ArrayList<Player> winner = referee.getWinner(roundController.getPlayers());
         stage.setScene(new Scene(new WinMenu(stage, winner), 1000, 700));
-    }
-
-    public Player getCurrentPlayer() {
-        return roundController.getCurrentPlayer();
-    }
-
-    public int getRoundCount() {
-        return roundController.getRoundCount();
     }
 }

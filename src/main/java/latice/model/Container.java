@@ -53,7 +53,6 @@ public abstract class Container {
     @Override
     public String toString() {
         return
-                "tiles=" + tiles.toString()
-                ;
+                "tiles=" + tiles.toString();
     }
 }

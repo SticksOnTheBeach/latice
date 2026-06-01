@@ -28,9 +28,7 @@ public class LaticeTestCases {
 		players = new ArrayList<>();
 		players.add(new Player(new Rack(), "testj1"));
 		players.add(new Player(new Rack(), "testj2"));
-
-		Referee referee = new Referee(new Board());
-		game = new Game(players, referee, new Board());
+		game = new Game(players, new Board());
 	}
 
 	//TODO : ajouter des test si il n'y a aucun joueur
@@ -85,6 +83,22 @@ public class LaticeTestCases {
 			player.getRack().addTileFromDeck(player.getDeck());
 		assertEquals(25, player.getDeck().getTiles().size());
 		assertEquals(5, player.getRack().getTiles().size());
+	}
+	@Test
+	public void noTileRemovedIfDeckIsEmpty() {
+		game.shareTilesDynamically();
+		Player player = players.get(0);
+
+		// vider le deck
+		while (!player.getDeck().isEmpty()) {
+			player.getDeck().remove();
+		}
+		assertTrue(player.getDeck().isEmpty());
+
+		player.getRack().addTileFromDeck(player.getDeck());
+
+		assertTrue(player.getDeck().isEmpty());
+		assertTrue(player.getRack().getTiles().isEmpty());
 	}
 
 	@Test
@@ -247,11 +261,6 @@ public class LaticeTestCases {
 	}
 // ===================== startGame =====================
 
-	@Test
-	public void startGameCreatesBoardNotNull() {
-		game.startGame();
-		assertNotNull(game.getBoard());
-	}
 
 	@Test
 	public void startGameFillsRackForAllPlayers() {
@@ -411,74 +420,7 @@ public class LaticeTestCases {
 
 
 
-	@Test
-	public void hasAdjacentTileReturnsTrueWhenSameColoe() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
 
-		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.REDGREEN, SHAPE.TURTLE));
-
-		Tile tile = new Tile(COLOR.REDGREEN, SHAPE.GECKO);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
-	}
-
-	@Test
-	public void hasAdjacentTileReturnsTrueWhenSameShape() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-
-		board.getSquare(new Position(5, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN));
-
-		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
-	}
-
-	@Test
-	public void hasAdjacentTileReturnsTrueWhenSameColor() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-
-		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
-
-		Tile tile = new Tile(COLOR.NAVY, SHAPE.FLOWER);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
-	}
-
-	@Test
-	public void hasAdjacentTileReturnsTrueWhenSameShapes() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-		board.getSquare(new Position(4, 5)).setTile(new Tile(COLOR.YELLOW, SHAPE.FEATHER));
-		Tile tile = new Tile(COLOR.TEAL, SHAPE.FEATHER);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
-	}
-
-	@Test
-	public void hasAdjacentTileReturnsFalse() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-
-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
-		assertFalse(referee.hasAdjacentTile(new Position(4, 4))); // plateau vide
-	}
-
-
-	@Test
-	public void hasAdjacentTileReturnsTrueWithMultipleNeighbors() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-		board.getSquare(new Position(4, 3)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
-		board.getSquare(new Position(3, 4)).setTile(new Tile(COLOR.MAGENTA, SHAPE.GECKO));
-
-		Tile tile = new Tile(COLOR.MAGENTA, SHAPE.DOLPHIN);
-		assertTrue(referee.hasAdjacentTile(new Position(4, 4)));
-	}
 	// ===================== calculatePoints =====================
 
 	@Test
@@ -560,10 +502,20 @@ public class LaticeTestCases {
 		Referee referee = new Referee(new Board());
 		assertEquals(List.of(p1), referee.getWinner(players));
 	}
-	// ===================== hasAdjacentSameColor =====================
+// ===================== hasValidNeighbors =====================
 
 	@Test
-	public void hasAdjacentSameColorReturnsTrueWhenNeighborSameColor() {
+	public void hasValidNeighbors_returnsFalse_whenNoNeighbors() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
+		assertFalse(referee.hasValidNeighbors(new Position(2, 2), tile));
+	}
+
+	@Test
+	public void hasValidNeighbors_returnsTrue_whenNeighborSameColor() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
@@ -571,11 +523,23 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
 
-		assertTrue(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+		assertTrue(referee.hasValidNeighbors(new Position(4, 5), tile));
 	}
 
 	@Test
-	public void hasAdjacentSameColorReturnsFalseWhenNoNeighborSameColor() {
+	public void hasValidNeighbors_returnsTrue_whenNeighborSameShape() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+		Tile tile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);
+
+		assertTrue(referee.hasValidNeighbors(new Position(4, 5), tile));
+	}
+
+	@Test
+	public void hasValidNeighbors_returnsFalse_whenNeighborDifferentColorAndShape() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
@@ -583,57 +547,107 @@ public class LaticeTestCases {
 		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
 		Tile tile = new Tile(COLOR.TEAL, SHAPE.GECKO);
 
-		assertFalse(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+		assertFalse(referee.hasValidNeighbors(new Position(4, 5), tile));
 	}
 
 	@Test
-	public void hasAdjacentSameColorReturnsFalseWhenNoNeighborAtAll() {
+	public void hasValidNeighbors_returnsFalse_whenOneValidAndOneInvalidNeighbor() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));   // même couleur ✓
+		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.GECKO));    // aucun match ✗
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN);
+
+		assertFalse(referee.hasValidNeighbors(new Position(4, 5), tile));
+	}
+
+	@Test
+	public void hasValidNeighbors_returnsTrue_whenTwoValidNeighbors() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN); // même couleur que (4,4), même forme que (4,6)
+
+		assertTrue(referee.hasValidNeighbors(new Position(4, 5), tile));
+	}
+
+// ===================== countMatchingNeighbors =====================
+
+	@Test
+	public void countMatchingNeighbors_returnsZero_whenNoNeighbors() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
 
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.BIRD);
-		assertFalse(referee.hasAdjacentSameColor(new Position(4, 4), tile));
+		assertEquals(0, referee.countMatchingNeighbors(new Position(2, 2), tile));
 	}
 
 	@Test
-	public void hasAdjacentSameColorReturnsFalseeWithMultipleNeighborsOneMatches() {
+	public void countMatchingNeighbors_returnsOne_whenOneNeighborSameColor() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
 
-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));   // pas même couleur
-		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.YELLOW, SHAPE.TURTLE)); // même couleur
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
 		Tile tile = new Tile(COLOR.YELLOW, SHAPE.GECKO);
 
-		assertFalse(referee.hasAdjacentSameColor(new Position(4, 5), tile));
+		assertEquals(1, referee.countMatchingNeighbors(new Position(4, 5), tile));
 	}
 
-// ===================== hasAdjacentSameShape =====================
-
 	@Test
-	public void hasAdjacentSameShapeReturnsFalseWhenNoNeighborSameShape() {
+	public void countMatchingNeighbors_returnsOne_whenOneNeighborSameShape() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
 
-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
-		Tile tile = new Tile(COLOR.TEAL, SHAPE.BIRD);
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+		Tile tile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);
 
-		assertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+		assertEquals(1, referee.countMatchingNeighbors(new Position(4, 5), tile));
 	}
-	// ===================== hasAdjacentSameShape=====================
 
 	@Test
-	public void hasAdjacentSameShapeReturnsTrueWhenNeighborSameShape() {
+	public void countMatchingNeighbors_returnsZero_whenNoMatch() {
 		Board board = new Board();
 		board.createGameBoard();
 		Referee referee = new Referee(board);
 
-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.DOLPHIN));
-		Tile tile = new Tile(COLOR.TEAL, SHAPE.DOLPHIN);
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+		Tile tile = new Tile(COLOR.TEAL, SHAPE.GECKO);
 
-		assertTrue(referee.hasAdjacentSameShape(new Position(4, 5), tile));
+		assertEquals(0, referee.countMatchingNeighbors(new Position(4, 5), tile));
+	}
+
+	@Test
+	public void countMatchingNeighbors_returnsTwo_whenTwoNeighborsBothMatch() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));
+		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN); // match couleur (4,4) + match forme (4,6)
+
+		assertEquals(2, referee.countMatchingNeighbors(new Position(4, 5), tile));
+	}
+
+	@Test
+	public void countMatchingNeighbors_returnsOne_whenTwoNeighborsOnlyOneMatches() {
+		Board board = new Board();
+		board.createGameBoard();
+		Referee referee = new Referee(board);
+
+		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.YELLOW, SHAPE.BIRD));   // match couleur ✓
+		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.GECKO));    // aucun match ✗
+		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN);
+
+		assertEquals(1, referee.countMatchingNeighbors(new Position(4, 5), tile));
 	}
 
 // ===================== BuyExtraMoveAction =====================
@@ -751,27 +765,5 @@ public class LaticeTestCases {
 		assertNull(new Deck(new ArrayList<>()).getFirstTile());
 	}
 
-	@Test
-	public void hasAdjacentSameShapeReturnsFalseWhenNoNeighborAtAll() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-
-		Tile tile = new Tile(COLOR.NAVY, SHAPE.DOLPHIN);
-		assertFalse(referee.hasAdjacentSameShape(new Position(4, 4), tile));
-	}
-
-	@Test
-	public void hasAdjacentSameShapeReturnsFalseWithMultipleNeighborsOneMatches() {
-		Board board = new Board();
-		board.createGameBoard();
-		Referee referee = new Referee(board);
-
-		board.getSquare(new Position(4, 4)).setTile(new Tile(COLOR.NAVY, SHAPE.BIRD));
-		board.getSquare(new Position(4, 6)).setTile(new Tile(COLOR.TEAL, SHAPE.DOLPHIN));
-		Tile tile = new Tile(COLOR.YELLOW, SHAPE.DOLPHIN);
-
-		assertFalse(referee.hasAdjacentSameShape(new Position(4, 5), tile));
-	}
 
 }

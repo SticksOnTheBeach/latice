@@ -102,6 +102,7 @@ public class ActionPromptDialog extends StackPane {
         btnYes.setOnAction(e -> {
             hide();
             mainPane.openActionShop();
+           mainPane.updateDisplay();
         });
         btnNo.setOnAction(e -> {
             hide();
