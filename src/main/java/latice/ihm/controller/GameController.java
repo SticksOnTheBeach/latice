@@ -81,7 +81,10 @@ public class GameController {
             showWinMenu();
             return;
         }
-
+        Player currentPlayer = roundController.getCurrentPlayer();
+        currentPlayer.getRack().addTileFromDeck(currentPlayer.getDeck());
+        int currentIndex = roundController.getCurrentPlayerIndex();
+        mainPane.rafraichirRackJoueur(currentIndex);
         referee.setHasPlayedAction(false);
         mainPane.updateDisplay();
     }
