@@ -30,6 +30,7 @@ public class RackTransition {
 
     private ArrayList<HBox>    playerSlots;
     private ArrayList<RackBox> rackBoxes;
+    private ArrayList<DeckBox> deckBoxes;
 
     private ArrayList<Player> players;
     private int               currentPlayerIndex;
@@ -46,10 +47,11 @@ public class RackTransition {
         this.gameController     = gameController;
         this.playerSlots        = new ArrayList<>();
         this.rackBoxes          = new ArrayList<>();
+        this.deckBoxes          = new ArrayList<>();
 
         for (Player player : players) {
             RackBox rackBox = new RackBox(player.getRack(), player.getColor());
-            DeckBox deckBox = new DeckBox(roundController, gameController);
+            DeckBox deckBox = new DeckBox(player);
 
             HBox slot = new HBox(15, deckBox, rackBox);
             slot.setAlignment(Pos.CENTER);
@@ -57,6 +59,7 @@ public class RackTransition {
             slot.setPickOnBounds(false);
 
             rackBoxes.add(rackBox);
+            deckBoxes.add(deckBox);
             playerSlots.add(slot);
             container.getChildren().add(slot);
         }
@@ -193,9 +196,8 @@ public class RackTransition {
 
         RackBox newRack = new RackBox(players.get(playerIndex).getRack(), players.get(playerIndex).getColor());
         rackBoxes.set(playerIndex, newRack);
-
         slot.getChildren().add(1, newRack);
-
+        deckBoxes.get(playerIndex).refresh();
         if (playerIndex == currentPlayerIndex) {
             slot.setMouseTransparent(false);
             slot.setPickOnBounds(false);

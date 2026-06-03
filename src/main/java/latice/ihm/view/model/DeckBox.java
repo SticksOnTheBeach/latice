@@ -1,12 +1,15 @@
 package latice.ihm.view.model;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import latice.ihm.controller.GameController;
 import latice.ihm.controller.RoundController;
+import latice.model.Player;
 import latice.model.exceptions.InvalidImagePathException;
 import latice.util.ImageLoader;
 
@@ -29,14 +32,16 @@ public class DeckBox extends VBox {
 	 *    give automatiquement les tuiles  manquantes dans le rack du joueur, donc on poarcout
 	 *    sa pioche, pour voir combien de tuiles il lui en manque et la pioche lui donne autaznt de tuile pour remplir son rack à 5
 	 */
-    private RoundController roundController;
-    private GameController gameController;
+    private Label nbTuilles;
+    private Player player;
 
-    public DeckBox(RoundController roundController, GameController gameController) {
-        this.roundController = roundController;
-        this.gameController = gameController;
+    public DeckBox(Player player) {
+        this.player = player;
 
         ImageView deckView = new ImageView();
+        nbTuilles = new Label("Pioche : " + player.getDeck().size());
+        nbTuilles.setStyle("-fx-font-size: 12px; -fx-text-fill: white;");
+
         try {
             deckView.setImage(ImageLoader.load("/images/game/deck.png"));
         } catch (InvalidImagePathException e) {
@@ -47,11 +52,14 @@ public class DeckBox extends VBox {
         deckView.setPreserveRatio(true);
         deckView.setSmooth(true);
 
-        HBox horizontalLayout = new HBox(deckView);
+        StackPane horizontalLayout = new StackPane(deckView, nbTuilles);
         horizontalLayout.setAlignment(Pos.CENTER);
 
         getChildren().add(horizontalLayout);
         setAlignment(Pos.CENTER);
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+    }
+    public void refresh() {
+        nbTuilles.setText("Pioche : " + player.getDeck().size());
     }
 }
