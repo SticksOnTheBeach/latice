@@ -247,6 +247,13 @@ public class LaticeTestCases {
 		assertEquals(deckSizeBefore, player.getDeck().getTiles().size());
 	}
 
+	@Test
+	public void removeOnEmptyDeckDoesNothing() {
+		Player player = players.get(0);
+		// deck vide par défaut
+		player.getDeck().remove();
+		assertTrue(player.getDeck().isEmpty());
+	}
 
 	@Test
 	public void drawOneTileDrawsExactlyOneTile() {
@@ -313,7 +320,6 @@ public class LaticeTestCases {
 	public void exchangeAllTilesReturnsTilesToDeck() {
 		game.shareTilesDynamically();
 		Player player = players.get(0);
-		player.getRack().addTileFromDeck(player.getDeck()); // 5 tuiles dans rack, 25 dans deck
 
 		int totalBefore = player.getRack().getTiles().size() + player.getDeck().getTiles().size();
 		player.getRack().exchangeAllTiles(player.getDeck());
