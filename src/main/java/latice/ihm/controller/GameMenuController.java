@@ -50,9 +50,8 @@ public class GameMenuController {
         }
  
         Board board = new Board();
-        Referee referee = new Referee(board);
- 
-        Game game = new Game(players,board);
+        Game game = new Game(players, board);
+        Referee referee = new Referee(board,  game.getRoundLimit());
         game.startGame();
  
         TileController tileController = new TileController(board, referee);

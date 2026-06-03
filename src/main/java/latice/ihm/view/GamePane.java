@@ -26,6 +26,7 @@ import latice.model.Referee;
 public class GamePane extends BorderPane {
     protected Label lblNbRound;
     protected int   nbRound;
+    protected int roundLimit;
     protected Label lblPlayerRound;
     private Game    game;
     private Button btnEndTurn;
@@ -50,9 +51,11 @@ public class GamePane extends BorderPane {
         this.roundController = roundController;
         this.referee = referee;
         this.nbRound = roundController.getRoundCount();
+        this.roundLimit = game.getRoundLimit();
 
-        lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
+        lblNbRound = new Label("Cycle : " + nbRound +"/" + roundLimit);
+
         // btnOption = new  Button();
         // btnOption.set
         btnEndTurn = new Button("End Turn");
@@ -153,7 +156,7 @@ public class GamePane extends BorderPane {
     public void updateDisplay() {
         Player current = roundController.getCurrentPlayer();
         lblPlayerRound.setText("Player Turn : " + current.getName());
-        lblNbRound.setText("Round : " + roundController.getRoundCount());
+        lblNbRound.setText("Cycle : " + roundController.getRoundCount() +"/" + roundLimit);
         rackTransition.animateToPlayer(roundController.getCurrentPlayerIndex());
         if (actionShop != null) {
             actionShop.refreshPoints();

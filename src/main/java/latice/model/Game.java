@@ -12,6 +12,7 @@ public class Game {
     // pour que getCurrentPlayer() et nextTurn() fonctionnent dans tous les cas.
     private ArrayList<Player> players = new ArrayList<Player>();
     private Board board;
+    private int roundLimit;
 
 
 
@@ -24,6 +25,7 @@ public class Game {
         this.players = players;
 
         this.board = board;
+        this.roundLimit = computeRoundLimit();// definir dirrectement sa valeur dans le constructeur
     }
 
     public void startGame() {
@@ -50,6 +52,13 @@ public class Game {
         return listTile;
     }
 
+    private int computeRoundLimit() {
+        return switch (players.size()) {
+            case 3 -> 8;
+            case 4 -> 6;
+            default -> 10;
+        };
+    }
     /**
      * Distributes tiles dynamically among all players.
      */
@@ -75,5 +84,6 @@ public class Game {
     public Board getBoard() {
         return this.board;
     }
+    public int getRoundLimit() { return roundLimit; }
 
 }
