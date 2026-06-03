@@ -1,14 +1,20 @@
 package latice.ihm;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import latice.ihm.controller.GameMenuController;
-import latice.ihm.view.menu.PlayerMenu;
 import latice.ihm.view.menu.MainMenuPane;
+import latice.ihm.view.menu.PlayerMenu;
 
 public class LaticeIhmApp extends Application {
-
+	
+	private MediaPlayer mediaPlayer;
+	
     @Override
     public void start(Stage primaryStage) {
     	
@@ -49,7 +55,18 @@ public class LaticeIhmApp extends Application {
         
         //GameMenu gameMenu = new GameMenu(e -> controller.handleBack(e));
         controller.setGameMenu(gameMenu, mainMenu);
+        
+        String musicFile = getClass().getResource("/images/menu/music.mp3").toExternalForm();
+        Media sound = new Media(musicFile);
+        mediaPlayer = new MediaPlayer(sound);  // ← pas "MediaPlayer mediaPlayer = ..."
+        mediaPlayer.setVolume(0.5);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setOnReady(() -> mediaPlayer.play());
+        mediaPlayer.setOnError(() -> {
+            System.err.println("Erreur MediaPlayer : " + mediaPlayer.getError());
+        });
 
+        
         primaryStage.setResizable(false);
         primaryStage.setTitle("Latice");
         primaryStage.setScene(new Scene(mainMenu, 1000, 700));

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import latice.ihm.view.GamePane;
-import latice.ihm.view.menu.WinMenu;
+import latice.ihm.view.menu.WinMenuPane;
 import latice.ihm.view.model.ActionPromptDialog;
 import latice.model.Player;
 import latice.model.Position;
@@ -112,6 +112,6 @@ public class GameController {
      */
     private void showWinMenu() {
         ArrayList<Player> winner = referee.getWinner(roundController.getPlayers());
-        stage.setScene(new Scene(new WinMenu(stage, winner), 1000, 700));
+        stage.setScene(new Scene(new WinMenuPane(stage, winner), 1000, 700));
     }
 }
