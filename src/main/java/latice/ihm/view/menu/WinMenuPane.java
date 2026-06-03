@@ -12,13 +12,13 @@ import latice.model.Player;
 
 import java.util.ArrayList;
 
-public class WinMenu extends BorderPane {
+public class WinMenuPane extends BorderPane {
 
     private Label lblVictory;
     private Button btnReplay = new Button("> REPLAY");
     private Button btnExit = new Button("> EXIT");
 
-    public WinMenu(Stage stage, ArrayList<Player> winners) {
+    public WinMenuPane(Stage stage, ArrayList<Player> winners) {
 
         this.setStyle("-fx-background-color: #1a2e35;");
 
