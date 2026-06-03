@@ -34,13 +34,16 @@ public class Rack extends Container {
 
 
     public void exchangeAllTiles(Deck deck) {
-            deck.getTiles().addAll(tiles);// CASCADE a refaire
-            deck.shuffle();
-            tiles.clear();
+        ArrayList<Tile> temporaryRack = new ArrayList<>(tiles);
+        tiles.clear();
         addTileFromDeck(deck);
+            deck.getTiles().addAll(tiles);
+        deck.getTiles().addAll(temporaryRack);
+        deck.shuffle();
 
 
     }
+
 /*
 NOT USED FOR NOW, BUT COULD BE USEFUL IN THE FUTURE IF WE WANT TO IMPLEMENT A "EXCHANGE SOME TILES" FEATURE
     public void exchangeSomeTiles(Deck deck, ArrayList<Tile> tilesToKeep) {
