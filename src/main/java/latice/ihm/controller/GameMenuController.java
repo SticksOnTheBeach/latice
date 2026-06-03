@@ -18,13 +18,11 @@ public class GameMenuController {
 
     private Stage stage;
     private PlayerMenu gameMenu;
-    private MainMenuPane mainMenu;
     public GameMenuController(Stage stage) {
         this.stage = stage;
     }
 
-    public void setGameMenu(PlayerMenu gameMenu, MainMenuPane mainMenu) {
-        this.gameMenu = gameMenu;
+    public void setGameMenu(PlayerMenu gameMenu) {
         this.gameMenu = gameMenu;
     }
 

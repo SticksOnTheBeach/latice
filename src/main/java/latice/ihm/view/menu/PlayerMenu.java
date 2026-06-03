@@ -21,18 +21,6 @@ import javafx.util.Duration;
 import latice.ihm.view.style.Style;
 
 public class PlayerMenu extends BorderPane {
-    /* TODO : 2 possibilités pour les lignes des joueurs
-     * soit faire que joueur 3 et joueur 4 soit déjà déclaré mais non affiché et donc que dès
-     * que l'on clique sur le "+" ça s'affiche et donc un écouteur
-     * INCONVÉNIENTS :
-     *  - c'est "hardcoder", si plus tard on veut augmenter et laisser place à plus de joueurs,
-     * on aura un problème qui est que ce sera moins modulaire, et moins optimisé
-     *  - Les objets Player 3 et 4 existent en mémoire même s'ils ne jouent pas
-     *  - Plus difficile à maintenir
-     *
-     * soit faire comme déjà implémenté, réaliser une boucle qui parcours la listes des joueurs et donc que pour
-     * le i-ième joueur tu fais joueur i + 1, et que la liste des joueurs est géré dynamiquement
-     */
     private static final int MAX_PLAYERS = 4;
 
     private ArrayList<String> playerNames = new ArrayList<>();
@@ -313,9 +301,7 @@ public class PlayerMenu extends BorderPane {
         slideOut.play();
     }
     
-    /*public boolean colorIsAlreadyPick() {
-    	if 
-    }*/
+
     
     private boolean handleStart() {
         boolean correct = true;

@@ -28,6 +28,7 @@ public class GamePane extends BorderPane {
     protected int   nbRound;
     protected Label lblPlayerRound;
     private Game    game;
+    private Button btnEndTurn;
 
     private RoundController roundController;
     private RackTransition  rackTransition;
@@ -54,8 +55,7 @@ public class GamePane extends BorderPane {
         lblPlayerRound = new Label("Player Turn :");
         // btnOption = new  Button();
         // btnOption.set
-
-        Button btnEndTurn = new Button("End Turn");
+        btnEndTurn = new Button("End Turn");
         String btnEndTurnStyle =
                 "-fx-background-color: rgba(255, 255, 255, 0.12); " +
                 "-fx-background-radius: 20px; " +
@@ -164,6 +164,7 @@ public class GamePane extends BorderPane {
         actionShop.openPanel();
     }
 
+
     /**
      * Ajoute un overlay (ex: ActionPromptDialog) par-dessus le centre du jeu.
      */
@@ -196,7 +197,9 @@ public class GamePane extends BorderPane {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
+    public void setBtnEndTurnDisabled(boolean disabled) {
+        btnEndTurn.setDisable(disabled);
+    }
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }

@@ -19,19 +19,6 @@ import latice.util.ImageLoader;
  * via TileController.placeTile() qui recharge le rack après chaque coup.
  */
 public class DeckBox extends VBox {
-	/*
-	 *  TODO ; changer le systeme de pioche, la pioche n'est pas cliquable pour les joueurs, 
-	 *  la pioche est juste un systeme automatique
-	 *  
-	 *  fair een sorte de vérifier, lorsqu'il s'agit duu joueur actuel qui joue, s'il est 
-	 *  en capacité de pouvoir  joueur avec son rack actuel :
-	 *  
-	 *   1ere option : s'il ne peux pas jouer et que son rack est full : passTurn()ù
-	 *   
-	 *    2 eme opption: s'il ne peux pas jouer et que son rackj n'est pas full, la pioche
-	 *    give automatiquement les tuiles  manquantes dans le rack du joueur, donc on poarcout
-	 *    sa pioche, pour voir combien de tuiles il lui en manque et la pioche lui donne autaznt de tuile pour remplir son rack à 5
-	 */
     private Label nbTuilles;
     private Player player;
 
@@ -39,9 +26,8 @@ public class DeckBox extends VBox {
         this.player = player;
 
         ImageView deckView = new ImageView();
-        nbTuilles = new Label("Pioche : " + player.getDeck().size());
-        nbTuilles.setStyle("-fx-font-size: 12px; -fx-text-fill: white;");
-
+        nbTuilles = new Label(""+player.getDeck().size());
+        nbTuilles.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white");
         try {
             deckView.setImage(ImageLoader.load("/images/game/deck.png"));
         } catch (InvalidImagePathException e) {
@@ -60,6 +46,6 @@ public class DeckBox extends VBox {
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
     }
     public void refresh() {
-        nbTuilles.setText("Pioche : " + player.getDeck().size());
+        nbTuilles.setText(""+player.getDeck().size());
     }
 }

@@ -139,7 +139,8 @@ public class RackTransition {
 
             allTransitions.getChildren().addAll(tt, rt, ft);
         }
-
+        allTransitions.setOnFinished(e -> gameController.setBtnEndTurnDisabled(false));
+        gameController.setBtnEndTurnDisabled(true);
         allTransitions.play();
     }
 

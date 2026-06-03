@@ -138,7 +138,7 @@ public class MainMenuPane extends BorderPane {
             e -> controller.handleBack(e),
             e -> controller.handleStart(e)
         );
-        controller.setGameMenu(gameMenu, this); //Le met en parametre du controller pour qu'il puisse y accéder et faire le lien entre les deux
+        controller.setGameMenu(gameMenu); //Le met en parametre du controller pour qu'il puisse y accéder et faire le lien entre les deux
  
         stage.setScene(new Scene(gameMenu, 1000, 700));
     }

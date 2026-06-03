@@ -53,8 +53,7 @@ public class LaticeIhmApp extends Application {
             );
         MainMenuPane mainMenu = new MainMenuPane(primaryStage);
         
-        //GameMenu gameMenu = new GameMenu(e -> controller.handleBack(e));
-        controller.setGameMenu(gameMenu, mainMenu);
+        controller.setGameMenu(gameMenu);
         
         String musicFile = getClass().getResource("/images/menu/music.mp3").toExternalForm();
         Media sound = new Media(musicFile);

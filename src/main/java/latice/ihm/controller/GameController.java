@@ -59,17 +59,6 @@ public class GameController {
     }
 
     /**
-     * Pioche UNE SEULE tuile et met à jour l'interface immédiatement.
-     */
-    public void drawTile() {
-        Player currentPlayer = roundController.getCurrentPlayer();
-        int currentIndex = roundController.getCurrentPlayerIndex();
-
-        currentPlayer.getRack().drawOneTile(currentPlayer.getDeck());
-        mainPane.rafraichirRackJoueur(currentIndex);
-    }
-
-    /**
      * Méthode pour passer son tour (Bouton "Fin de tour").
      * Le rack du joueur précédent est déjà rechargé dans TileController.placeTile().
      */
@@ -106,7 +95,9 @@ public class GameController {
             passTurn();
         }
     }
-
+    public void setBtnEndTurnDisabled(boolean disabled) {
+        mainPane.setBtnEndTurnDisabled(disabled);
+    }
     /**
      * Affiche l'écran de fin de partie.
      */

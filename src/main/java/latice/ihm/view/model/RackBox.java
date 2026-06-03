@@ -49,12 +49,6 @@ public class RackBox extends HBox {
                 TileView tileView = new TileView(tile);
                 slot.getChildren().add(tileView);
             }
-            
-            /*
-            for (Tile tile : rack.getTiles()) {
-                getChildren().add(new TileView(tile));
-            }
-			*/
             getChildren().add(slot);
         }
     }
