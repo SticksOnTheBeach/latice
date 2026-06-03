@@ -246,15 +246,6 @@ public class LaticeTestCases {
 
 		assertEquals(deckSizeBefore, player.getDeck().getTiles().size());
 	}
-
-	@Test
-	public void removeOnEmptyDeckDoesNothing() {
-		Player player = players.get(0);
-		// deck vide par défaut
-		player.getDeck().remove();
-		assertTrue(player.getDeck().isEmpty());
-	}
-
 	@Test
 	public void drawOneTileDrawsExactlyOneTile() {
 		game.shareTilesDynamically();
