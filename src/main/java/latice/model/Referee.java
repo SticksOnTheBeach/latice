@@ -10,11 +10,11 @@ public class Referee {
     private Board gameboard;
     private boolean havePlayed = false;
     private int roundCount = 1;
-    
-    public Referee(Board gameboard) {
+    private int roundLimit;
+    public Referee(Board gameboard, int roundLimit){
         this.gameboard = gameboard;
+        this.roundLimit = roundLimit;
     }
-
     public boolean isValidMove(Position position, Tile tile) {
         if (gameboard.isBoardEmpty() && position.equals(new Position(4, 4))) {
             return true;
@@ -87,7 +87,7 @@ public class Referee {
     };
     
     public boolean winingConditionCycles(){
-        if (this.roundCount > 10){
+        if (this.roundCount > roundLimit){
             return true;
         }
         return false;
@@ -119,7 +119,12 @@ public class Referee {
     public int getRoundCount() {
         return roundCount;
     }
-    
+    public int getRoundLimit() {
+        return roundLimit;
+    }
+    public void setRoundLimit(int roundLimit) {
+        this.roundLimit = roundLimit;
+    }
     public boolean isHasPlayedAction() { 
     	return havePlayed; 
     }

@@ -23,13 +23,14 @@ public class RackTransition {
     private static final int ANIM_DURATION = 500;
     private static final double BLUR_RADIUS = 15.0;
 
-    private static final double OFFSET_BAS =  360;
+    private static final double OFFSET_BAS = 360;
     private static final double OFFSET_HAUT = -360;
     private static final double OFFSET_GAUCHE = -440;
-    private static final double OFFSET_DROITE =  440;
+    private static final double OFFSET_DROITE = 440;
 
     private ArrayList<HBox> playerSlots;
     private ArrayList<RackBox> rackBoxes;
+    private ArrayList<DeckBox> deckBoxes;
 
     private ArrayList<Player> players;
     private int currentPlayerIndex;
@@ -46,10 +47,11 @@ public class RackTransition {
         this.gameController = gameController;
         this.playerSlots = new ArrayList<>();
         this.rackBoxes = new ArrayList<>();
+        this.deckBoxes = new ArrayList<>();
 
         for (Player player : players) {
             RackBox rackBox = new RackBox(player.getRack(), player.getColor());
-            DeckBox deckBox = new DeckBox(roundController, gameController);
+            DeckBox deckBox = new DeckBox(player);
 
             HBox slot = new HBox(15, deckBox, rackBox);
             slot.setAlignment(Pos.CENTER);
@@ -57,6 +59,7 @@ public class RackTransition {
             slot.setPickOnBounds(false);
 
             rackBoxes.add(rackBox);
+            deckBoxes.add(deckBox);
             playerSlots.add(slot);
             container.getChildren().add(slot);
         }
@@ -64,9 +67,6 @@ public class RackTransition {
         firstRackPosition();
     }
 
-    /**
-     * Applique ou retire le flou sur un slot selon s'il est actif ou non.
-     */
     private void applyBlurForOthersPlayers(HBox slot, boolean isCurrentPlayer) {
         if (isCurrentPlayer) {
             slot.setEffect(null);
@@ -137,62 +137,52 @@ public class RackTransition {
             allTransitions.getChildren().addAll(tt, rt, ft);
         }
 
+        allTransitions.setOnFinished(e -> gameController.setBtnEndTurnDisabled(false));
+        gameController.setBtnEndTurnDisabled(true);
         allTransitions.play();
     }
 
     private double[] getOffsets(int positionRelative, int nbJoueurs) {
         if (nbJoueurs == 2) {
             switch (positionRelative) {
-                case 0:  
-                	return new double[]{ 0, OFFSET_BAS };
-                case 1:  
-                	return new double[]{ 0, OFFSET_HAUT };
-                default: 
-                	return new double[]{ 0, 0 };
+                case 0: return new double[]{0, OFFSET_BAS};
+                case 1: return new double[]{0, OFFSET_HAUT};
+                default: return new double[]{0, 0};
             }
         } else if (nbJoueurs == 3) {
             switch (positionRelative) {
-                case 0:  
-                	return new double[]{ 0,OFFSET_BAS };
-                case 1:  
-                	return new double[]{ OFFSET_DROITE, 0 };
-                case 2:  
-                	return new double[]{ OFFSET_GAUCHE, 0 };
-                default: 
-                	return new double[]{ 0, 0 };
+                case 0: return new double[]{0, OFFSET_BAS};
+                case 1: return new double[]{OFFSET_DROITE, 0};
+                case 2: return new double[]{OFFSET_GAUCHE, 0};
+                default: return new double[]{0, 0};
             }
         } else {
             switch (positionRelative) {
-                case 0:  
-                	return new double[]{ 0,OFFSET_BAS };
-                case 1:  
-                	return new double[]{ OFFSET_DROITE, 0 };
-                case 2:  
-                	return new double[]{ 0,OFFSET_HAUT };
-                case 3:  
-                	return new double[]{ OFFSET_GAUCHE, 0 };
-                default: 
-                	return new double[]{ 0, 0 };
+                case 0: return new double[]{0, OFFSET_BAS};
+                case 1: return new double[]{OFFSET_DROITE, 0};
+                case 2: return new double[]{0, OFFSET_HAUT};
+                case 3: return new double[]{OFFSET_GAUCHE, 0};
+                default: return new double[]{0, 0};
             }
         }
     }
 
     private double getTargetAngle(int positionRelative, int nbJoueurs) {
         if (nbJoueurs == 2) {
-            return positionRelative == 1 ? 180 : 0; // si positionRelative vaut 1, renvoie 180, sinon renvoie 0
+            return positionRelative == 1 ? 180 : 0;
         } else if (nbJoueurs == 3) {
             switch (positionRelative) {
-                case 0:  return 0;
-                case 1:  return 90;
-                case 2:  return -90;
+                case 0: return 0;
+                case 1: return 90;
+                case 2: return -90;
                 default: return 0;
             }
         } else {
             switch (positionRelative) {
-                case 0:  return 0;
-                case 1:  return 90;
-                case 2:  return 180;
-                case 3:  return -90;
+                case 0: return 0;
+                case 1: return 90;
+                case 2: return 180;
+                case 3: return -90;
                 default: return 0;
             }
         }
@@ -205,8 +195,8 @@ public class RackTransition {
 
         RackBox newRack = new RackBox(players.get(playerIndex).getRack(), players.get(playerIndex).getColor());
         rackBoxes.set(playerIndex, newRack);
-
         slot.getChildren().add(1, newRack);
+        deckBoxes.get(playerIndex).refresh();
 
         if (playerIndex == currentPlayerIndex) {
             slot.setMouseTransparent(false);

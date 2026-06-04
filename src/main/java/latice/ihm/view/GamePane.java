@@ -26,8 +26,10 @@ import latice.model.Referee;
 public class GamePane extends BorderPane {
     protected Label lblNbRound;
     protected int   nbRound;
+    protected int roundLimit;
     protected Label lblPlayerRound;
     private Game    game;
+    private Button btnEndTurn;
 
     private RoundController roundController;
     private RackTransition  rackTransition;
@@ -49,13 +51,14 @@ public class GamePane extends BorderPane {
         this.roundController = roundController;
         this.referee = referee;
         this.nbRound = roundController.getRoundCount();
+        this.roundLimit = game.getRoundLimit();
 
-        lblNbRound = new Label("Round : " + nbRound);
         lblPlayerRound = new Label("Player Turn :");
+        lblNbRound = new Label("Cycle : " + nbRound +"/" + roundLimit);
+
         // btnOption = new  Button();
         // btnOption.set
-
-        Button btnEndTurn = new Button("End Turn");
+        btnEndTurn = new Button("End Turn");
         String btnEndTurnStyle =
                 "-fx-background-color: rgba(255, 255, 255, 0.12); " +
                 "-fx-background-radius: 20px; " +
@@ -153,7 +156,7 @@ public class GamePane extends BorderPane {
     public void updateDisplay() {
         Player current = roundController.getCurrentPlayer();
         lblPlayerRound.setText("Player Turn : " + current.getName());
-        lblNbRound.setText("Round : " + roundController.getRoundCount());
+        lblNbRound.setText("Cycle : " + roundController.getRoundCount() +"/" + roundLimit);
         rackTransition.animateToPlayer(roundController.getCurrentPlayerIndex());
         if (actionShop != null) {
             actionShop.refreshPoints();
@@ -163,6 +166,7 @@ public class GamePane extends BorderPane {
     public void openActionShop() {
         actionShop.openPanel();
     }
+
 
     /**
      * Ajoute un overlay (ex: ActionPromptDialog) par-dessus le centre du jeu.
@@ -196,7 +200,9 @@ public class GamePane extends BorderPane {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
+    public void setBtnEndTurnDisabled(boolean disabled) {
+        btnEndTurn.setDisable(disabled);
+    }
     public void rafraichirRackJoueur(int playerIndex) {
         rackTransition.rafraichirRack(playerIndex);
     }

@@ -110,7 +110,7 @@ public class WinMenuPane extends BorderPane {
                         "-fx-text-fill: white; -fx-text-alignment: center;";
 
         if (players.size() == 1) {
-            Label lbl = new Label(players.get(0).getName() + " a gagné !");
+            Label lbl = new Label(players.get(0).getName() + " as won !");
             lbl.setStyle(titleStyle);
             container.getChildren().add(lbl);
         } else {

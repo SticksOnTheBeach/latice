@@ -37,7 +37,6 @@ public class Rack extends Container {
         ArrayList<Tile> temporaryRack = new ArrayList<>(tiles);
         tiles.clear();
         addTileFromDeck(deck);
-            deck.getTiles().addAll(tiles);
         deck.getTiles().addAll(temporaryRack);
         deck.shuffle();
 

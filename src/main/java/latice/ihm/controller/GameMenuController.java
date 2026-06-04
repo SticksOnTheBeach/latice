@@ -18,13 +18,11 @@ public class GameMenuController {
 
     private Stage stage;
     private PlayerMenu gameMenu;
-    private MainMenuPane mainMenu;
     public GameMenuController(Stage stage) {
         this.stage = stage;
     }
 
-    public void setGameMenu(PlayerMenu gameMenu, MainMenuPane mainMenu) {
-        this.gameMenu = gameMenu;
+    public void setGameMenu(PlayerMenu gameMenu) {
         this.gameMenu = gameMenu;
     }
 
@@ -52,9 +50,8 @@ public class GameMenuController {
         }
  
         Board board = new Board();
-        Referee referee = new Referee(board);
- 
-        Game game = new Game(players,board);
+        Game game = new Game(players, board);
+        Referee referee = new Referee(board,  game.getRoundLimit());
         game.startGame();
  
         TileController tileController = new TileController(board, referee);
